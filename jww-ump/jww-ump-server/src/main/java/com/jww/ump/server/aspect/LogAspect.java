@@ -54,8 +54,6 @@ public class LogAspect {
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         startTime = System.currentTimeMillis();
         Object result = null;
-        boolean isQueryType = false;
-        SysUserModel crrentUser = null;
         SysLogModel sysLogModel = logPre(pjp);
         try {
             result = pjp.proceed();
@@ -71,18 +69,15 @@ public class LogAspect {
 
 
     private SysLogModel logPre(ProceedingJoinPoint pjp) throws Exception{
-        //操作类型
-        Integer operationType = null;
-        //方法名称
-        String operation = null;
+        SysLogModel sysLogModel = new SysLogModel();
         for (Method method : Class.forName(pjp.getTarget().getClass().getName()).getMethods()) {
             if (method.getName().equals(pjp.getSignature().getName())) {
                 Class[] clazzs = method.getParameterTypes();
                 if (clazzs.length == pjp.getArgs().length) {
                     //方法名称
-                    operation = method.getAnnotation(SysLogOpt.class).value();
+                    sysLogModel.setOperation(method.getAnnotation(SysLogOpt.class).value());
                     //操作类型
-                    operationType = method.getAnnotation(SysLogOpt.class).operationType().value();
+                    sysLogModel.setOperationType(method.getAnnotation(SysLogOpt.class).operationType().value());
                     break;
                 }
             }
@@ -95,17 +90,13 @@ public class LogAspect {
         String classMethod = pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName();
         //请求参数
         String args = JSON.toJSONString(pjp.getArgs()).replaceAll(RegexUtil.getJSonValueRegex("password"),"****").replaceAll(RegexUtil.getJSonValueRegex("oldPassword"),"****");
-        SysLogModel sysLogModel = new SysLogModel();
+
         sysLogModel.setIp(ip);
         sysLogModel.setMethod(classMethod);
         sysLogModel.setParams(args);
         sysLogModel.setCreateTime(new Date());
         sysLogModel.setCreateBy(0L);
         sysLogModel.setUpdateBy(0L);
-        //方法名称
-        sysLogModel.setOperation(operation);
-        //操作类型
-        sysLogModel.setOperationType(operationType);
         SysUserModel crrentUser = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
         if(crrentUser!=null){
             sysLogModel.setUserName(crrentUser.getUserName());
@@ -115,16 +106,14 @@ public class LogAspect {
 
 
     private SysLogModel logAfter(Object result, SysLogModel sysLogModel) {
-        boolean hasLogin = false;
         ResultModel response = null;
         if(result!=null){
             response = (ResultModel)result;
         }
         if(sysLogModel.getUserName()==null){
-            SysUserModel crrentUser = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
-            if(crrentUser!=null){
-                sysLogModel.setUserName(crrentUser.getUserName());
-                hasLogin = true;
+            SysUserModel user = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
+            if(user!=null){
+                sysLogModel.setUserName(user.getUserName());
             }
         }
         //返回结果
