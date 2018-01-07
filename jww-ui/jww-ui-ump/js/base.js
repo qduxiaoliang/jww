@@ -21,8 +21,8 @@ layui.define(['jquery'], function (exports) {
         dataType: 'json',
         contentType: "application/json",
         beforeSend: function (evt, request, settings) {
-            // request.url = 'http://localhost:8089/' + request.url;
-            request.url = '/' + request.url;
+            request.url = 'http://localhost:8089/' + request.url;
+            // request.url = '/' + request.url;
         },
         dataFilter: function (result) {
             try {
@@ -55,7 +55,7 @@ layui.define(['jquery'], function (exports) {
             var loadingIndex = layer.msg('数据请求中', {
                 icon: 16,
                 shade: 0.01,
-                time: -1
+                time: 30000
             });
             return loadingIndex;
         },
