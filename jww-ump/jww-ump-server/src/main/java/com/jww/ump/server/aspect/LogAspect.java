@@ -45,45 +45,32 @@ public class LogAspect {
     @Autowired
     private SysLogService logService;
 
-    private SysLogModel sysLogModel = new SysLogModel();
-
-    SysUserModel crrentUser = null;
-
-    @Pointcut("execution(* *..controller..*.*(..)) && @annotation(com.jww.ump.server.annotation.SysLogOpt)")
+    @Pointcut("execution(* *..controller..*.*(..)) && @annotation(com.jww.base.am.server.annotation.SysLogOpt)")
     public void logPointCut() {
 
     }
 
     @Around("logPointCut()")
-    public Object doAround(ProceedingJoinPoint pjp) throws Throwable{
+    public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         startTime = System.currentTimeMillis();
         Object result = null;
         boolean isQueryType = false;
+        SysUserModel crrentUser = null;
+        SysLogModel sysLogModel = logPre(pjp);
         try {
-            isQueryType = logPre(pjp);
             result = pjp.proceed();
         } finally {
-            try{
-                //查询类型不添加日志
-                if(!isQueryType && logAfter(result)){
-                    logService.add(sysLogModel);
-                }
-            }  catch (RuntimeException e){
-                log.error(e.getMessage());
-            }  catch (Exception e){
-                log.error(e.getMessage());
-            } catch (Throwable e){
-                log.error(e.getMessage());
+            //查询类型不添加日志
+            if(!(sysLogModel.getOperationType()==Constants.LogOptEnum.QUERY.value() || sysLogModel.getOperationType() ==Constants.LogOptEnum.UNKNOW.value())
+                    && logAfter(result,sysLogModel).getUserName()!=null){
+                logService.add(sysLogModel);
             }
         }
-
         return result;
     }
 
 
-    private boolean logPre(ProceedingJoinPoint pjp) throws Exception{
-        crrentUser = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
-        boolean isQueryType = false;
+    private SysLogModel logPre(ProceedingJoinPoint pjp) throws Exception{
         //操作类型
         Integer operationType = null;
         //方法名称
@@ -100,18 +87,15 @@ public class LogAspect {
                 }
             }
         }
-        //查询类型不添加日志
-        if(operationType==Constants.LogOptEnum.UNKNOW.value()||operationType==Constants.LogOptEnum.QUERY.value()){
-            return true;
-        }
         //获取请求对象
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         startTime = System.currentTimeMillis();
         String ip = HttpUtil.getClientIP(request);
-        //方法名含包名（com.jww.ump.server.controller.SysLogController.queryListPage）
+        //方法名含包名（com.jww.ump.SysLogController.queryListPage）
         String classMethod = pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName();
         //请求参数
         String args = JSON.toJSONString(pjp.getArgs()).replaceAll(RegexUtil.getJSonValueRegex("password"),"****").replaceAll(RegexUtil.getJSonValueRegex("oldPassword"),"****");
+        SysLogModel sysLogModel = new SysLogModel();
         sysLogModel.setIp(ip);
         sysLogModel.setMethod(classMethod);
         sysLogModel.setParams(args);
@@ -122,24 +106,26 @@ public class LogAspect {
         sysLogModel.setOperation(operation);
         //操作类型
         sysLogModel.setOperationType(operationType);
-        return isQueryType;
+        SysUserModel crrentUser = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
+        if(crrentUser!=null){
+            sysLogModel.setUserName(crrentUser.getUserName());
+        }
+        return sysLogModel;
     }
 
 
-    private boolean logAfter(Object result) {
+    private SysLogModel logAfter(Object result, SysLogModel sysLogModel) {
         boolean hasLogin = false;
         ResultModel response = null;
         if(result!=null){
             response = (ResultModel)result;
         }
-        if(crrentUser==null){
-            crrentUser = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
-        }
-        if(crrentUser!=null){
-            sysLogModel.setUserName(crrentUser.getUserName());
-            hasLogin = true;
-        }else{
-            return hasLogin;
+        if(sysLogModel.getUserName()==null){
+            SysUserModel crrentUser = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
+            if(crrentUser!=null){
+                sysLogModel.setUserName(crrentUser.getUserName());
+                hasLogin = true;
+            }
         }
         //返回结果
         if(response!=null && response.code == Constants.ResultCodeEnum.SUCCESS.value()){
@@ -150,6 +136,6 @@ public class LogAspect {
         //执行时长(毫秒)
         Long spendTime = System.currentTimeMillis() - startTime;
         sysLogModel.setTime(spendTime);
-        return hasLogin;
+        return sysLogModel;
     }
 }
