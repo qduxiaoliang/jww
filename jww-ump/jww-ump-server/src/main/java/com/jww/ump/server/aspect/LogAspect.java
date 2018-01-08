@@ -45,7 +45,7 @@ public class LogAspect {
     @Autowired
     private SysLogService logService;
 
-    @Pointcut("execution(* *..controller..*.*(..)) && @annotation(com.jww.base.am.server.annotation.SysLogOpt)")
+    @Pointcut("execution(* *..controller..*.*(..)) && @annotation(com.jww.ump.server.annotation.SysLogOpt)")
     public void logPointCut() {
 
     }
