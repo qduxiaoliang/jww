@@ -61,7 +61,7 @@ public class LogAspect {
             //查询类型不添加日志
             if(!(sysLogModel.getOperationType()==Constants.LogOptEnum.QUERY.value() || sysLogModel.getOperationType() ==Constants.LogOptEnum.UNKNOW.value())
                     && logAfter(result,sysLogModel).getUserName()!=null){
-                logService.add(sysLogModel);
+                logService.insert(sysLogModel);
             }
         }
         return result;
