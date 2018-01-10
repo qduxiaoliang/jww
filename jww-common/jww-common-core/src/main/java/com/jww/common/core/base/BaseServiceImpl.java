@@ -1,8 +1,9 @@
 package com.jww.common.core.base;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.jww.common.core.Constants;
+import com.jww.common.core.exception.BusinessException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -41,8 +42,16 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel>
     public T add(T entity) {
         entity.setCreateTime(new Date());
         entity.setUpdateTime(new Date());
-        if (super.insert(entity)) {
-            return entity;
+        try {
+            if (super.insert(entity)) {
+                return entity;
+            }
+        } catch (Exception exception) {
+            String duplicateKey = "DuplicateKeyException";
+            if (exception.toString().contains(duplicateKey)) {
+                throw new BusinessException(Constants.ResultCodeEnum.DATA_DUPLICATE_KEY.getMessage());
+            }
+            throw exception;
         }
         return null;
     }
