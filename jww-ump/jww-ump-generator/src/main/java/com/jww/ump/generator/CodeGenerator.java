@@ -11,7 +11,7 @@ import com.jww.common.core.util.MybatisPlusGeneratorUtil;
 public class CodeGenerator {
 
     public static void main(String[] args) {
-        MybatisPlusGeneratorUtil mybatisPlusGeneratorUtil = new MybatisPlusGeneratorUtil();
+        UmpGeneratorUtil mybatisPlusGeneratorUtil = new UmpGeneratorUtil();
         String propertiesFilePath = "generator.properties";
         mybatisPlusGeneratorUtil.generator(propertiesFilePath);
     }
