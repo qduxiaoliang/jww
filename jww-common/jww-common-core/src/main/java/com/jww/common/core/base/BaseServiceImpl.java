@@ -1,15 +1,20 @@
 package com.jww.common.core.base;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.jww.common.core.Constants;
 import com.jww.common.core.exception.BusinessException;
+import com.xiaoleilu.hutool.util.ObjectUtil;
+import com.xiaoleilu.hutool.util.StrUtil;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 业务处理基类实现
@@ -56,13 +61,4 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel>
         return null;
     }
 
-    @Override
-    public boolean delBatchByIds(T entity, List<Long> ids) {
-        ids.forEach(id -> {
-            entity.setId(id);
-            entity.setIsDel(1);
-            this.modifyById(entity);
-        });
-        return true;
-    }
 }

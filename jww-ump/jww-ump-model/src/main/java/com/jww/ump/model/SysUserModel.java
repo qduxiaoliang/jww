@@ -138,4 +138,19 @@ public class SysUserModel extends BaseModel {
      */
     @TableField(exist = false)
     private Long[] role;
+    /**
+     * 是否启用
+     */
+    @TableField("enable_")
+    private Integer enable;
+    /**
+     * 是否删除(0:未删除;1:已删除)
+     */
+    @TableField("is_del")
+    private Integer isDel;
+    /**
+     * 备注
+     */
+    @TableField("remark_")
+    private String remark;
 }

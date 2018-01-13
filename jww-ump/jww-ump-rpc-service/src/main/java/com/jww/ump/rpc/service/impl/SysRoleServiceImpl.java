@@ -19,7 +19,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -131,5 +133,19 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleMo
         EntityWrapper<SysRoleModel> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("dept_id", deptId);
         return sysRoleMapper.selectList(entityWrapper);
+    }
+
+    @Override
+    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
+    public boolean deleteBatchIds(List<? extends Serializable> idList){
+        List<SysRoleModel> roleModelList = new ArrayList<SysRoleModel>();
+        idList.forEach(id -> {
+            SysRoleModel entity = new SysRoleModel();
+            entity.setId((Long)id);
+            entity.setIsDel(1);
+            entity.setUpdateTime(new Date());
+            roleModelList.add(entity);
+        });
+        return super.updateBatchById(roleModelList);
     }
 }

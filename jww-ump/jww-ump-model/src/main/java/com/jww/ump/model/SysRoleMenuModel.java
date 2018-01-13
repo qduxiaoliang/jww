@@ -24,28 +24,19 @@ public class SysRoleMenuModel extends BaseModel {
     @TableField("menu_id")
     private Long menuId;
 
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public Long getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(Long menuId) {
-        this.menuId = menuId;
-    }
-
-    @Override
-    public String toString() {
-        return "SysRoleMenu{" +
-                ", roleId=" + roleId +
-                ", menuId=" + menuId +
-                "}";
-    }
+    /**
+     * 是否启用
+     */
+    @TableField("enable_")
+    private Integer enable;
+    /**
+     * 是否删除(0:未删除;1:已删除)
+     */
+    @TableField("is_del")
+    private Integer isDel;
+    /**
+     * 备注
+     */
+    @TableField("remark_")
+    private String remark;
 }
