@@ -21,7 +21,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel>
         extends ServiceImpl<BaseMapper<T>, T> implements BaseService<T> {
 
     @Override
-    @CacheEvict(value = "data")
+    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
     public T modifyById(T entity) {
         T resultEntity = null;
         entity.setUpdateTime(new Date());
@@ -32,13 +32,13 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel>
     }
 
     @Override
-    @Cacheable(value = "data")
+    @Cacheable(value = Constants.CACHE_VALUE)
     public T queryById(Long id) {
         return super.selectById(id);
     }
 
     @Override
-    @CachePut(value = "data")
+    @CachePut(Constants.CACHE_VALUE)
     public T add(T entity) {
         entity.setCreateTime(new Date());
         entity.setUpdateTime(new Date());

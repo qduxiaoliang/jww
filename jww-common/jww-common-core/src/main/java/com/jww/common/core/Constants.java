@@ -52,6 +52,11 @@ public final class Constants {
     public static final String SHIRO_CACHE_NAMESPACE = CACHE_NAMESPACE + "shiro:";
 
     /**
+     * 数据缓存值
+     */
+    public static final String CACHE_VALUE = "value";
+
+    /**
      * 缓存键值
      */
     public static final Map<Class<?>, String> CACHE_KEY_MAP = new HashMap<>(5);
@@ -178,4 +183,5 @@ public final class Constants {
         }
 
     }
+
 }

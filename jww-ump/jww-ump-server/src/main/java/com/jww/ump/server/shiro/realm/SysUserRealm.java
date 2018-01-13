@@ -5,7 +5,6 @@ import com.jww.common.web.util.WebUtil;
 import com.jww.ump.model.SysUserModel;
 import com.jww.ump.rpc.api.SysAuthorizeService;
 import com.jww.ump.rpc.api.SysUserService;
-import com.xiaoleilu.hutool.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -15,10 +14,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * shiro权限获取

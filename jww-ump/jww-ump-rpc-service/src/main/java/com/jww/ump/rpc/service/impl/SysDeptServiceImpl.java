@@ -3,6 +3,7 @@ package com.jww.ump.rpc.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jww.common.core.Constants;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
@@ -20,7 +21,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     private SysTreeMapper sysTreeMapper;
 
     @Override
-    @CachePut(value = "data")
+    @CachePut(value = Constants.CACHE_VALUE)
     @DistributedLock(value = "#sysDeptModel.getParentId()")
     public SysDeptModel addDept(SysDeptModel sysDeptModel) {
         EntityWrapper<SysDeptModel> wrapper = new EntityWrapper<>();
@@ -76,7 +76,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     }
 
     @Override
-    @Cacheable(value = "data")
+    @Cacheable(value = Constants.CACHE_VALUE)
     public SysDeptModel queryOne(Long id) {
         log.info("SysDeptServiceImpl->queryOne->id:" + id);
         SysDeptModel sysDeptModel = sysDeptMapper.selectOne(id);
@@ -84,14 +84,14 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     }
 
     @Override
-    @CacheEvict(value = "data", allEntries = true)
+    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
     public Integer deleteBatch(Long[] ids) {
         int succ = 0;
         for (Long id : ids) {
             Boolean res = false;
             try {
                 res = this.delDept(id);
-            } catch (Exception e) {
+            } catch (Exception e) {e.printStackTrace();
                 log.error("删除部门失败，id:{}", id, e);
             }
             if (res) {

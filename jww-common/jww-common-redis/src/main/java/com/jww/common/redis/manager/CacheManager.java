@@ -1,7 +1,5 @@
 package com.jww.common.redis.manager;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.Serializable;
 import java.util.Set;
 

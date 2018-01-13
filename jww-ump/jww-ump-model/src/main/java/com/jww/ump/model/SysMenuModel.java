@@ -1,11 +1,11 @@
 package com.jww.ump.model;
 
-import java.util.List;
-
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.jww.common.core.base.BaseModel;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * <p>

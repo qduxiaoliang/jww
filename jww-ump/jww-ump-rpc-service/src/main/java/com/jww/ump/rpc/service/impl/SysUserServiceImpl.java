@@ -3,6 +3,7 @@ package com.jww.ump.rpc.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jww.common.core.Constants;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.ump.dao.mapper.SysRoleMapper;
@@ -63,7 +64,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserMo
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "data", allEntries = true)
+    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
     public boolean delBatchByIds(List<Long> ids) {
         List<SysUserModel> sysUserModelList = new ArrayList<>(5);
         for (Long id : ids) {
@@ -93,7 +94,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserMo
     }
 
     @Override
-    @CachePut(value = "data")
+    @CachePut(value = Constants.CACHE_VALUE)
     @Transactional(rollbackFor = Exception.class)
     @DistributedLock
     public SysUserModel add(SysUserModel sysUserModel) {

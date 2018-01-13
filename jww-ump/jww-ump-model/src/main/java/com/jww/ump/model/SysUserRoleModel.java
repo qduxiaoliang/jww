@@ -1,13 +1,9 @@
 package com.jww.ump.model;
 
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import com.jww.common.core.base.BaseModel;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
  * <p>

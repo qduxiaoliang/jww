@@ -6,7 +6,6 @@ import com.jww.common.core.base.BaseModel;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
