@@ -2,6 +2,7 @@ package com.jww.common.redis.helper;
 
 import com.jww.common.redis.manager.CacheManager;
 import com.jww.common.redis.util.CacheUtil;
+import com.xiaoleilu.hutool.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -192,17 +193,18 @@ public final class RedisHelper implements CacheManager {
 
     @Override
     public boolean unlock(String key, String lockValue) {
-        if (lockValue == null || "".equals(lockValue)) {
+        if (StrUtil.isEmpty(lockValue)) {
             log.error("lockValue must be not empty");
             throw new IllegalArgumentException("lockValue must be not empty");
         }
-        redisTemplate.watch(key);
         if (lockValue.equals(this.get(key))) {
+            redisTemplate.watch(key);
+            redisTemplate.multi();
             this.del(key);
+            redisTemplate.exec();
             log.info("release lock, key: {}, lockValue: {}", key, lockValue);
             return true;
         }
-        redisTemplate.unwatch();
         return false;
     }
 
