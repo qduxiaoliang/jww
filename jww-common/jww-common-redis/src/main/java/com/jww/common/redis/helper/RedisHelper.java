@@ -192,17 +192,18 @@ public final class RedisHelper implements CacheManager {
 
     @Override
     public boolean unlock(String key, String lockValue) {
-        if (lockValue == null || "".equals(lockValue)) {
+        if (StrUtil.isEmpty(lockValue)) {
             log.error("lockValue must be not empty");
             throw new IllegalArgumentException("lockValue must be not empty");
         }
-        redisTemplate.watch(key);
         if (lockValue.equals(this.get(key))) {
+            redisTemplate.watch(key);
+            redisTemplate.multi();
             this.del(key);
+            redisTemplate.exec();
             log.info("release lock, key: {}, lockValue: {}", key, lockValue);
             return true;
         }
-        redisTemplate.unwatch();
         return false;
     }
 
