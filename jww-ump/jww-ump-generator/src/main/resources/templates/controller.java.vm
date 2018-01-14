@@ -128,7 +128,7 @@ public class ${table.controllerName} {
     @DeleteMapping("/delBatchByIds")
     public ResultModel delBatchByIds(@RequestBody Long[] ids) {
         Assert.notNull(ids);
-        return ResultUtil.ok(service.delBatchByIds(new ${entity}(), Arrays.asList(ids)));
+        return ResultUtil.ok(service.deleteBatchIds(Arrays.asList(ids)));
     }
 }
 
