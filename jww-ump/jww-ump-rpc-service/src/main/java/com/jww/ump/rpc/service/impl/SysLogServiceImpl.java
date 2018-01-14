@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,12 +32,9 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogModel
 
     @Override
     public Page<SysLogModel> queryListPage(Page<SysLogModel> page) {
-        log.info("SysLogServiceImpl->queryListPage->page:" + page.toString());
-        log.info("SysLogServiceImpl->queryListPage->page->condition:" + JSON.toJSONString(page.getCondition()));
-
-        SysLogModel sysLogModel = new SysLogModel();
-        sysLogModel.setIsDel(0);
-        EntityWrapper<SysLogModel> entityWrapper = new EntityWrapper<>(sysLogModel);
+        log.debug("SysLogServiceImpl->queryListPage->page:" + page.toString());
+        log.debug("SysLogServiceImpl->queryListPage->page->condition:" + JSON.toJSONString(page.getCondition()));
+        EntityWrapper<SysLogModel> entityWrapper = new EntityWrapper<>();
         if (ObjectUtil.isNotNull(page.getCondition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<String, Object> paramMap = page.getCondition();
@@ -48,7 +43,9 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogModel
                     conditionSql.append(k + " like '%" + v + "%' OR ");
                 }
             });
-            entityWrapper.and(StrUtil.removeSuffix(conditionSql.toString(), "OR "));
+            if(StrUtil.isNotBlank(conditionSql)){
+                entityWrapper.where(StrUtil.removeSuffix(conditionSql.toString(), "OR "));
+            }
         }
         entityWrapper.orderBy("create_time",false);
         page.setCondition(null);

@@ -25,21 +25,6 @@ public abstract class BaseModel implements Serializable {
     @TableId(value = "id_", type = IdType.ID_WORKER)
     private Long id;
     /**
-     * 是否启用
-     */
-    @TableField("enable_")
-    private Integer enable;
-    /**
-     * 是否删除(0:未删除;1:已删除)
-     */
-    @TableField("is_del")
-    private Integer isDel;
-    /**
-     * 备注
-     */
-    @TableField("remark_")
-    private String remark;
-    /**
      * 创建时间
      */
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")

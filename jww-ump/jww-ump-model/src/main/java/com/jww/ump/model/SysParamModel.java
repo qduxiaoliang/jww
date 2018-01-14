@@ -38,5 +38,19 @@ public class SysParamModel extends BaseModel {
 	private String paramValue;
 	@TableField("catalog_id")
 	private Long catalogId;
-
+	/**
+	 * 是否启用
+	 */
+	@TableField("enable_")
+	private Integer enable;
+	/**
+	 * 是否删除(0:未删除;1:已删除)
+	 */
+	@TableField("is_del")
+	private Integer isDel;
+	/**
+	 * 备注
+	 */
+	@TableField("remark_")
+	private String remark;
 }

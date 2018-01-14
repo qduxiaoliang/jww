@@ -125,7 +125,7 @@ public class SysDicController extends BaseController {
         if (ids.size() == 0) {
             throw new BusinessException("字典ID集合不能为空");
         }
-        return ResultUtil.ok(sysDicService.delBatchByIds(new SysDicModel(), ids));
+        return ResultUtil.ok(sysDicService.deleteBatchIds(ids));
     }
 }
 

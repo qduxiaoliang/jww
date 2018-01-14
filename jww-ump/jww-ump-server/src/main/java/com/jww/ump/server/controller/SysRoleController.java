@@ -128,7 +128,7 @@ public class SysRoleController extends BaseController {
         if (ids.size() == 0) {
             throw new BusinessException("角色ID集合不能为空");
         }
-        return ResultUtil.ok(sysRoleService.delBatchByIds(new SysRoleModel(), ids));
+        return ResultUtil.ok(sysRoleService.deleteBatchIds(ids));
     }
 
     /**

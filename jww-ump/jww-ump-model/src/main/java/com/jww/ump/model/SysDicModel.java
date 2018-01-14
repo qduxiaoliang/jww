@@ -6,7 +6,6 @@ import com.jww.common.core.base.BaseModel;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -22,7 +21,6 @@ import javax.validation.constraints.Size;
 public class SysDicModel extends BaseModel {
 
     private static final long serialVersionUID = 1L;
-
     /**
      * 类型
      */
@@ -53,4 +51,19 @@ public class SysDicModel extends BaseModel {
     private Integer sortNo;
     @TableField("editable_")
     private Integer editable;
+    /**
+     * 是否启用
+     */
+    @TableField("enable_")
+    private Integer enable;
+    /**
+     * 是否删除(0:未删除;1:已删除)
+     */
+    @TableField("is_del")
+    private Integer isDel;
+    /**
+     * 备注
+     */
+    @TableField("remark_")
+    private String remark;
 }

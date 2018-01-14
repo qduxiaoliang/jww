@@ -1,9 +1,9 @@
 package com.jww.ump.server.druid.servlet;
 
+import com.alibaba.druid.support.http.StatViewServlet;
+
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
-
-import com.alibaba.druid.support.http.StatViewServlet;
 
 /**
  * druid数据源状态监控.

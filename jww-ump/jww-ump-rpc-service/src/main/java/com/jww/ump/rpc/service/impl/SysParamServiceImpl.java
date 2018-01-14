@@ -2,14 +2,20 @@ package com.jww.ump.rpc.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jww.common.core.Constants;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.ump.dao.mapper.SysParamMapper;
 import com.jww.ump.model.SysParamModel;
 import com.jww.ump.rpc.api.SysParamService;
 import com.xiaoleilu.hutool.util.ObjectUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,5 +46,19 @@ public class SysParamServiceImpl extends BaseServiceImpl<SysParamMapper, SysPara
         }
         page.setCondition(null);
         return super.selectPage(page, entityWrapper);
+    }
+
+    @Override
+    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
+    public boolean deleteBatchIds(List<? extends Serializable> idList){
+        List<SysParamModel> sysParamModelList = new ArrayList<SysParamModel>();
+        idList.forEach(id -> {
+            SysParamModel entity = new SysParamModel();
+            entity.setId((Long)id);
+            entity.setIsDel(1);
+            entity.setUpdateTime(new Date());
+            sysParamModelList.add(entity);
+        });
+        return super.updateBatchById(sysParamModelList);
     }
 }

@@ -128,7 +128,7 @@ public class SysMenuController extends BaseController {
     @RequiresPermissions("sys:menu:read")
     public ResultModel query(@PathVariable(value = "id") Long id) {
         Assert.notNull(id);
-        SysMenuModel sysMenuModel = sysMenuService.selectById(id);
+        SysMenuModel sysMenuModel = sysMenuService.queryById(id);
         return ResultUtil.ok(sysMenuModel);
     }
 
@@ -217,7 +217,7 @@ public class SysMenuController extends BaseController {
      */
     @ApiOperation(value = "查询菜单树", notes = "根据菜单类型和菜单ID查询菜单树")
     @GetMapping("/queryTree/{menuType}/{menuId}")
-    @RequiresPermissions("sys:menu:update")
+    @RequiresPermissions("sys:menu:read")
     public ResultModel queryTree(@PathVariable(required = false, value = "menuType") Integer menuType, @PathVariable(value = "menuId") Long menuId) {
         List<SysTreeModel> list = sysMenuService.queryTree(menuId, menuType);
         return ResultUtil.ok(list);
@@ -233,7 +233,7 @@ public class SysMenuController extends BaseController {
      */
     @ApiOperation(value = "查询菜单树", notes = "根据菜单类型查询菜单树")
     @GetMapping("/queryTree/{menuType}")
-    @RequiresPermissions("sys:menu:add")
+    @RequiresPermissions("sys:menu:read")
     public ResultModel queryTree(@PathVariable(required = false, value = "menuType") Integer menuType) {
         List<SysTreeModel> list = sysMenuService.queryTree(null, menuType);
         return ResultUtil.ok(list);

@@ -1,5 +1,6 @@
 package com.jww.common.redis.configuration;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +8,8 @@ import com.jww.common.core.Constants;
 import com.jww.common.core.base.BaseModel;
 import com.xiaoleilu.hutool.util.ArrayUtil;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.*;
+import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +20,8 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author shadj
@@ -31,11 +33,12 @@ import java.util.stream.Stream;
 public class RedisConfig extends CachingConfigurerSupport {
 
     /**
+     * <p>
+     * 自定义KEY生成器，格式： jww:data:[包名 + 类名 + 方法名+ 参数]
+     * 如：jww:data:com.jww.common.redis.RedisConfig:queryList_param1_param2
+     * </p>
+     *
      * @return KeyGenerator
-     * @description: 自定义KEY生成器，格式：
-     * Cacheable ： cacheNames(0) + 包名 + 类名 +  参数  ,如：keyGenerator.com.jww.common.redis.RedisConfig:param1_param2
-     * CachePut  ： cacheNames(0) + 包名 + 类名 +  id    ,要求第一个参数为BaseModel
-     * CacheEvict:  cacheNames(0) + 包名 + 类名 +  id    ,要求第一个参数为BaseModel
      * @author shadj
      * @date 2017/11/21 15:38
      */
@@ -45,49 +48,36 @@ public class RedisConfig extends CachingConfigurerSupport {
         return new KeyGenerator() {
             @Override
             public Object generate(Object target, Method method, Object... params) {
+                String paramStr = getParamStr(params);
                 StringBuilder sb = new StringBuilder();
-                Cacheable cacheable = method.getAnnotation(Cacheable.class);
-                CachePut cachePut = method.getAnnotation(CachePut.class);
-                CacheEvict cacheEvict = method.getAnnotation(CacheEvict.class);
-                String cacheName = "";
-                String suffix = "";
-                if (cacheable != null) {
-                    String[] cacheNames = cacheable.value();
-                    if (ArrayUtil.isNotEmpty(cacheNames)) {
-                        cacheName = cacheNames[0];
-                    }
-                    suffix = Stream.of(params).map(String::valueOf).collect(Collectors.joining("_"));
-                } else if (cachePut != null) {
-                    String[] cacheNames = cachePut.value();
-                    if (ArrayUtil.isNotEmpty(cacheNames)) {
-                        cacheName = cacheNames[0];
-                    }
-                    suffix = getIDFromParams(params);
-                } else if (cacheEvict != null) {
-                    String[] cacheNames = cacheEvict.value();
-                    if (ArrayUtil.isNotEmpty(cacheNames)) {
-                        cacheName = cacheNames[0];
-                    }
-                    suffix = getIDFromParams(params);
-                }
-                sb.append(Constants.DATA_CACHE_NAMESPACE).append(target.getClass().getName()).append(":")
-                        .append(cacheName).append(":").append(suffix);
+                sb.append(Constants.DATA_CACHE_NAMESPACE)
+                        .append(target.getClass().getName())
+                        .append(":").append(method.getName())
+                        .append("_").append(paramStr);
                 return sb.toString();
             }
 
-            /** 从参数中获取ID */
-            private String getIDFromParams(Object[] params) {
-                String id = "";
-                if (ArrayUtil.isNotEmpty(params)) {
-                    //获取第一个参数
-                    Object param0 = params[0];
-                    //如果第一个参数是BaseModel，则获取ID
-                    if (param0 instanceof BaseModel) {
-                        BaseModel param0BaseModel = (BaseModel) param0;
-                        id = String.valueOf(param0BaseModel.getId());
+            /** 获取参数串（BaseModel取ID），以下划线连线 */
+            private String getParamStr(Object[] params) {
+                if (ArrayUtil.isEmpty(params)) {
+                    return "";
+                }
+                String paramStr = "";
+                for (Object param : params) {
+                    //BaseModel类型，取ID
+                    if (param instanceof BaseModel) {
+                        BaseModel model = (BaseModel) param;
+                        paramStr = String.join("_", paramStr, String.valueOf(model.getId()));
+                    } else if (ArrayUtil.isArray(param)) {
+                        //数组类型，将各元素序列化为字符串
+                        Object[] arrs = (Object[]) param;
+                        paramStr = Arrays.stream(arrs).map(JSON::toJSONString).collect(Collectors.joining("_"));
+                    } else {
+                        //其它类型，直接序列化为字符串
+                        paramStr = String.join("_", paramStr, JSON.toJSONString(param));
                     }
                 }
-                return id;
+                return paramStr;
             }
         };
     }

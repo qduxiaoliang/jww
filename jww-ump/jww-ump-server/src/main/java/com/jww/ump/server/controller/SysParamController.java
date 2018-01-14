@@ -123,7 +123,7 @@ public class SysParamController extends BaseController {
         if (CollectionUtil.isEmpty(ids)) {
             throw new BusinessException("参数ID集合不能为空");
         }
-        return ResultUtil.ok(sysParamService.delBatchByIds(new SysParamModel(), ids));
+        return ResultUtil.ok(sysParamService.deleteBatchIds(ids));
     }
 }
 

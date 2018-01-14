@@ -2,6 +2,7 @@ package com.jww.ump.rpc.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.jww.common.core.Constants;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
 import com.jww.ump.dao.mapper.SysRoleMapper;
@@ -10,7 +11,6 @@ import com.jww.ump.model.SysRoleModel;
 import com.jww.ump.rpc.api.SysRoleMenuService;
 import com.jww.ump.rpc.api.SysRoleService;
 import com.xiaoleilu.hutool.lang.Assert;
-import com.xiaoleilu.hutool.util.ArrayUtil;
 import com.xiaoleilu.hutool.util.CollectionUtil;
 import com.xiaoleilu.hutool.util.ObjectUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
@@ -19,7 +19,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +89,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleMo
 
 
     @Override
-    @CacheEvict(value = "data")
+    @CacheEvict(value = Constants.CACHE_VALUE)
     @Transactional(rollbackFor = Exception.class)
     public SysRoleModel modifyById(SysRoleModel sysRoleModel) {
         SysRoleModel result = super.modifyById(sysRoleModel);
@@ -131,5 +133,19 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleMo
         EntityWrapper<SysRoleModel> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("dept_id", deptId);
         return sysRoleMapper.selectList(entityWrapper);
+    }
+
+    @Override
+    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
+    public boolean deleteBatchIds(List<? extends Serializable> idList){
+        List<SysRoleModel> roleModelList = new ArrayList<SysRoleModel>();
+        idList.forEach(id -> {
+            SysRoleModel entity = new SysRoleModel();
+            entity.setId((Long)id);
+            entity.setIsDel(1);
+            entity.setUpdateTime(new Date());
+            roleModelList.add(entity);
+        });
+        return super.updateBatchById(roleModelList);
     }
 }

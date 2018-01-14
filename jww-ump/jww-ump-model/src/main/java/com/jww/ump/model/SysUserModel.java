@@ -2,9 +2,7 @@ package com.jww.ump.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import com.jww.common.core.base.BaseModel;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
@@ -140,4 +138,19 @@ public class SysUserModel extends BaseModel {
      */
     @TableField(exist = false)
     private Long[] role;
+    /**
+     * 是否启用
+     */
+    @TableField("enable_")
+    private Integer enable;
+    /**
+     * 是否删除(0:未删除;1:已删除)
+     */
+    @TableField("is_del")
+    private Integer isDel;
+    /**
+     * 备注
+     */
+    @TableField("remark_")
+    private String remark;
 }
