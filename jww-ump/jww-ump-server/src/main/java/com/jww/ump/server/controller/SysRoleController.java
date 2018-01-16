@@ -89,8 +89,8 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("sys:role:add")
     @SysLogOpt(module = "角色管理", value = "角色新增", operationType = Constants.LogOptEnum.ADD)
     public ResultModel add(@Valid @RequestBody SysRoleModel sysRoleModel) {
-        sysRoleModel.setCreateBy(getCurrUser());
-        sysRoleModel.setUpdateBy(getCurrUser());
+        sysRoleModel.setCreateBy(super.getCurrentUserId());
+        sysRoleModel.setUpdateBy(super.getCurrentUserId());
         return ResultUtil.ok(sysRoleService.add(sysRoleModel));
     }
 
@@ -107,7 +107,7 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("sys:role:update")
     @SysLogOpt(module = "角色管理", value = "角色修改", operationType = Constants.LogOptEnum.MODIFY)
     public ResultModel modify(@Valid @RequestBody SysRoleModel sysRoleModel) {
-        sysRoleModel.setUpdateBy(getCurrUser());
+        sysRoleModel.setUpdateBy(super.getCurrentUserId());
         sysRoleService.modifyById(sysRoleModel);
         return ResultUtil.ok();
     }

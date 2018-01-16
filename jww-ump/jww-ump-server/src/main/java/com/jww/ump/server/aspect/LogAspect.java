@@ -4,13 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.jww.common.core.Constants;
 import com.jww.common.core.util.RegexUtil;
 import com.jww.common.web.model.ResultModel;
+import com.jww.common.web.util.WebUtil;
 import com.jww.ump.model.SysLogModel;
 import com.jww.ump.model.SysUserModel;
 import com.jww.ump.rpc.api.SysLogService;
 import com.jww.ump.server.annotation.SysLogOpt;
 import com.xiaoleilu.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -57,8 +57,8 @@ public class LogAspect {
             result = pjp.proceed();
         } finally {
             //查询类型不添加日志
-            if(!(sysLogModel.getOperationType()==Constants.LogOptEnum.QUERY.value() || sysLogModel.getOperationType() ==Constants.LogOptEnum.UNKNOW.value())
-                    && logAfter(result,sysLogModel).getUserName()!=null){
+            if (!(sysLogModel.getOperationType() == Constants.LogOptEnum.QUERY.value() || sysLogModel.getOperationType() == Constants.LogOptEnum.UNKNOW.value())
+                    && logAfter(result, sysLogModel).getUserName() != null) {
                 //不入缓存库
                 sysLogModel.setCreateTime(new Date());
                 sysLogModel.setUpdateTime(new Date());
@@ -69,7 +69,7 @@ public class LogAspect {
     }
 
 
-    private SysLogModel logPre(ProceedingJoinPoint pjp) throws Exception{
+    private SysLogModel logPre(ProceedingJoinPoint pjp) throws Exception {
         SysLogModel sysLogModel = new SysLogModel();
         for (Method method : Class.forName(pjp.getTarget().getClass().getName()).getMethods()) {
             if (method.getName().equals(pjp.getSignature().getName())) {
@@ -90,7 +90,7 @@ public class LogAspect {
         //方法名含包名（com.jww.ump.SysLogController.queryListPage）
         String classMethod = pjp.getSignature().getDeclaringTypeName() + "." + pjp.getSignature().getName();
         //请求参数
-        String args = JSON.toJSONString(pjp.getArgs()).replaceAll(RegexUtil.getJSonValueRegex("password"),"****").replaceAll(RegexUtil.getJSonValueRegex("oldPassword"),"****");
+        String args = JSON.toJSONString(pjp.getArgs()).replaceAll(RegexUtil.getJSonValueRegex("password"), "****").replaceAll(RegexUtil.getJSonValueRegex("oldPassword"), "****");
 
         sysLogModel.setIp(ip);
         sysLogModel.setMethod(classMethod);
@@ -98,8 +98,8 @@ public class LogAspect {
         sysLogModel.setCreateTime(new Date());
         sysLogModel.setCreateBy(0L);
         sysLogModel.setUpdateBy(0L);
-        SysUserModel crrentUser = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
-        if(crrentUser!=null){
+        SysUserModel crrentUser = (SysUserModel) WebUtil.getCurrentUser();
+        if (crrentUser != null) {
             sysLogModel.setUserName(crrentUser.getUserName());
         }
         return sysLogModel;
@@ -108,19 +108,19 @@ public class LogAspect {
 
     private SysLogModel logAfter(Object result, SysLogModel sysLogModel) {
         ResultModel response = null;
-        if(result!=null){
-            response = (ResultModel)result;
+        if (result != null) {
+            response = (ResultModel) result;
         }
-        if(sysLogModel.getUserName()==null){
-            SysUserModel user = (SysUserModel) SecurityUtils.getSubject().getPrincipal();
-            if(user!=null){
+        if (sysLogModel.getUserName() == null) {
+            SysUserModel user = (SysUserModel) WebUtil.getCurrentUser();
+            if (user != null) {
                 sysLogModel.setUserName(user.getUserName());
             }
         }
         //返回结果
-        if(response!=null && response.code == Constants.ResultCodeEnum.SUCCESS.value()){
+        if (response != null && response.code == Constants.ResultCodeEnum.SUCCESS.value()) {
             sysLogModel.setResult(1);
-        }else{
+        } else {
             sysLogModel.setResult(0);
         }
         //执行时长(毫秒)

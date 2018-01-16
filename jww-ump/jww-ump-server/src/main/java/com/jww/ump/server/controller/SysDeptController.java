@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -84,8 +83,8 @@ public class SysDeptController extends BaseController {
     @SysLogOpt(module = "部门管理", value = "部门新增", operationType = Constants.LogOptEnum.ADD)
     public ResultModel add(@Valid @RequestBody SysDeptModel sysDeptModel) {
         if (sysDeptModel != null) {
-            sysDeptModel.setCreateBy(this.getCurrUser());
-            sysDeptModel.setUpdateBy(this.getCurrUser());
+            sysDeptModel.setCreateBy(super.getCurrentUserId());
+            sysDeptModel.setUpdateBy(super.getCurrentUserId());
         }
         return ResultUtil.ok(sysDeptService.addDept(sysDeptModel));
     }
@@ -103,7 +102,7 @@ public class SysDeptController extends BaseController {
     @RequiresPermissions("sys:dept:update")
     @SysLogOpt(module = "部门管理", value = "部门修改", operationType = Constants.LogOptEnum.MODIFY)
     public ResultModel modify(@RequestBody SysDeptModel sysDeptModel) {
-        sysDeptModel.setUpdateBy(this.getCurrUser());
+        sysDeptModel.setUpdateBy(super.getCurrentUserId());
         sysDeptModel.setUpdateTime(new Date());
         sysDeptService.modifyById(sysDeptModel);
         return ResultUtil.ok();

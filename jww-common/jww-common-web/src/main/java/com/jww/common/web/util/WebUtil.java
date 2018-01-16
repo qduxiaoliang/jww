@@ -36,6 +36,13 @@ public final class WebUtil {
     /**
      * 保存当前用户
      */
+    public static void saveCurrentUserId(Long userId) {
+        setSession(Constants.CURRENT_USER_ID, userId);
+    }
+
+    /**
+     * 保存当前用户
+     */
     public static void saveCurrentUser(HttpServletRequest request, Object user) {
         setSession(request, Constants.CURRENT_USER, user);
     }
@@ -43,13 +50,31 @@ public final class WebUtil {
     /**
      * 获取当前用户
      */
-    public static Long getCurrentUser() {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (null != currentUser) {
+    public static Object getCurrentUser() {
+        Subject subject = SecurityUtils.getSubject();
+        if (null != subject) {
             try {
-                Session session = currentUser.getSession();
+                Session session = subject.getSession();
                 if (null != session) {
-                    return (Long) session.getAttribute(Constants.CURRENT_USER);
+                    return session.getAttribute(Constants.CURRENT_USER);
+                }
+            } catch (InvalidSessionException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前用户ID
+     */
+    public static Long getCurrentUserId() {
+        Subject subject = SecurityUtils.getSubject();
+        if (null != subject) {
+            try {
+                Session session = subject.getSession();
+                if (null != session) {
+                    return (Long) session.getAttribute(Constants.CURRENT_USER_ID);
                 }
             } catch (InvalidSessionException e) {
                 log.error(e.getMessage(), e);
@@ -77,9 +102,9 @@ public final class WebUtil {
      * 将一些数据放到ShiroSession中,以便于其它地方使用
      */
     private static void setSession(Object key, Object value) {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (null != currentUser) {
-            Session session = currentUser.getSession();
+        Subject subject = SecurityUtils.getSubject();
+        if (null != subject) {
+            Session session = subject.getSession();
             if (null != session) {
                 session.setAttribute(key, value);
             }

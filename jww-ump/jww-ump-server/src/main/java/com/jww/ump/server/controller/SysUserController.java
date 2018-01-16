@@ -7,7 +7,6 @@ import com.jww.common.core.util.SecurityUtil;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.ResultModel;
 import com.jww.common.web.util.ResultUtil;
-import com.jww.common.web.util.WebUtil;
 import com.jww.ump.model.SysUserModel;
 import com.jww.ump.model.SysUserRoleModel;
 import com.jww.ump.rpc.api.SysUserService;
@@ -93,7 +92,7 @@ public class SysUserController extends BaseController {
         }
         // 设置初始密码: 123456
         sysUserModel.setPassword(SecurityUtil.encryptPassword("123456"));
-        sysUserModel.setCreateBy(getCurrUser());
+        sysUserModel.setCreateBy(getCurrentUserId());
         sysUserService.add(sysUserModel);
         return ResultUtil.ok();
     }
@@ -130,7 +129,7 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("sys:user:update")
     @SysLogOpt(module = "用户管理", value = "用户修改", operationType = Constants.LogOptEnum.MODIFY)
     public ResultModel modify(@RequestBody SysUserModel sysUserModel) {
-        sysUserModel.setCreateBy(this.getCurrUser());
+        sysUserModel.setCreateBy(super.getCurrentUserId());
         sysUserModel.setUpdateTime(new Date());
         return ResultUtil.ok(sysUserService.modifyUser(sysUserModel));
     }
@@ -147,10 +146,10 @@ public class SysUserController extends BaseController {
     @PostMapping("/modifyMySelf")
     @SysLogOpt(module = "用户管理", value = "个人资料修改", operationType = Constants.LogOptEnum.MODIFY)
     public ResultModel modifyMySelf(@RequestBody SysUserModel sysUserModel) {
-        if (!sysUserModel.getId().equals(WebUtil.getCurrentUser())) {
+        if (!sysUserModel.getId().equals(super.getCurrentUserId())) {
             throw new BusinessException("不能修改其他用户信息");
         }
-        sysUserModel.setCreateBy(this.getCurrUser());
+        sysUserModel.setCreateBy(super.getCurrentUserId());
         sysUserModel.setUpdateTime(new Date());
         return ResultUtil.ok(sysUserService.modifyById(sysUserModel));
     }
@@ -188,13 +187,13 @@ public class SysUserController extends BaseController {
         Assert.notEmpty(sysUserModel.getOldPassword());
         Assert.notEmpty(sysUserModel.getPassword());
         String encryptOldPassword = SecurityUtil.encryptPassword(sysUserModel.getOldPassword());
-        SysUserModel currentSysUserModel = sysUserService.queryById(getCurrUser());
+        SysUserModel currentSysUserModel = sysUserService.queryById(super.getCurrentUserId());
         if (!encryptOldPassword.equals(currentSysUserModel.getPassword())) {
             throw new BusinessException("旧密码不正确");
         }
         String encryptPassword = SecurityUtil.encryptPassword(sysUserModel.getPassword());
         sysUserModel.setPassword(encryptPassword);
-        sysUserModel.setId(getCurrUser());
+        sysUserModel.setId(super.getCurrentUserId());
         return ResultUtil.ok(sysUserService.modifyById(sysUserModel));
     }
 

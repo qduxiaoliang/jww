@@ -69,6 +69,13 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/reg", "anon");
         filterChainDefinitionMap.put("/captcha/*", "anon");
         filterChainDefinitionMap.put("/logout", "anon");
+        // 静态资源不鉴权
+        filterChainDefinitionMap.put("/index.html", "anon");
+        filterChainDefinitionMap.put("/css/**", "anon");
+        filterChainDefinitionMap.put("/images/**", "anon");
+        filterChainDefinitionMap.put("/js/**", "anon");
+        filterChainDefinitionMap.put("/layui/**", "anon");
+        filterChainDefinitionMap.put("/page/**", "anon");
         /******** start swagger2不鉴权 ********/
         filterChainDefinitionMap.put("/*/api-docs*", "anon");
         filterChainDefinitionMap.put("/callback*", "anon");

@@ -110,7 +110,7 @@ public class LoginController extends BaseController {
         // 清空验证码缓存
         CacheUtil.getCache().del(Constants.CAPTCHA_CACHE_NAMESPACE + loginModel.getCaptchaId());
         // 验证通过，返回前端所需的用户信息
-        SysUserModel crrentUser = (SysUserModel) subject.getPrincipal();
+        SysUserModel crrentUser = (SysUserModel) super.getCurrentUser();
         SysUserModel sysUserModel = new SysUserModel();
         sysUserModel.setId(crrentUser.getId());
         sysUserModel.setAccount(crrentUser.getAccount());

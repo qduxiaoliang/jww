@@ -145,7 +145,7 @@ public class SysMenuController extends BaseController {
     @RequiresPermissions("sys:menu:update")
     @SysLogOpt(module = "菜单管理", value = "菜单修改", operationType = Constants.LogOptEnum.MODIFY)
     public ResultModel modify(@RequestBody SysMenuModel sysMenuModel) {
-        sysMenuModel.setUpdateBy(this.getCurrUser());
+        sysMenuModel.setUpdateBy(super.getCurrentUserId());
         sysMenuModel.setUpdateTime(new Date());
         sysMenuService.modifyById(sysMenuModel);
         return ResultUtil.ok();
@@ -167,8 +167,8 @@ public class SysMenuController extends BaseController {
         if (sysMenuModel != null) {
             Date now = new Date();
             sysMenuModel.setCreateTime(now);
-            sysMenuModel.setCreateBy(this.getCurrUser());
-            sysMenuModel.setUpdateBy(this.getCurrUser());
+            sysMenuModel.setCreateBy(super.getCurrentUserId());
+            sysMenuModel.setUpdateBy(super.getCurrentUserId());
             sysMenuModel.setUpdateTime(now);
         }
         sysMenuService.add(sysMenuModel);

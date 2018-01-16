@@ -17,7 +17,18 @@ public abstract class BaseController {
      * @author wanyong
      * @date 2017-11-30 17:45
      */
-    protected Long getCurrUser() {
+    protected Long getCurrentUserId() {
+        return WebUtil.getCurrentUserId();
+    }
+
+    /**
+     * 获取当前用户
+     *
+     * @return Object
+     * @author wanyong
+     * @date 2017-11-30 17:45
+     */
+    protected Object getCurrentUser() {
         return WebUtil.getCurrentUser();
     }
 }

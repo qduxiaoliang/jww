@@ -15,6 +15,10 @@ public final class Constants {
      * 当前用户
      */
     public static final String CURRENT_USER = "CURRENT_USER";
+    /**
+     * 当前用户
+     */
+    public static final String CURRENT_USER_ID = "CURRENT_USER_ID";
 
     /**
      * mapper方法中查询语句开头格式，必须以select开头，才会切换数据源

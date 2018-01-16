@@ -27,7 +27,7 @@ layui.config({
         type: "GET",
         url: "index/permissions",
         success: function (data) {
-            if (data.code == 200) {
+            if (data.code === 200) {
                 // 设置用户权限到浏览器本地sessionStorage中
                 window.sessionStorage.setItem("JWW_UMP_USER_PERMISSIONS", data.data);
             }

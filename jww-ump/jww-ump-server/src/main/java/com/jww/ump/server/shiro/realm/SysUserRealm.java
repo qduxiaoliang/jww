@@ -43,14 +43,12 @@ public class SysUserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        SysUserModel sysUserModel = (SysUserModel) principals.getPrimaryPrincipal();
-        if (sysUserModel != null) {
-            List<String> permissionList = sysAuthorizeService.queryPermissionsByUserId(sysUserModel.getId());
-            permissionList.stream().forEach(permission -> {
-                simpleAuthorizationInfo.addStringPermission(permission);
-            });
-            log.info("userId:{},simpleAuthorizationInfo:{}", sysUserModel.getId(), JSON.toJSONString(simpleAuthorizationInfo.getStringPermissions()));
-        }
+        Long userId = WebUtil.getCurrentUserId();
+        List<String> permissionList = sysAuthorizeService.queryPermissionsByUserId(userId);
+        permissionList.stream().forEach(permission -> {
+            simpleAuthorizationInfo.addStringPermission(permission);
+        });
+        log.info("userId:{},simpleAuthorizationInfo:{}", userId, JSON.toJSONString(simpleAuthorizationInfo.getStringPermissions()));
         return simpleAuthorizationInfo;
     }
 
@@ -72,7 +70,8 @@ public class SysUserRealm extends AuthorizingRealm {
         if (!sysUserModel.getPassword().equals(new String(usernamePasswordToken.getPassword()))) {
             throw new IncorrectCredentialsException();
         }
-        WebUtil.saveCurrentUser(sysUserModel.getId());
-        return new SimpleAuthenticationInfo(sysUserModel, sysUserModel.getPassword(), sysUserModel.getUserName());
+        WebUtil.saveCurrentUser(sysUserModel);
+        WebUtil.saveCurrentUserId(sysUserModel.getId());
+        return new SimpleAuthenticationInfo(sysUserModel.getAccount(), sysUserModel.getPassword(), sysUserModel.getUserName());
     }
 }

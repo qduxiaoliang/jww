@@ -84,8 +84,8 @@ public class SysParamController extends BaseController {
     @RequiresPermissions("sys:param:add")
     @SysLogOpt(module = "参数管理", value = "参数新增", operationType = Constants.LogOptEnum.ADD)
     public ResultModel add(@Valid @RequestBody SysParamModel sysParamModel) {
-        sysParamModel.setCreateBy(getCurrUser());
-        sysParamModel.setUpdateBy(getCurrUser());
+        sysParamModel.setCreateBy(super.getCurrentUserId());
+        sysParamModel.setUpdateBy(super.getCurrentUserId());
         return ResultUtil.ok(sysParamService.add(sysParamModel));
     }
 
@@ -102,7 +102,7 @@ public class SysParamController extends BaseController {
     @RequiresPermissions("sys:param:update")
     @SysLogOpt(module = "参数管理", value = "参数修改", operationType = Constants.LogOptEnum.MODIFY)
     public ResultModel modify(@RequestBody SysParamModel sysParamModel) {
-        sysParamModel.setUpdateBy(getCurrUser());
+        sysParamModel.setUpdateBy(super.getCurrentUserId());
         sysParamService.modifyById(sysParamModel);
         return ResultUtil.ok();
     }

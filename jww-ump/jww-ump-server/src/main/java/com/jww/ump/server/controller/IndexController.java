@@ -36,6 +36,6 @@ public class IndexController extends BaseController {
     @GetMapping("/permissions")
     @RequiresAuthentication
     public ResultModel<List<SysMenuModel>> queryMyPermissions() {
-        return ResultUtil.ok(sysAuthorizeService.queryPermissionsByUserId(super.getCurrUser()));
+        return ResultUtil.ok(sysAuthorizeService.queryPermissionsByUserId(super.getCurrentUserId()));
     }
 }

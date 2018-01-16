@@ -6,7 +6,6 @@ import com.xiaoleilu.hutool.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.*;
@@ -18,28 +17,31 @@ import java.util.*;
  * @date 2017/12/29 18:28
  */
 @Slf4j
-@Component
 public class RedisCache<K, V> implements Cache<K, V> {
 
     @Override
     public V get(K key) throws CacheException {
-        log.debug("获取缓存，key:{}", getCacheKey(key));
-        V value = (V) CacheUtil.getCache().get(getCacheKey(key));
+        String cacheKey = getCacheKey(key);
+        log.debug("获取缓存，key:{}", cacheKey);
+        @SuppressWarnings("unchecked")
+        V value = (V) CacheUtil.getCache().get(cacheKey);
         return value;
     }
 
     @Override
     public V put(K key, V value) throws CacheException {
-        log.debug("放入缓存，key:{},value:{}", getCacheKey(key), value);
-        CacheUtil.getCache().set(getCacheKey(key), (Serializable) value, 30 * 60);
+        String cacheKey = getCacheKey(key);
+        log.debug("放入缓存，key:{},value:{}", cacheKey, value);
+        CacheUtil.getCache().set(cacheKey, (Serializable) value, 30 * 60);
         return value;
     }
 
     @Override
     public V remove(K key) throws CacheException {
-        log.debug("清除缓存，key:{}", getCacheKey(key));
+        String cacheKey = getCacheKey(key);
+        log.debug("清除缓存，key:{}", cacheKey);
         V value = (V) get(key);
-        CacheUtil.getCache().del(getCacheKey(key));
+        CacheUtil.getCache().del(cacheKey);
         return value;
     }
 
@@ -86,10 +88,8 @@ public class RedisCache<K, V> implements Cache<K, V> {
     /**
      * 获取缓存KEY
      */
-
     private String getCacheKey(K key) {
-        String cacheName = CacheUtil.getCacheKey(this.getClass());
-        return new StringBuilder(getKeyPrefix()).append(cacheName).append(":").append(key).toString();
+        return getKeyPrefix() + key;
     }
 
     /**

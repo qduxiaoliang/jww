@@ -86,8 +86,8 @@ public class SysDicController extends BaseController {
     @RequiresPermissions("sys:dic:add")
     @SysLogOpt(module = "字典管理", value = "字典新增", operationType = Constants.LogOptEnum.ADD)
     public ResultModel add(@Valid @RequestBody SysDicModel sysDicModel) {
-        sysDicModel.setCreateBy(getCurrUser());
-        sysDicModel.setUpdateBy(getCurrUser());
+        sysDicModel.setCreateBy(super.getCurrentUserId());
+        sysDicModel.setUpdateBy(super.getCurrentUserId());
         return ResultUtil.ok(sysDicService.add(sysDicModel));
     }
 
@@ -104,7 +104,7 @@ public class SysDicController extends BaseController {
     @RequiresPermissions("sys:dic:update")
     @SysLogOpt(module = "字典管理", value = "字典修改", operationType = Constants.LogOptEnum.MODIFY)
     public ResultModel modify(@Valid @RequestBody SysDicModel sysDicModel) {
-        sysDicModel.setUpdateBy(getCurrUser());
+        sysDicModel.setUpdateBy(super.getCurrentUserId());
         sysDicService.modifyById(sysDicModel);
         return ResultUtil.ok();
     }
