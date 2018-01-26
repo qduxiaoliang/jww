@@ -6,7 +6,10 @@ import com.xiaoleilu.hutool.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -55,7 +58,6 @@ public final class RedisHelper implements CacheManager {
     public void set(String key, Serializable value) {
         redisTemplate.opsForValue().set(key, value);
     }
-
 
 
     /**
@@ -197,15 +199,22 @@ public final class RedisHelper implements CacheManager {
             log.error("lockValue must be not empty");
             throw new IllegalArgumentException("lockValue must be not empty");
         }
-        if (lockValue.equals(this.get(key))) {
-            redisTemplate.watch(key);
-            redisTemplate.multi();
-            this.del(key);
-            redisTemplate.exec();
-            log.info("release lock, key: {}, lockValue: {}", key, lockValue);
-            return true;
-        }
-        return false;
+        Object ret = redisTemplate.execute(new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+                operations.watch(key);
+                String value = (String) operations.opsForValue().get(key);
+                if(lockValue.equals(value)){
+                    operations.multi();
+                    operations.delete(key);
+                    Object rs = operations.exec();
+                    return rs;
+                }
+                operations.unwatch();
+                return null;
+            }
+        });
+        return ret == null ? false : true;
     }
 
     @Override
