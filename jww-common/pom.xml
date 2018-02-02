@@ -22,6 +22,7 @@
         <module>jww-common-pay</module>
         <module>jww-common-dsession</module>
         <module>jww-common-db</module>
+        <module>jww-common-oss</module>
     </modules>
     <packaging>pom</packaging>
 
