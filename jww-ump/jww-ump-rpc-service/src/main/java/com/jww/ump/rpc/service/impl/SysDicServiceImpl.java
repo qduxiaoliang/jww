@@ -2,13 +2,14 @@ package com.jww.ump.rpc.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.jww.common.core.Constants;
 import com.jww.common.core.base.BaseServiceImpl;
+import com.jww.ump.common.UmpConstants;
 import com.jww.ump.dao.mapper.SysDicMapper;
 import com.jww.ump.model.SysDicModel;
 import com.jww.ump.rpc.api.SysDicService;
 import com.xiaoleilu.hutool.util.ObjectUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ import java.util.Map;
  * @since 2017-12-17
  */
 @Service("sysDicService")
+@CacheConfig(cacheNames = UmpConstants.UmpCacheName.DIC)
 public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicModel> implements SysDicService {
 
     @Override
@@ -49,7 +51,7 @@ public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicModel
     }
 
     @Override
-    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
+    @CacheEvict(value = UmpConstants.UmpCacheName.DIC, allEntries = true)
     public boolean deleteBatchIds(List<? extends Serializable> idList){
         List<SysDicModel> sysDicModelList = new ArrayList<SysDicModel>();
         idList.forEach(id -> {

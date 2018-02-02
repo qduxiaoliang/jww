@@ -1,6 +1,7 @@
 package com.jww.ump.rpc.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.jww.ump.common.UmpConstants;
 import com.jww.ump.dao.mapper.SysAuthorizeMapper;
 import com.jww.ump.dao.mapper.SysMenuMapper;
 import com.jww.ump.model.SysMenuModel;
@@ -33,7 +34,7 @@ public class SysAuthorizeServiceImpl implements SysAuthorizeService {
     public List<String> queryPermissionsByUserId(Long userId) {
         List<String> permissions = new ArrayList<String>();
         //如果是超级管理员，则查询所有权限code
-        if (userId == 1) {
+        if (UmpConstants.USERID_ADMIN.equals(userId)) {
             EntityWrapper<SysMenuModel> wrapper = new EntityWrapper<SysMenuModel>();
             wrapper.eq("is_del", 0);
             List<SysMenuModel> list = sysMenuMapper.selectList(wrapper);
@@ -42,6 +43,7 @@ public class SysAuthorizeServiceImpl implements SysAuthorizeService {
                     permissions.add(sysMenuModel.getPermission());
                 }
             }
+            permissions.add(UmpConstants.PERMISSION_ADMIN);
         } else {
             permissions = sysAuthorizeMapper.selectPermissionsByUserId(userId);
         }

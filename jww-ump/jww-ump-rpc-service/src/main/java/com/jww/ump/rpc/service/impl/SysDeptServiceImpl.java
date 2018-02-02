@@ -3,10 +3,10 @@ package com.jww.ump.rpc.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.jww.common.core.Constants;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
+import com.jww.ump.common.UmpConstants;
 import com.jww.ump.dao.mapper.SysDeptMapper;
 import com.jww.ump.dao.mapper.SysTreeMapper;
 import com.jww.ump.model.SysDeptModel;
@@ -16,6 +16,7 @@ import com.xiaoleilu.hutool.lang.Assert;
 import com.xiaoleilu.hutool.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,6 +31,7 @@ import java.util.List;
  */
 @Service("sysDeptService")
 @Slf4j
+@CacheConfig(cacheNames = UmpConstants.UmpCacheName.DEPT)
 public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptModel> implements SysDeptService {
 
     @Autowired
@@ -38,7 +40,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     private SysTreeMapper sysTreeMapper;
 
     @Override
-    @CachePut(value = Constants.CACHE_VALUE)
+    @CachePut
     @DistributedLock(value = "#sysDeptModel.getParentId()")
     public SysDeptModel addDept(SysDeptModel sysDeptModel) {
         EntityWrapper<SysDeptModel> wrapper = new EntityWrapper<>();
@@ -61,6 +63,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     }
 
     @Override
+    @CacheEvict(value = UmpConstants.UmpCacheName.DEPT, allEntries = true)
     public boolean modifyDept(SysDeptModel sysDeptModel) {
         return super.updateById(sysDeptModel);
     }
@@ -76,7 +79,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     }
 
     @Override
-    @Cacheable(value = Constants.CACHE_VALUE)
+    @Cacheable
     public SysDeptModel queryOne(Long id) {
         log.info("SysDeptServiceImpl->queryOne->id:" + id);
         SysDeptModel sysDeptModel = sysDeptMapper.selectOne(id);
@@ -84,7 +87,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     }
 
     @Override
-    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
+    @CacheEvict(value = UmpConstants.UmpCacheName.DEPT, allEntries = true)
     public Integer deleteBatch(Long[] ids) {
         int succ = 0;
         for (Long id : ids) {
@@ -110,6 +113,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     ;
 
     @Override
+    @Cacheable
     public List<SysTreeModel> queryTree(Long id) {
         List<SysTreeModel> sysTreeModelList = sysTreeMapper.selectDeptTree(id);
         List<SysTreeModel> list = SysTreeModel.getTree(sysTreeModelList);
@@ -118,6 +122,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
 
     @Override
     @DistributedLock
+    @CacheEvict(value = UmpConstants.UmpCacheName.DEPT, allEntries = true)
     public boolean delDept(Long id) {
         int subDeptCount = querySubDeptCount(id);
         if (subDeptCount > 0) {
@@ -135,6 +140,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptMo
     }
 
     @Override
+    @Cacheable
     public List<SysDeptModel> querySubDept(Long id) {
         Assert.notNull(id);
         EntityWrapper<SysDeptModel> wrapper = new EntityWrapper<>();

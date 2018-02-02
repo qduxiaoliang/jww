@@ -3,10 +3,10 @@ package com.jww.ump.rpc.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.jww.common.core.Constants;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
+import com.jww.ump.common.UmpConstants;
 import com.jww.ump.dao.mapper.SysMenuMapper;
 import com.jww.ump.dao.mapper.SysRoleMenuMapper;
 import com.jww.ump.dao.mapper.SysTreeMapper;
@@ -14,11 +14,10 @@ import com.jww.ump.model.SysMenuModel;
 import com.jww.ump.model.SysTreeModel;
 import com.jww.ump.rpc.api.SysMenuService;
 import com.xiaoleilu.hutool.collection.CollUtil;
-import com.xiaoleilu.hutool.util.ArrayUtil;
-import com.xiaoleilu.hutool.util.CollectionUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
+import com.xiaoleilu.hutool.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -39,6 +38,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service("sysMenuService")
+@CacheConfig(cacheNames = UmpConstants.UmpCacheName.MENU)
 public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuModel> implements SysMenuService {
 
     @Autowired
@@ -51,6 +51,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
     private SysRoleMenuMapper sysRoleMenuMapper;
 
     @Override
+    @Cacheable
     public List<SysMenuModel> queryList() {
         SysMenuModel sysMenuModel = new SysMenuModel();
         // 状态为：启用
@@ -68,10 +69,20 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
         menu.setEnable(1);
         menu.setIsDel(0);
         EntityWrapper<SysMenuModel> wrapper = new EntityWrapper<>(menu);
-        String menuName = page.getCondition() == null ? null : page.getCondition().get("menu_name").toString();
         wrapper.eq("a.is_del", 0).eq("a.enable_", 1);
-        if (StrUtil.isNotEmpty(menuName)) {
-            wrapper.like(" a.menu_name ", "%" + menuName + "%");
+        if (ObjectUtil.isNotNull(page.getCondition())) {
+            StringBuilder conditionSql = new StringBuilder();
+            Map<String, Object> paramMap = page.getCondition();
+            paramMap.forEach((k, v) -> {
+                if (NumberUtil.isNumber(v + "")) {
+                    conditionSql.append("a.").append(k + " = " + v + " and ");
+                } else if (StrUtil.isNotBlank(v + "")) {
+                    conditionSql.append("a.").append(k + " like '%" + v + "%' and ");
+                }
+            });
+            if (StrUtil.isNotBlank(conditionSql)) {
+                wrapper.where(StrUtil.removeSuffix(conditionSql.toString(), "and "));
+            }
         }
         wrapper.orderBy(" parent_id, sort_no ", true);
         page.setCondition(null);
@@ -79,20 +90,34 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
     }
 
     @Override
-    @Cacheable(Constants.CACHE_VALUE)
+    @Cacheable
     public List<SysTreeModel> queryMenuTreeByUserId(Long userId) {
-        List<SysMenuModel> sysMenuModelList = sysMenuMapper.selectMenuTreeByUserId(userId);
+        List<SysMenuModel> sysMenuModelList = null;
+        // 如果是超级管理员，则查询所有目录菜单
+        if (UmpConstants.USERID_ADMIN.equals(userId)) {
+            SysMenuModel sysMenuModel = new SysMenuModel();
+            sysMenuModel.setEnable(1);
+            sysMenuModel.setIsShow(1);
+            sysMenuModel.setIsDel(0);
+            EntityWrapper<SysMenuModel> wrapper = new EntityWrapper<>(sysMenuModel);
+            wrapper.ne("menu_type", 2);
+            wrapper.orderBy("parent_id, sort_no", true);
+            sysMenuModelList = sysMenuMapper.selectList(wrapper);
+        } else {
+            sysMenuModelList = sysMenuMapper.selectMenuTreeByUserId(userId);
+        }
         return convertTreeData(sysMenuModelList, null);
     }
 
     @Override
+    @Cacheable
     public List<SysTreeModel> queryFuncMenuTree() {
         List<SysMenuModel> sysMenuModelList = queryList();
         return convertTreeData(sysMenuModelList, null);
     }
 
     @Override
-    @Cacheable(Constants.CACHE_VALUE)
+    @Cacheable(value = UmpConstants.UmpCacheName.ROLE)
     public List<SysTreeModel> queryFuncMenuTree(Long roleId) {
         List<SysMenuModel> sysMenuModelList = queryList();
         List<Long> menuIdList = sysRoleMenuMapper.selectMenuIdListByRoleId(roleId);
@@ -101,6 +126,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
     }
 
     @Override
+    @Cacheable
     public List<SysTreeModel> queryTree(Long id, Integer menuType) {
         List<SysTreeModel> sysTreeModelList = sysTreeMapper.selectMenuTree(id, menuType);
         List<SysTreeModel> list = SysTreeModel.getTree(sysTreeModelList);
@@ -109,7 +135,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
 
     @Override
     @DistributedLock
-    @CacheEvict(value = Constants.CACHE_VALUE,allEntries = true)
+    @CacheEvict(value = UmpConstants.UmpCacheName.MENU,allEntries = true)
     public Boolean delete(Long id) {
         //查询是否有子菜单，如果有则返回false，否则允许删除
         EntityWrapper<SysMenuModel> entityWrapper = new EntityWrapper<SysMenuModel>();
@@ -133,7 +159,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
     }
 
     @Override
-    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
+    @CacheEvict(value = UmpConstants.UmpCacheName.MENU, allEntries = true)
     public Integer deleteBatch(Long[] ids) {
         int succ = 0;
         for (Long id : ids) {
@@ -152,7 +178,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
     }
 
     @Override
-    @CachePut(value = Constants.CACHE_VALUE)
+    @CachePut
     @DistributedLock(value = "#sysMenuModel.getParentId()")
     public SysMenuModel add(SysMenuModel sysMenuModel) {
         //名称重复验证，同一目录下，菜单名称不能相同
@@ -168,12 +194,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
     }
 
     @Override
-/*    @Caching(evict = {
-            @CacheEvict(Constants.CACHE_VALUE),
-            @CacheEvict(value = Constants.CACHE_VALUE,allEntries = true)
-        }
-    )*/
-    @CacheEvict(value = {Constants.CACHE_VALUE, Constants.CACHE_VALUE}, allEntries = true)
+    @CacheEvict(value = UmpConstants.UmpCacheName.MENU, allEntries = true)
     public SysMenuModel modifyById(SysMenuModel sysMenuModel) {
         if(StrUtil.isNotBlank(sysMenuModel.getMenuName())){
             //名称重复验证，同一目录下，菜单名称不能相同（需要排除自己）

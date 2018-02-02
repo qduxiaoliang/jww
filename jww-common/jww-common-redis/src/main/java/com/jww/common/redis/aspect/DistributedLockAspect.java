@@ -37,7 +37,6 @@ public class DistributedLockAspect {
 
     @Around("pointCut()")
     public Object doAround(ProceedingJoinPoint pjp) {
-        Object result = null;
         /*
         如果注释中配置了key(支持SpEL表达式)，则lockName的规则为：lock:{cacheName}：{key}
         否则，lockName的规则为：lock:{cacheName}：{param0.id}_{param1.id}
@@ -54,7 +53,7 @@ public class DistributedLockAspect {
             }
             log.info("获取分布式锁成功，lockName ：{}，lockValue : {}", lockName, lockValue);
             try {
-                result = pjp.proceed();
+                return pjp.proceed();
             } catch (BusinessException e) {
                 log.error("方法执行失败", e);
                 throw e;
@@ -67,10 +66,9 @@ public class DistributedLockAspect {
                 CacheUtil.getCache().unlock(lockName, lockValue);
                 log.info("释放分布式锁成功，lockName ：{}，lockValue : {}", lockName, lockValue);
             } catch (Throwable throwable) {
-                log.error("分布式锁解锁失败，lockName ：{}", lockName);
+                log.error("分布式锁解锁失败，lockName ：{}", lockName, throwable);
             }
         }
-        return result;
     }
 
     /**
@@ -100,23 +98,19 @@ public class DistributedLockAspect {
             return parserKey(signature, key, args);
         }
 
-        StringBuilder str = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         String delimiter = "_";
         for (Object arg : args) {
             if (arg instanceof BaseModel) {
                 BaseModel param0BaseModel = (BaseModel) arg;
-                str.append(String.valueOf(param0BaseModel.getId()))
+                sb.append(String.valueOf(param0BaseModel.getId()))
                         .append(delimiter);
             } else {
-                str.append(String.valueOf(arg))
+                sb.append(String.valueOf(arg))
                         .append(delimiter);
             }
         }
-        String ret = str.toString();
-        if (ret.endsWith(delimiter)) {
-            ret = ret.substring(0, ret.length() - 1);
-        }
-        return str.toString();
+        return StrUtil.removeSuffix(sb.toString(), delimiter);
     }
 
     /**

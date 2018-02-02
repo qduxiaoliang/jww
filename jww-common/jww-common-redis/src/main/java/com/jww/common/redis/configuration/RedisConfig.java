@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jww.common.core.Constants;
 import com.jww.common.core.base.BaseModel;
 import com.xiaoleilu.hutool.util.ArrayUtil;
+import com.xiaoleilu.hutool.util.StrUtil;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
-import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.annotation.*;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,9 +48,40 @@ public class RedisConfig extends CachingConfigurerSupport {
         return new KeyGenerator() {
             @Override
             public Object generate(Object target, Method method, Object... params) {
+                CacheConfig cacheConfig = target.getClass().getAnnotation(CacheConfig.class);
+                Cacheable cacheable = method.getAnnotation(Cacheable.class);
+                CachePut cachePut = method.getAnnotation(CachePut.class);
+                CacheEvict cacheEvict = method.getAnnotation(CacheEvict.class);
+                String cacheName = "";
+                if (cacheable != null) {
+                    String[] cacheNames = cacheable.value();
+                    if (ArrayUtil.isNotEmpty(cacheNames)) {
+                        cacheName = cacheNames[0];
+                    }
+                } else if (cachePut != null) {
+                    String[] cacheNames = cachePut.value();
+                    if (ArrayUtil.isNotEmpty(cacheNames)) {
+                        cacheName = cacheNames[0];
+                    }
+                } else if (cacheEvict != null) {
+                    String[] cacheNames = cacheEvict.value();
+                    if (ArrayUtil.isNotEmpty(cacheNames)) {
+                        cacheName = cacheNames[0];
+                    }
+                }
+                if (cacheConfig != null && StrUtil.isBlank(cacheName)) {
+                    String[] cacheNames = cacheConfig.cacheNames();
+                    if (ArrayUtil.isNotEmpty(cacheNames)) {
+                        cacheName = cacheNames[0];
+                    }
+                }
+                if(StrUtil.isBlank(cacheName)) {
+                    cacheName = "default";
+                }
                 String paramStr = getParamStr(params);
                 StringBuilder sb = new StringBuilder();
                 sb.append(Constants.DATA_CACHE_NAMESPACE)
+                        .append(cacheName).append(":")
                         .append(target.getClass().getName())
                         .append(":").append(method.getName())
                         .append("_").append(paramStr);

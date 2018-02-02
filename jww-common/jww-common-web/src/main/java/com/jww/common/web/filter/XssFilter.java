@@ -24,7 +24,7 @@ public class XssFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        log.info("init XssFilter");
+        log.debug("init XssFilter");
         String excludePath = filterConfig.getInitParameter("excludePaths");
         if (StrUtil.isNotBlank(excludePath)) {
             excludePaths = excludePath.split(",");
@@ -33,14 +33,14 @@ public class XssFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.info("XssFilter.doFilter. request uri: {}",((HttpServletRequest) servletRequest).getRequestURI());
+        log.debug("XssFilter.doFilter. request uri: {}",((HttpServletRequest) servletRequest).getRequestURI());
         if (excludePaths != null) {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             String uri = request.getRequestURI();
             // 排除部分URL不做过滤。
             for (String str : excludePaths) {
                 if (uri.indexOf(str) >= 0) {
-                    log.info("该URL不作校验：" + uri);
+                    log.debug("该URL不作校验：" + uri);
                     filterChain.doFilter(servletRequest, servletResponse);
                     return;
                 }

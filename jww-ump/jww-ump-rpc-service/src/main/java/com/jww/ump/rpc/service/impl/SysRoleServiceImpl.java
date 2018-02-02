@@ -2,10 +2,11 @@ package com.jww.ump.rpc.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.jww.common.core.Constants;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
+import com.jww.ump.common.UmpConstants;
 import com.jww.ump.dao.mapper.SysRoleMapper;
+import com.jww.ump.dao.mapper.SysRoleMenuMapper;
 import com.jww.ump.model.SysRoleMenuModel;
 import com.jww.ump.model.SysRoleModel;
 import com.jww.ump.rpc.api.SysRoleMenuService;
@@ -15,7 +16,9 @@ import com.xiaoleilu.hutool.util.CollectionUtil;
 import com.xiaoleilu.hutool.util.ObjectUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,7 @@ import java.util.Map;
  * @since 2017-12-17
  */
 @Service("sysRoleService")
+@CacheConfig(cacheNames = UmpConstants.UmpCacheName.ROLE)
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleModel> implements SysRoleService {
 
     @Autowired
@@ -69,6 +73,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleMo
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = UmpConstants.UmpCacheName.ROLE, allEntries = true)
     public SysRoleModel add(SysRoleModel sysRoleModel) {
         // 根据角色名称和部门检查是否存在相同的角色
         SysRoleModel checkModel = new SysRoleModel();
@@ -89,7 +94,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleMo
 
 
     @Override
-    @CacheEvict(value = Constants.CACHE_VALUE)
+    @CacheEvict(value = UmpConstants.UmpCacheName.ROLE, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public SysRoleModel modifyById(SysRoleModel sysRoleModel) {
         SysRoleModel result = super.modifyById(sysRoleModel);
@@ -128,6 +133,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleMo
     }
 
     @Override
+    @Cacheable
     public List<SysRoleModel> queryRoles(Long deptId) {
         Assert.notNull(deptId);
         EntityWrapper<SysRoleModel> entityWrapper = new EntityWrapper<>();
@@ -136,12 +142,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleMo
     }
 
     @Override
-    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
-    public boolean deleteBatchIds(List<? extends Serializable> idList){
+    @CacheEvict(value = UmpConstants.UmpCacheName.ROLE, allEntries = true)
+    public boolean deleteBatchIds(List<? extends Serializable> idList) {
         List<SysRoleModel> roleModelList = new ArrayList<SysRoleModel>();
         idList.forEach(id -> {
             SysRoleModel entity = new SysRoleModel();
-            entity.setId((Long)id);
+            entity.setId((Long) id);
             entity.setIsDel(1);
             entity.setUpdateTime(new Date());
             roleModelList.add(entity);

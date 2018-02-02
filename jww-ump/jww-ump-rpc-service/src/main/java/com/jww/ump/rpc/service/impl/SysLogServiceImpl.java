@@ -1,6 +1,5 @@
 package com.jww.ump.rpc.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.jww.common.core.base.BaseServiceImpl;
@@ -32,8 +31,6 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogModel
 
     @Override
     public Page<SysLogModel> queryListPage(Page<SysLogModel> page) {
-        log.debug("SysLogServiceImpl->queryListPage->page:" + page.toString());
-        log.debug("SysLogServiceImpl->queryListPage->page->condition:" + JSON.toJSONString(page.getCondition()));
         EntityWrapper<SysLogModel> entityWrapper = new EntityWrapper<>();
         if (ObjectUtil.isNotNull(page.getCondition())) {
             StringBuilder conditionSql = new StringBuilder();
@@ -47,7 +44,7 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogModel
                 entityWrapper.where(StrUtil.removeSuffix(conditionSql.toString(), "OR "));
             }
         }
-        entityWrapper.orderBy("create_time",false);
+        entityWrapper.orderBy("create_time", false);
         page.setCondition(null);
         return super.selectPage(page, entityWrapper);
     }

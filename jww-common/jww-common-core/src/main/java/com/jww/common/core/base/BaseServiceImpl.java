@@ -8,6 +8,7 @@ import com.jww.common.core.Constants;
 import com.jww.common.core.exception.BusinessException;
 import com.xiaoleilu.hutool.util.ObjectUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,7 +27,6 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel>
         extends ServiceImpl<BaseMapper<T>, T> implements BaseService<T> {
 
     @Override
-    @CacheEvict(value = Constants.CACHE_VALUE, allEntries = true)
     public T modifyById(T entity) {
         T resultEntity = null;
         entity.setUpdateTime(new Date());
@@ -37,13 +37,11 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseModel>
     }
 
     @Override
-    @Cacheable(value = Constants.CACHE_VALUE)
     public T queryById(Long id) {
         return super.selectById(id);
     }
 
     @Override
-    @CachePut(Constants.CACHE_VALUE)
     public T add(T entity) {
         entity.setCreateTime(new Date());
         entity.setUpdateTime(new Date());
