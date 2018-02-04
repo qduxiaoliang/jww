@@ -26,44 +26,51 @@ public final class Constants {
     public static final String MAPPER_METHOD_STARTSWITH_SELECT = "select";
 
     /**
-     * 缓存命名空间
-     */
-    public static final String CACHE_NAMESPACE = "jww:";
-
-    /**
-     * 数据缓存命名空间
-     */
-    public static final String DATA_CACHE_NAMESPACE = CACHE_NAMESPACE + "data:";
-
-    /**
-     * 分布式锁缓存命名空间
-     */
-    public static final String LOCK_CACHE_NAMESPACE = CACHE_NAMESPACE + "lock:";
-
-    /**
-     * TOKEN缓存命名空间
-     */
-    public static final String TOKEN_CACHE_NAMESPACE = CACHE_NAMESPACE + "token:";
-
-    /**
-     * CAPTCHA缓存命名空间
-     */
-    public static final String CAPTCHA_CACHE_NAMESPACE = CACHE_NAMESPACE + "captcha:";
-
-    /**
-     * SHIRO缓存命名空间
-     */
-    public static final String SHIRO_CACHE_NAMESPACE = CACHE_NAMESPACE + "shiro:";
-
-    /**
-     * 数据缓存值
-     */
-    public static final String CACHE_VALUE = "value";
-
-    /**
      * 缓存键值
      */
     public static final Map<Class<?>, String> CACHE_KEY_MAP = new HashMap<>(5);
+
+    /**
+     * 缓存命名空间前缀
+     */
+    public static final String CACHE_NAMESPACE_PREFIX = "jww:";
+
+    /**
+     * 缓存命名空间枚举
+     */
+    public enum CacheNamespaceEnum {
+        /**
+         * 数据缓存
+         */
+        DATA(CACHE_NAMESPACE_PREFIX + "data:", "数据缓存"),
+        LOCK(CACHE_NAMESPACE_PREFIX + "lock:", "分布式锁"),
+        TOKEN(CACHE_NAMESPACE_PREFIX + "token:", "票据"),
+        CAPTCHA(CACHE_NAMESPACE_PREFIX + "captcha:", "验证码"),
+        SHIRO(CACHE_NAMESPACE_PREFIX + "shiro:", "shiro"),
+        IP(CACHE_NAMESPACE_PREFIX + "ip:", "ip归属地");
+
+        /**
+         * 值
+         */
+        private String value;
+        /**
+         * 描述
+         */
+        private String message;
+
+        CacheNamespaceEnum(String value, String message) {
+            this.value = value;
+            this.message = message;
+        }
+
+        public String value() {
+            return this.value;
+        }
+
+        public String getMessage() {
+            return this.message;
+        }
+    }
 
     /**
      * 返回码枚举

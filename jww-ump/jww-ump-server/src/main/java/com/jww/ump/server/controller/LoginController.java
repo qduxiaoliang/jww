@@ -59,10 +59,10 @@ public class LoginController extends BaseController {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(116, 37, 4, 15);
         captcha.createCode();
-        if (StrUtil.isBlank(captchaId) || !CacheUtil.getCache().exists(Constants.CAPTCHA_CACHE_NAMESPACE + captchaId)) {
+        if (StrUtil.isBlank(captchaId) || !CacheUtil.getCache().exists(Constants.CacheNamespaceEnum.CAPTCHA.value() + captchaId)) {
             captchaId = RandomUtil.randomUUID();
         }
-        CacheUtil.getCache().set(Constants.CAPTCHA_CACHE_NAMESPACE + captchaId, captcha.getCode(), 120);
+        CacheUtil.getCache().set(Constants.CacheNamespaceEnum.CAPTCHA.value() + captchaId, captcha.getCode(), 120);
         captcha.write(outputStream);
         Map<String, String> map = new HashMap<String, String>(2);
         map.put("captchaId", captchaId);
@@ -83,7 +83,7 @@ public class LoginController extends BaseController {
     @SysLogOpt(module = "登录接口", value = "用户登录", operationType = Constants.LogOptEnum.LOGIN)
     public ResultModel login(@Valid @RequestBody LoginModel loginModel) {
         // 校验验证码
-        String redisCaptchaValue = (String) CacheUtil.getCache().get(Constants.CAPTCHA_CACHE_NAMESPACE + loginModel.getCaptchaId());
+        String redisCaptchaValue = (String) CacheUtil.getCache().get(Constants.CacheNamespaceEnum.CAPTCHA.value() + loginModel.getCaptchaId());
         if (StrUtil.isBlank(redisCaptchaValue)) {
             throw new LoginException(Constants.ResultCodeEnum.LOGIN_FAIL_CAPTCHA_ERROR.getMessage());
         }
@@ -108,14 +108,14 @@ public class LoginController extends BaseController {
             throw new LoginException(e);
         }
         // 清空验证码缓存
-        CacheUtil.getCache().del(Constants.CAPTCHA_CACHE_NAMESPACE + loginModel.getCaptchaId());
+        CacheUtil.getCache().del(Constants.CacheNamespaceEnum.CAPTCHA.value() + loginModel.getCaptchaId());
         // 验证通过，返回前端所需的用户信息
-        SysUserModel crrentUser = (SysUserModel) super.getCurrentUser();
+        SysUserModel currentUser = (SysUserModel) super.getCurrentUser();
         SysUserModel sysUserModel = new SysUserModel();
-        sysUserModel.setId(crrentUser.getId());
-        sysUserModel.setAccount(crrentUser.getAccount());
-        sysUserModel.setUserName(crrentUser.getUserName());
-        sysUserModel.setAvatar(crrentUser.getAvatar());
+        sysUserModel.setId(currentUser.getId());
+        sysUserModel.setAccount(currentUser.getAccount());
+        sysUserModel.setUserName(currentUser.getUserName());
+        sysUserModel.setAvatar(currentUser.getAvatar());
         return ResultUtil.ok(sysUserModel);
     }
 

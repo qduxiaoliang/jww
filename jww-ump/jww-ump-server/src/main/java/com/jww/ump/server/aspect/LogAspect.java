@@ -57,12 +57,13 @@ public class LogAspect {
             result = pjp.proceed();
         } finally {
             //查询类型不添加日志
-            if (!(sysLogModel.getOperationType() == Constants.LogOptEnum.QUERY.value() || sysLogModel.getOperationType() == Constants.LogOptEnum.UNKNOW.value())
-                    && logAfter(result, sysLogModel).getUserName() != null) {
-                //不入缓存库
-                sysLogModel.setCreateTime(new Date());
-                sysLogModel.setUpdateTime(new Date());
-                logService.insert(sysLogModel);
+            if (Constants.LogOptEnum.QUERY.value() != sysLogModel.getOperationType()) {
+                if (logAfter(result, sysLogModel).getUserName() != null) {
+                    //不入缓存库
+                    sysLogModel.setCreateTime(new Date());
+                    sysLogModel.setUpdateTime(new Date());
+                    logService.insert(sysLogModel);
+                }
             }
         }
         return result;
@@ -98,9 +99,9 @@ public class LogAspect {
         sysLogModel.setCreateTime(new Date());
         sysLogModel.setCreateBy(0L);
         sysLogModel.setUpdateBy(0L);
-        SysUserModel crrentUser = (SysUserModel) WebUtil.getCurrentUser();
-        if (crrentUser != null) {
-            sysLogModel.setUserName(crrentUser.getUserName());
+        SysUserModel currentUser = (SysUserModel) WebUtil.getCurrentUser();
+        if (currentUser != null) {
+            sysLogModel.setUserName(currentUser.getUserName());
         }
         return sysLogModel;
     }

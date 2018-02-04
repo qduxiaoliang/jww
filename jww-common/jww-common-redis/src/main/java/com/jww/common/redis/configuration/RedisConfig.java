@@ -75,12 +75,12 @@ public class RedisConfig extends CachingConfigurerSupport {
                         cacheName = cacheNames[0];
                     }
                 }
-                if(StrUtil.isBlank(cacheName)) {
+                if (StrUtil.isBlank(cacheName)) {
                     cacheName = "default";
                 }
                 String paramStr = getParamStr(params);
                 StringBuilder sb = new StringBuilder();
-                sb.append(Constants.DATA_CACHE_NAMESPACE)
+                sb.append(Constants.CacheNamespaceEnum.DATA.value())
                         .append(cacheName).append(":")
                         .append(target.getClass().getName())
                         .append(":").append(method.getName())

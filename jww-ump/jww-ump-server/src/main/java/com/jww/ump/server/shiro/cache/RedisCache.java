@@ -96,6 +96,6 @@ public class RedisCache<K, V> implements Cache<K, V> {
      * 获取缓存key前缀
      */
     private String getKeyPrefix() {
-        return Constants.SHIRO_CACHE_NAMESPACE;
+        return Constants.CacheNamespaceEnum.SHIRO.value();
     }
 }

@@ -29,7 +29,7 @@ public class CacheUtil {
      */
     public static String getCacheKey(Object id, Class<?> cls) {
         String cacheName = getCacheKey(cls);
-        return new StringBuilder(Constants.DATA_CACHE_NAMESPACE).append(cacheName).append(":").append(id).toString();
+        return new StringBuilder(Constants.CacheNamespaceEnum.DATA.value()).append(cacheName).append(":").append(id).toString();
     }
 
     /**
@@ -37,7 +37,7 @@ public class CacheUtil {
      */
     public static String getLockKey(Object id, Class<?> cls) {
         String cacheName = getCacheKey(cls);
-        return new StringBuilder(Constants.LOCK_CACHE_NAMESPACE).append(cacheName).append(":").append(id).toString();
+        return new StringBuilder(Constants.CacheNamespaceEnum.LOCK.value()).append(cacheName).append(":").append(id).toString();
     }
 
     /**
