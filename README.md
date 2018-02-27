@@ -60,6 +60,7 @@ jww
 │  ├─jww-common-http HTTP客户端
 │  ├─jww-common-log 日志服务
 │  ├─jww-common-mq 队列服务
+│  ├─jww-common-oss 对象储存组件
 │  ├─jww-common-pay 支付宝/微信支付组件
 │  ├─jww-common-redis 缓存服务
 │  └─jww-common-web WEB组件
