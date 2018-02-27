@@ -59,10 +59,14 @@
         <swagger2.spring.boot.starter.version>0.1.2</swagger2.spring.boot.starter.version>
         <!-- aspectjweaver -->
         <aspectjweaver.version>1.8.11</aspectjweaver.version>
-
+        <!-- servlet-api -->
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
         <!-- 代码生成器相关 -->
         <velocity.engine.core.version>2.0</velocity.engine.core.version>
-
+        <!-- 阿里云OSS -->
+        <aliyun-sdk-oss.version>3.0.0</aliyun-sdk-oss.version>
+        <!-- 腾讯云COS -->
+        <cos_api.version>5.2.4</cos_api.version>
     </properties>
 
 
