@@ -37,14 +37,14 @@ public class OssProperties {
     private String prefix;
 
     /**
-     * AccessKeyId
+     * AccessKeyId(对应腾讯云：SecretId)
      */
     @Getter
     @Setter
     private String accessKeyId;
 
     /**
-     * AccessKeySecret
+     * AccessKeySecret(对应腾讯云：SecretKey)
      */
     @Getter
     @Setter
@@ -58,7 +58,7 @@ public class OssProperties {
     private String bucketName;
 
     /**
-     * endPoint
+     * endPoint(对应腾讯云：Region)
      */
     @Getter
     @Setter
