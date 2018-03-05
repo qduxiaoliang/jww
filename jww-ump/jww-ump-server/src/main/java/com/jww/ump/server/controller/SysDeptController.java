@@ -104,7 +104,7 @@ public class SysDeptController extends BaseController {
     public ResultModel modify(@RequestBody SysDeptModel sysDeptModel) {
         sysDeptModel.setUpdateBy(super.getCurrentUserId());
         sysDeptModel.setUpdateTime(new Date());
-        sysDeptService.modifyById(sysDeptModel);
+        sysDeptService.modifyDept(sysDeptModel);
         return ResultUtil.ok();
     }
 
