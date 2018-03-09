@@ -7,6 +7,7 @@ import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.model.GetObjectRequest;
 import com.qcloud.cos.model.ObjectMetadata;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.region.Region;
@@ -70,5 +71,11 @@ public class QqCloudStorageServiceImpl implements CloudStorageService {
     @Override
     public String uploadSuffix(InputStream inputStream, String suffix) {
         return null;
+    }
+
+    @Override
+    public InputStream download(String path) {
+        GetObjectRequest getObjectRequest = new GetObjectRequest(ossProperties.getBucketName(), path);
+        return client.getObject(getObjectRequest).getObjectContent();
     }
 }

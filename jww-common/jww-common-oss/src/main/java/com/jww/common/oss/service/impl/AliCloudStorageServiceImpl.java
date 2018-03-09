@@ -55,4 +55,9 @@ public class AliCloudStorageServiceImpl implements CloudStorageService {
     public String uploadSuffix(InputStream inputStream, String suffix) {
         return null;
     }
+
+    @Override
+    public InputStream download(String path) {
+        return client.getObject(ossProperties.getBucketName(), path).getObjectContent();
+    }
 }

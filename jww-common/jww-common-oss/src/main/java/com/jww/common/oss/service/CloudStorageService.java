@@ -45,4 +45,14 @@ public interface CloudStorageService {
      * @return 返回http地址
      */
     String uploadSuffix(InputStream inputStream, String suffix);
+
+    /**
+     * 下载文件
+     *
+     * @param path 文件路径
+     * @return InputStream
+     * @author wanyong
+     * @date 2018-03-08 21:58
+     */
+    InputStream download(String path);
 }
