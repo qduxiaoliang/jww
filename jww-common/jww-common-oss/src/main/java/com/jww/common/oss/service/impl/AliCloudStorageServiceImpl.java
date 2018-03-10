@@ -60,4 +60,9 @@ public class AliCloudStorageServiceImpl implements CloudStorageService {
     public InputStream download(String path) {
         return client.getObject(ossProperties.getBucketName(), path).getObjectContent();
     }
+
+    @Override
+    public void delete(String path) {
+        client.deleteObject(ossProperties.getBucketName(), path);
+    }
 }

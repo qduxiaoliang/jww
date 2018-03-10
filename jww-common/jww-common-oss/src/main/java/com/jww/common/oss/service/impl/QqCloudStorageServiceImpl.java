@@ -78,4 +78,9 @@ public class QqCloudStorageServiceImpl implements CloudStorageService {
         GetObjectRequest getObjectRequest = new GetObjectRequest(ossProperties.getBucketName(), path);
         return client.getObject(getObjectRequest).getObjectContent();
     }
+
+    @Override
+    public void delete(String path) {
+        client.deleteObject(ossProperties.getBucketName(), path);
+    }
 }
