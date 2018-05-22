@@ -20,7 +20,7 @@ layui.config({
             #end
             {field: 'opt', title: '操作', fixed: 'right', width: 160, align: 'center', toolbar: '#toolBar'}
         ]],
-        url: 'user/listPage',
+        url: 'user/queryListPage',
         method: 'post',
         request: {
             pageName: 'current', //页码的参数名称，默认：page
@@ -30,7 +30,7 @@ layui.config({
             statusCode: 200, //成功的状态码，默认：0
             msgName: 'message' //状态信息的字段名称，默认：msg
         },
-        elem: '#userTable',
+        elem: '#${entity}Table',
         page: {
             elem: 'pageDiv',
             limit: 10,
