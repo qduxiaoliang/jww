@@ -3,7 +3,7 @@ package com.jww.common.web.util;
 import com.jww.common.core.Constants;
 import com.jww.common.core.model.PageModel;
 import com.jww.common.web.model.ResultModel;
-import com.xiaoleilu.hutool.util.StrUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 返回结果工具类

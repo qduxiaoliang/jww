@@ -1,7 +1,7 @@
 package com.jww.common.web.util;
 
 import com.jww.common.core.Constants;
-import com.xiaoleilu.hutool.util.StrUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.InvalidSessionException;

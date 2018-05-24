@@ -1,7 +1,7 @@
 package com.jww.common.web.filter;
 
-import com.xiaoleilu.hutool.http.HttpUtil;
-import com.xiaoleilu.hutool.io.FileUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;

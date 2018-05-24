@@ -1,7 +1,8 @@
 package com.jww.common.core.util;
 
-import com.xiaoleilu.hutool.crypto.SecureUtil;
-import com.xiaoleilu.hutool.lang.Base64;
+
+import cn.hutool.core.codec.Base64;
+import cn.hutool.crypto.SecureUtil;
 
 /**
  * 加解密工具类

@@ -1,5 +1,6 @@
 package com.jww.ump.server.aspect;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.jww.common.core.Constants;
 import com.jww.common.core.util.RegexUtil;
@@ -9,7 +10,6 @@ import com.jww.ump.model.SysLogModel;
 import com.jww.ump.model.SysUserModel;
 import com.jww.ump.rpc.api.SysLogService;
 import com.jww.ump.server.annotation.SysLogOpt;
-import com.xiaoleilu.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

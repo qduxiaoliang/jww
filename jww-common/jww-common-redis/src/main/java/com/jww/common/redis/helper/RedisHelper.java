@@ -2,7 +2,7 @@ package com.jww.common.redis.helper;
 
 import com.jww.common.redis.manager.CacheManager;
 import com.jww.common.redis.util.CacheUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -2,7 +2,7 @@ package com.jww.ump.server.shiro.cache;
 
 import com.jww.common.core.Constants;
 import com.jww.common.redis.util.CacheUtil;
-import com.xiaoleilu.hutool.collection.CollUtil;
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;

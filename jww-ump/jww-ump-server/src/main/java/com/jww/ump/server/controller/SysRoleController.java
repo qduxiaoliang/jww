@@ -11,7 +11,7 @@ import com.jww.ump.model.SysRoleModel;
 import com.jww.ump.rpc.api.SysDeptService;
 import com.jww.ump.rpc.api.SysRoleService;
 import com.jww.ump.server.annotation.SysLogOpt;
-import com.xiaoleilu.hutool.lang.Assert;
+import cn.hutool.core.lang.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

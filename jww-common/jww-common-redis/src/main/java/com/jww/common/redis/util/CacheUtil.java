@@ -2,8 +2,8 @@ package com.jww.common.redis.util;
 
 import com.jww.common.core.Constants;
 import com.jww.common.redis.manager.CacheManager;
-import com.xiaoleilu.hutool.util.ArrayUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import org.springframework.cache.annotation.CacheConfig;
 
 /**

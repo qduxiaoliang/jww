@@ -1,7 +1,7 @@
 package com.jww.common.mdb;
 
 import com.jww.common.core.Constants;
-import com.xiaoleilu.hutool.util.StrUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 数据源DbContextHolder

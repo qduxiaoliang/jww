@@ -10,7 +10,7 @@ import com.jww.ump.model.SysMenuModel;
 import com.jww.ump.model.SysTreeModel;
 import com.jww.ump.rpc.api.SysMenuService;
 import com.jww.ump.server.annotation.SysLogOpt;
-import com.xiaoleilu.hutool.lang.Assert;
+import cn.hutool.core.lang.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;

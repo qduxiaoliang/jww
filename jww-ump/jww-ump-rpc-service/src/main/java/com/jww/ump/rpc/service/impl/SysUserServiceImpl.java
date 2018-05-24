@@ -12,7 +12,7 @@ import com.jww.ump.model.SysRoleModel;
 import com.jww.ump.model.SysUserModel;
 import com.jww.ump.model.SysUserRoleModel;
 import com.jww.ump.rpc.api.SysUserService;
-import com.xiaoleilu.hutool.lang.Assert;
+import cn.hutool.core.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;

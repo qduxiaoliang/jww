@@ -6,8 +6,8 @@ import com.jww.ump.dao.mapper.SysAuthorizeMapper;
 import com.jww.ump.dao.mapper.SysMenuMapper;
 import com.jww.ump.model.SysMenuModel;
 import com.jww.ump.rpc.api.SysAuthorizeService;
-import com.xiaoleilu.hutool.collection.CollUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

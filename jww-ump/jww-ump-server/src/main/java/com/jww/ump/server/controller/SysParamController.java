@@ -1,5 +1,6 @@
 package com.jww.ump.server.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.jww.common.core.Constants;
 import com.jww.common.core.exception.BusinessException;
 import com.jww.common.core.model.PageModel;
@@ -9,8 +10,7 @@ import com.jww.common.web.util.ResultUtil;
 import com.jww.ump.model.SysParamModel;
 import com.jww.ump.rpc.api.SysParamService;
 import com.jww.ump.server.annotation.SysLogOpt;
-import com.xiaoleilu.hutool.lang.Assert;
-import com.xiaoleilu.hutool.util.CollectionUtil;
+import cn.hutool.core.lang.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

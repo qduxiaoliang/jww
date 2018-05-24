@@ -1,6 +1,6 @@
 package com.jww.common.web.filter;
 
-import com.xiaoleilu.hutool.util.StrUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 

@@ -1,6 +1,6 @@
 package com.jww.common.web.filter;
 
-import com.xiaoleilu.hutool.util.ArrayUtil;
+import cn.hutool.core.util.ArrayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;

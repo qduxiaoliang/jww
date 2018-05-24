@@ -1,5 +1,10 @@
 package com.jww.ump.server.controller;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.CircleCaptcha;
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.jww.common.core.Constants;
 import com.jww.common.core.exception.LoginException;
 import com.jww.common.core.model.LoginModel;
@@ -11,11 +16,6 @@ import com.jww.common.web.util.ResultUtil;
 import com.jww.ump.model.SysUserModel;
 import com.jww.ump.rpc.api.SysUserService;
 import com.jww.ump.server.annotation.SysLogOpt;
-import com.xiaoleilu.hutool.captcha.CaptchaUtil;
-import com.xiaoleilu.hutool.captcha.CircleCaptcha;
-import com.xiaoleilu.hutool.lang.Base64;
-import com.xiaoleilu.hutool.util.RandomUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

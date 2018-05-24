@@ -1,5 +1,6 @@
 package com.jww.common.core.util;
 
+import cn.hutool.setting.dialect.Props;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
@@ -7,10 +8,9 @@ import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.xiaoleilu.hutool.io.FileUtil;
-import com.xiaoleilu.hutool.setting.dialect.Props;
-import com.xiaoleilu.hutool.util.CharsetUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

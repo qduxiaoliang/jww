@@ -1,9 +1,9 @@
 package com.jww.common.log.web;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.jww.common.core.util.RegexUtil;
-import com.xiaoleilu.hutool.date.DateUtil;
-import com.xiaoleilu.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
