@@ -28,25 +28,26 @@
  12. 代码生成器：根据数据库表结构生成简单的增删改查功能代码，包括model、mapper、service、controller。
 
 ## 技术选型
-    ● 核心框架：Spring Boot 1.5.8 + Dubbo 2.5.7
+    ● 核心框架：Spring Boot 1.5.12.RELEASE + Dubbo 2.5.7
     ● 分布式协调服务：ZooKeeper 3.4.11
     ● 校验框架：Hibernate Validator 5.3.5.Final
     ● 安全框架：Apache Shiro 1.4.0
     ● 代码生成：MyBatis Plus Generator 2.1.6
     ● 持久层框架：MyBatis 3.4.5 + MyBatis-Plus 2.1.6
-    ● 数据库连接池：Alibaba Druid 1.1.5
+    ● 数据库连接池：Alibaba Druid 1.1.9
     ● 缓存框架：Redis.clients:jedis 2.8.2
     ● 队列框架：Apache ActiveMQ 5.14.5
     ● 会话管理：Spring-Session 1.3.1
     ● 日志管理：SLF4J 
     ● 前端框架：Layui 2.2.45
     ● 公用工具集：Hutool 3.2.3
-    ● 支付组件：Egan pay-java-parent 2.0.4
-    ● 代码简化：Lombok 1.16.18
+    ● 支付组件：Egan pay-java-parent 2.0.7
+    ● 代码简化：Lombok 1.16.20
     ● 序列化框架：Alibaba Fastjson 1.2.41
-    ● HTTP客户端：Hutool-http 3.2.3
+    ● HTTP客户端：Hutool-http 4.0.10
     ● 接口测试框架：Swagger2
     ● 字体图标：Alibaba Iconfont
+    ● JWT：jsonwebtoken 0.9.0
     
 
 ## 项目结构 
@@ -58,11 +59,13 @@ jww
 │  ├─jww-common-mdb 多数据源组件
 │  ├─jww-common-dsession 分布式session
 │  ├─jww-common-http HTTP客户端
+│  ├─jww-common-jwt JWT组件
 │  ├─jww-common-log 日志服务
 │  ├─jww-common-mq 队列服务
 │  ├─jww-common-oss 对象储存组件
 │  ├─jww-common-pay 支付宝/微信支付组件
 │  ├─jww-common-redis 缓存服务
+│  ├─jww-common-ship 快递服务组件
 │  └─jww-common-web WEB组件
 │ 
 ├─jww-ui 页面模块
@@ -121,9 +124,6 @@ jww
 
 ![预览图](jww-readme/ui-demo-index.png)
 ![预览图](jww-readme/ui-demo-userList.png)
-![预览图](jww-readme/ui-demo-deptList.png)
-![预览图](jww-readme/ui-demo-menuList.png)
-![预览图](jww-readme/ui-demo-roleList.png)
 ![预览图](jww-readme/ui-demo-log.png)
 ![预览图](jww-readme/ui-demo-webMonitor.png)
 ![预览图](jww-readme/ui-demo-swagger2.png)
