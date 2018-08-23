@@ -2,7 +2,16 @@
 快递服务模块
 
 ### 使用步骤
-1. 增加物流信息配置 
+1. 引入模块，pom.xml增加：
+
+```
+        <dependency>
+            <groupId>com.jww</groupId>
+            <artifactId>jww-common-jwt</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+```
+2. 增加物流信息配置 
 
 ```
 # 物流接口配置
@@ -13,12 +22,13 @@ ship:
   isTest: true
 ```
 
-2. 注入服务实现类
+3. 注入服务实现类
 ```
+@Autowired
 private ShipService shipServiceQD100; 
 ```
 
-3. 执行查询 
+4. 执行查询 
 ```
 ShipDetail shipDetail = shipService.queryFreeFirst("jd", "VJ4103XXXXXXX");
 ```

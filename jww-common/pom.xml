@@ -24,6 +24,7 @@
         <module>jww-common-db</module>
         <module>jww-common-oss</module>
         <module>jww-common-ship</module>
+        <module>jww-common-jwt</module>
     </modules>
     <packaging>pom</packaging>
 
