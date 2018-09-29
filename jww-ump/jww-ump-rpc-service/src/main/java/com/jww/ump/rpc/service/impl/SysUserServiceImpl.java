@@ -1,5 +1,6 @@
 package com.jww.ump.rpc.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.jww.common.core.annotation.DistributedLock;
@@ -12,7 +13,6 @@ import com.jww.ump.model.SysRoleModel;
 import com.jww.ump.model.SysUserModel;
 import com.jww.ump.model.SysUserRoleModel;
 import com.jww.ump.rpc.api.SysUserService;
-import cn.hutool.core.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -106,16 +106,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserMo
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = UmpConstants.UmpCacheName.USER, allEntries = true)
+    @CacheEvict(value = {UmpConstants.UmpCacheName.USER,UmpConstants.UmpCacheName.MENU }, allEntries = true)
     public boolean modifyUser(SysUserModel sysUserModel) {
-        boolean result = false;
         EntityWrapper<SysUserRoleModel> wrapper = new EntityWrapper<>();
         wrapper.eq("user_id", sysUserModel.getId());
         sysUserRoleMapper.delete(wrapper);
         insertUserRole(sysUserModel);
-        result = super.updateById(sysUserModel);
-
-        return result;
+        return super.updateById(sysUserModel);
     }
 
     @Override
