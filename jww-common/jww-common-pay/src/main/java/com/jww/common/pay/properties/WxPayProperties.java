@@ -15,19 +15,31 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "weixin")
 public class WxPayProperties {
 
-    @Setter@Getter
+    @Setter
+    @Getter
     private String appid;
-    @Setter@Getter
-    private String secret;
-    @Setter@Getter
-    private String mchId;
-    @Setter@Getter
-    private String secretKey;
-    @Setter@Getter
-    private String keyPublic;
-    @Setter@Getter
-    private String notifyUrl;
-    @Setter@Getter
-    private String signType;
 
+    @Setter
+    @Getter
+    private String secret;
+
+    @Setter
+    @Getter
+    private String mchId;
+
+    @Setter
+    @Getter
+    private String secretKey;
+
+    @Setter
+    @Getter
+    private String keyPublic;
+
+    @Setter
+    @Getter
+    private String notifyUrl;
+
+    @Setter
+    @Getter
+    private String signType;
 }

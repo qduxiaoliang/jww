@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>人才管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_495397_6d0isfl9et81tt9.css" media="all"/>
+    <link rel="stylesheet" href="../../css/common.css" media="all"/>
+    <style>
+        .layui-btn-container .layui-btn {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body class="childrenBody">
+<form class="layui-form layui-form-pane">
+    <blockquote class="layui-elem-quote">
+        <div class="layui-form-item" style="margin-bottom: -0.5rem;">
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input type="text" name="talent_name" placeholder="请输入人才名称" class="layui-input search_input">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input type="text" name="phone_" placeholder="请输入手机号码" class="layui-input search_input">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <div class="layui-btn-container">
+                    <a class="layui-btn" id="search" clickPassValue="1" lay-submit lay-filter="searchFilter">查询</a>
+                    <permission value="hrm:talent:add">
+                        <a class="layui-btn layui-btn-normal addBtn">新增</a>
+                    </permission>
+                    <a class="layui-btn layui-btn-warm transferBtn">批量转让</a>
+                    <permission value="hrm:talent:delete">
+                        <a class="layui-btn layui-btn-danger batchDel">批量删除</a>
+                    </permission>
+                </div>
+            </div>
+        </div>
+    </blockquote>
+    <input type="hidden" name="nconn_time" value="1">
+</form>
+
+<table class="layui-table" id="talentTable" lay-filter="tableFilter"></table>
+
+<!-- 分页控件div -->
+<div id="pageDiv"></div>
+<!-- 工具栏模板 -->
+<div style="display: none;" id="toolBar">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">立即联系</a>
+</div>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="talentOrderList.js"></script>
+
+</body>
+</html>

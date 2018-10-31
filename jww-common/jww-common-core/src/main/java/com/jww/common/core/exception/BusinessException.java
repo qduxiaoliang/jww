@@ -1,6 +1,6 @@
 package com.jww.common.core.exception;
 
-import com.jww.common.core.Constants.ResultCodeEnum;
+import com.jww.common.core.constant.enums.ResultCodeEnum;
 
 /**
  * 业务异常类
@@ -27,7 +27,7 @@ public class BusinessException extends BaseException {
         super(message, ex);
     }
 
-    public BusinessException(ResultCodeEnum errorCode){
+    public BusinessException(ResultCodeEnum errorCode) {
         this.errorCode = errorCode;
     }
 

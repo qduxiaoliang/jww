@@ -19,7 +19,7 @@ public interface ShipService {
      * @author shadj
      * @date 2018/6/21 17:21
      */
-     ShipDetail queryFree(String com, String shipNumber);
+    ShipDetail queryFree(String com, String shipNumber);
 
     /**
      * 快递100实时快递查询接口实现

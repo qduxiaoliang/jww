@@ -18,22 +18,29 @@ public class ShipProperties {
     /**
      * 快递100免费版分配的身份授权key
      */
-    @Setter@Getter
+    @Setter
+    @Getter
     private String id;
+
     /**
      * 快递100企业版分配的customer ID
      */
-    @Setter@Getter
+    @Setter
+    @Getter
     private String customer;
+
     /**
      * 快递100企业版的授权key
      */
-    @Setter@Getter
+    @Setter
+    @Getter
     private String key;
+
     /**
      * 是否是测试环境，企业版的测试环境URL不一样
      */
-    @Setter@Getter
+    @Setter
+    @Getter
     private boolean isTest;
 
 }

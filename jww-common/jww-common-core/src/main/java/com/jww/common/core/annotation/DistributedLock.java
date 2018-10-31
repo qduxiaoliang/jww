@@ -14,8 +14,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface DistributedLock {
+    
     /**
      * Alias for {@link #key}.
+     *
      * @see #key
      */
     @AliasFor("key")

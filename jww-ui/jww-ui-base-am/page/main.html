@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>首页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_495397_6d0isfl9et81tt9.css" media="all"/>
+    <link rel="stylesheet" href="../css/common.css" media="all"/>
+</head>
+<body class="childrenBody">
+<fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px">
+    <legend>上下班打卡</legend>
+    <div style="margin: 10px 15px 5px;;">
+        <div class="layui-row" style="margin-bottom: 0.5rem;">
+            <button class="layui-btn startWork">上班签到</button>
+            <label id="cinTime" style="display: none;"></label>
+        </div>
+        <div class="layui-row">
+            <button class="layui-btn layui-btn-normal offWork">下班打卡</button>
+            <label id="coutTime" style="display: none;"></label>
+        </div>
+    </div>
+    <div style="margin-left: 15px;margin-bottom: 10px;" class="layui-form-mid layui-word-aux">
+        温馨提示：正常上下班时间，请记得及时签退，未签退的员工将会在过完当天后自动被设为早退哦！
+    </div>
+</fieldset>
+<fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px">
+    <legend>员工工作情况总览</legend>
+    <div style="margin-left: 15px;margin-bottom: 10px;" class="layui-form-mid layui-word-aux">今天还有<span
+            style="color: red">1</span>位员工未完成基本工作，<a style="color: blue" href="workStastics/workStasticsList.html">点此查看详细</a>
+    </div>
+</fieldset>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="../../js/main.js"></script>
+<script type="text/javascript" src="../../js/base.js"></script>
+</body>
+</html>

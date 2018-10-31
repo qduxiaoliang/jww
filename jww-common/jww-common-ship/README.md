@@ -1,4 +1,4 @@
-# jww-common-core
+# jww-common-ship
 快递服务模块
 
 ### 使用步骤
@@ -8,7 +8,7 @@
         <dependency>
             <groupId>com.jww</groupId>
             <artifactId>jww-common-jwt</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0</version>
         </dependency>
 ```
 2. 增加物流信息配置 

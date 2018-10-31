@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>会员新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="../../../css/common.css" media="all"/>
+</head>
+<body class="childrenBody">
+<form class="layui-form layui-form-pane" id="userForm">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">登录账号</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="account" id="account" lay-verify="account"
+                       placeholder="请输入登录账号">
+            </div>
+        </div>
+
+        <permission value="sys:admin">
+            <hrm id="passwordHrm">
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录密码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" name="password" id="password" lay-verify="password"
+                               placeholder="请输入登录密码">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-form-mid layui-word-aux" id="passwordTip">未设定登录密码时，初始密码为：123456</div>
+                </div>
+            </hrm>
+        </permission>
+
+    </div>
+
+    <div class="layui-form-item" style="margin-top: -15px;">
+        <div class="layui-inline">
+            <label class="layui-form-label">真实姓名</label>
+            <div class="layui-input-inline">
+                <input type="hidden" id="id" name="id" class="id">
+                <input type="text" class="layui-input" name="userName" id="userName" lay-verify="required"
+                       placeholder="请输入真实姓名">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <select name="sex" id="sex">
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">出生日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="birthDay" id="birthDay" lay-verify="date" placeholder="yyyy-MM-dd"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">电话</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="phone" id="phone" lay-verify="phone"
+                       placeholder="请输入电话">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">电子邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="email" id="email" lay-verify="email"
+                       placeholder="请输入电子邮箱">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">身份证</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="idCard" id="idCard" lay-verify="identity"
+                       placeholder="请输入身份证">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">微信</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="weiXin" id="weiXin" lay-verify=""
+                       placeholder="请输入微信">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">微博</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="weiBo" id="weiBo" lay-verify="" placeholder="请输入微博">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">QQ</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="qq" id="qq" lay-verify="" placeholder="请输入QQ">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="margin-top: -15px;">
+        <div class="layui-inline">
+            <label class="layui-form-label">所属部门</label>
+            <div class="layui-input-inline">
+                <input type="hidden" id="deptId" name="deptId" class="deptId">
+                <input type="text" id="deptName" name="deptName" class="layui-input"
+                       placeholder="请选择" readonly>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">职位</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="position" id="position" lay-verify=""
+                       placeholder="请输入职位">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="margin-top: -15px;">
+        <div class="layui-inline">
+            <label class="layui-form-label">部门角色</label>
+            <div class="layui-input-block" id="roleDiv">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="margin-top: -15px;">
+        <div class="layui-inline">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline">
+                <select name="enable" id="enable">
+                    <option value="1">启用</option>
+                    <option value="2">禁用</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addUser">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="../../../layui/layui.js"></script>
+<script type="text/javascript" src="user.js"></script>
+</body>
+</html>

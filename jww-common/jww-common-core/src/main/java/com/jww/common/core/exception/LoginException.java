@@ -1,6 +1,6 @@
 package com.jww.common.core.exception;
 
-import com.jww.common.core.Constants;
+import com.jww.common.core.constant.enums.ResultCodeEnum;
 
 /**
  * 登录异常类
@@ -27,7 +27,7 @@ public class LoginException extends BaseException {
     }
 
     @Override
-    public Constants.ResultCodeEnum getCode() {
-        return Constants.ResultCodeEnum.LOGIN_FAIL;
+    public ResultCodeEnum getCode() {
+        return ResultCodeEnum.LOGIN_FAIL;
     }
 }

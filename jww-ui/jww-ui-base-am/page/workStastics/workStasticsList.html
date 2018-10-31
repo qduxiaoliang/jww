@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> 员工工作情况总览</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_495397_6d0isfl9et81tt9.css" media="all"/>
+    <link rel="stylesheet" href="../../css/common.css" media="all"/>
+</head>
+<body class="childrenBody">
+<blockquote class="layui-elem-quote news_search">
+    <div class="layui-inline">
+        <div class="layui-input-inline" style="width: 220px;">
+            <input type="text" name="date" id="date" lay-verify="date" placeholder="统计时间" class="layui-input date">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <a class="layui-btn search_btn" clickPassValue="1">查询</a>
+    </div>
+</blockquote>
+
+<table class="layui-table" id="workStasticsTable" lay-filter="tableFilter"></table>
+
+<!-- 分页控件div -->
+<div id="pageDiv"></div>
+<!-- 工具栏模板 -->
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="workStasticsList.js"></script>
+
+</body>
+</html>

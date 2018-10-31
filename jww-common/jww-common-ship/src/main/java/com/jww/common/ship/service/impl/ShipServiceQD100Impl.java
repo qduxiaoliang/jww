@@ -49,7 +49,7 @@ public class ShipServiceQD100Impl implements ShipService {
     @Override
     public ShipDetail query(String com, String shipNumber) {
         log.info("免费查询物流跟踪信息，快递公司：{}，物流单号：{}", com, shipNumber);
-        return ShipUtil.query(shipProperties.getKey(),shipProperties.getCustomer(),com,shipNumber,shipProperties.isTest());
+        return ShipUtil.query(shipProperties.getKey(), shipProperties.getCustomer(), com, shipNumber, shipProperties.isTest());
     }
 
     /**
@@ -64,6 +64,6 @@ public class ShipServiceQD100Impl implements ShipService {
     @Override
     public ShipDetail queryFreeFirst(String com, String shipNumber) {
         log.info("免费查询物流跟踪信息，快递公司：{}，物流单号：{}", com, shipNumber);
-        return ShipUtil.queryFirtFree(shipProperties.getId(),shipProperties.getKey(),shipProperties.getCustomer(),com,shipNumber,shipProperties.isTest());
+        return ShipUtil.queryFirtFree(shipProperties.getId(), shipProperties.getKey(), shipProperties.getCustomer(), com, shipNumber, shipProperties.isTest());
     }
 }

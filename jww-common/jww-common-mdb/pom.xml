@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jww-common</artifactId>
         <groupId>com.jww</groupId>
-        <version>1.0.0</version>
+        <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,20 +15,13 @@
         <dependency>
             <groupId>com.jww</groupId>
             <artifactId>jww-common-db</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0</version>
         </dependency>
-        <!-- lombok -->
+        <!-- shardingjdbc -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <!-- springboot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-            <version>${spring.boot.version}</version>
+            <groupId>io.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <version>${sharding-jdbc-spring-boot-starter.version}</version>
         </dependency>
     </dependencies>
 

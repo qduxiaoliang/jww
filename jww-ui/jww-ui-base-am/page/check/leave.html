@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>员工请假</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="../../css/common.css" media="all"/>
+    <style type="text/css">
+        .layui-disabled {
+            color: #333 !important;
+        }
+
+        .layui-disabled:hover {
+            color: #333 !important;
+        }
+
+        .layui-select-disabled .layui-disabled {
+            border-color: #c2c2c2 !important;
+            color: #333 !important;
+        }
+    </style>
+</head>
+<body class="childrenBody">
+<form class="layui-form layui-form-pane" id="leaveForm">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">请假人</label>
+            <div class="layui-input-inline">
+                <select name="userId" id="userId" lay-verify="required">
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">请假类型</label>
+            <div class="layui-input-inline">
+                <select name="type" id="type" lay-verify="required">
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">请假时间</label>
+            <div class="layui-input-inline" style="width: 220px;">
+                <input type="text" name="leaveDate" id="leaveDate" placeholder="请选择请假时间" lay-verify="required"
+                       autocomplete="off" class="layui-input leaveDate">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text" style="margin-top: -10px;">
+        <label class="layui-form-label">请假说明</label>
+        <div class="layui-input-block">
+            <textarea id="remark" name="remark" placeholder="请输入请假说明" class="layui-textarea"
+                      style="min-height: 10rem;"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="addFilter">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    <input type="hidden" name="id" id="id"/>
+</form>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="leave.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+/**** 修改边框颜色 ****/
+.layui-badge-rim, .layui-colla-content, .layui-colla-item, .layui-collapse, .layui-form-pane .layui-form-item[pane], .layui-form-pane .layui-form-label, .layui-input, .layui-layedit, .layui-layedit-tool, .layui-quote-nm, .layui-select, .layui-tab-bar, .layui-tab-card, .layui-tab-title, .layui-tab-title .layui-this:after, .layui-textarea {
+    border-color: #c2c2c2;
+}
+
+/**** 修改table边框颜色 ****/
+.layui-table td, .layui-table th, .layui-table-fixed-r, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row] {
+    border-color: #c2c2c2;
+}
+
+/**** 修改table列居中显示 ****/
+.layui-table, .layui-table th {
+    text-align: center;
+}
+
+.childrenBody {
+    margin: 10px 10px 0;
+}
+
+/**** 避免table初始化时出现横向滚动条 ****/
+body {
+    /*overflow-y: scroll;*/
+}
+
+/**** 设置disabled字体颜色 ****/
+.layui-disabled {
+    color: #333 !important;
+}
+
+.layui-disabled:hover {
+    color: #333 !important;
+}
+
+.layui-select-disabled .layui-disabled {
+    border-color: #c2c2c2 !important;
+    color: #333 !important;
+}

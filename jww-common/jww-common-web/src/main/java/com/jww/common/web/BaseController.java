@@ -1,7 +1,5 @@
 package com.jww.common.web;
 
-import com.jww.common.web.util.WebUtil;
-
 /**
  * 控制器基类
  *
@@ -18,7 +16,7 @@ public abstract class BaseController {
      * @date 2017-11-30 17:45
      */
     protected Long getCurrentUserId() {
-        return WebUtil.getCurrentUserId();
+        return null;
     }
 
     /**
@@ -29,6 +27,6 @@ public abstract class BaseController {
      * @date 2017-11-30 17:45
      */
     protected Object getCurrentUser() {
-        return WebUtil.getCurrentUser();
+        return null;
     }
 }

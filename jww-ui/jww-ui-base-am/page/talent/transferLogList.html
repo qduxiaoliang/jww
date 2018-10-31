@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>转让日志</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_495397_6d0isfl9et81tt9.css" media="all"/>
+    <link rel="stylesheet" href="../../css/common.css" media="all"/>
+</head>
+<body class="childrenBody">
+<form class="layui-form layui-form-pane">
+    <blockquote class="layui-elem-quote">
+        <div class="layui-form-item" style="margin-bottom: -0.5rem;">
+            <div class="layui-inline">
+                <label class="layui-form-label">人才姓名</label>
+                <div class="layui-input-inline">
+                    <input name="talentName" type="text" value="" placeholder="人才姓名" class="layui-input search_input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">人才状态</label>
+                <div class="layui-input-inline">
+                    <select id="talentState" name="talentState" lay-filter="talentState">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">转让时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="createTime" id="createTime" lay-verify="createTime" placeholder="请选择转让时间"
+                           autocomplete="off"
+                           class="layui-input createTime">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">转出人</label>
+                <div class="layui-input-inline">
+                    <select id="fromId" name="fromId" lay-filter="fromId">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">转入人</label>
+                <div class="layui-input-inline">
+                    <select id="toId" name="toId" lay-filter="toId">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">转让原因</label>
+                <div class="layui-input-inline">
+                    <input name="transferReason" type="text" value="" placeholder="转出原因"
+                           class="layui-input search_input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <a class="layui-btn search_btn" clickPassValue="1" lay-submit lay-filter="searchFilter">查询</a>
+            </div>
+        </div>
+    </blockquote>
+</form>
+
+<table class="layui-table" id="roleTable" lay-filter="tableFilter"></table>
+
+<!-- 分页控件div -->
+<div id="pageDiv"></div>
+<!-- 工具栏模板 -->
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="transferLogList.js"></script>
+
+</body>
+</html>

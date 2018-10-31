@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>面试记录新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="../../../css/common.css" media="all"/>
+    <style type="text/css">
+        .layui-form-item .layui-inline {
+            margin-right: 0;
+        }
+
+        label {
+            width: 6.5rem;
+        }
+    </style>
+</head>
+<body class="childrenBody">
+<form class="layui-form layui-form-pane" id="interviewRecordForm">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">联系人</label>
+            <div class="layui-input-inline ">
+                <input type="text" class="layui-input" name="userName" id="userName" value=""
+                       readonly>
+                <input type="hidden" class="layui-input" name="userId" id="userId" value="">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">客户姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" name="talentName" id="talentName" value=""
+                       readonly>
+                <input type="hidden" class="layui-input" name="talentId" id="talentId" lay-verify="required"
+                       readonly>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">面试流程</label>
+            <div class="layui-input-inline">
+                <select id="interviewFlow" name="interviewFlow">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">面试企业</label>
+            <div class="layui-input-inline">
+                <select id="companyId" name="companyId" lay-filter="companyId">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+            <div class="layui-form-mid" style="color: #3366FF;cursor: pointer;" id="company_detail">查看详情</div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">面试职位</label>
+            <div class="layui-input-inline">
+                <select id="positionId" name="positionId" lay-filter="positionId">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+            <div class="layui-form-mid" style="color: #3366FF;cursor: pointer;" id="position_detail">查看详情</div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" style="margin-top: -10px;">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea"
+                      style="min-height: 5rem;"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-btn-container">
+            <button class="layui-btn" lay-submit lay-filter="addFilter">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+
+    <input type="hidden" name="id" id="id"/>
+</form>
+<script type="text/javascript" src="../../../layui/layui.js"></script>
+<script type="text/javascript" src="interviewRecord.js"></script>
+</body>
+</html>

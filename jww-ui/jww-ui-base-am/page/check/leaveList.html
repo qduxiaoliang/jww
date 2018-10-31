@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>请假管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_495397_6d0isfl9et81tt9.css" media="all"/>
+    <link rel="stylesheet" href="../../css/common.css" media="all"/>
+</head>
+<body class="childrenBody">
+<form class="layui-form">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <select id="userId" name="userId">
+                    <option value="">请选择请假员工</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <a class="layui-btn" id="search">查询</a>
+        </div>
+        <permission value="hrm:leave:add">
+            <div class="layui-inline">
+                <a class="layui-btn layui-btn-normal addBtn">员工请假</a>
+            </div>
+        </permission>
+        <permission value="hrm:leave:delete">
+            <div class="layui-inline">
+                <a class="layui-btn layui-btn-danger batchDel">批量删除</a>
+            </div>
+        </permission>
+    </blockquote>
+</form>
+
+<table class="layui-table" id="leaveTable" lay-filter="tableFilter"></table>
+
+<!-- 分页控件div -->
+<div id="pageDiv"></div>
+<!-- 工具栏模板 -->
+<div style="display: none;" id="toolBar">
+    <permission value="hrm:leave:update">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    </permission>
+    <permission value="hrm:leave:delete">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </permission>
+</div>
+<script type="text/javascript" src="../../layui/layui.js"></script>
+<script type="text/javascript" src="leaveList.js"></script>
+</body>
+</html>
