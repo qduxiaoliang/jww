@@ -1,5 +1,6 @@
 package com.jww.common.core.exception;
 
+import com.jww.common.core.base.BaseException;
 import com.jww.common.core.constant.enums.ResultCodeEnum;
 
 /**

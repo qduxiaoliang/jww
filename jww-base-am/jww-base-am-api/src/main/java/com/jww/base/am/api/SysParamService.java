@@ -1,7 +1,7 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.jww.base.am.model.SysParamModel;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jww.base.am.model.entity.SysParamEntity;
 import com.jww.common.core.base.BaseService;
 
 /**
@@ -12,7 +12,7 @@ import com.jww.common.core.base.BaseService;
  * @author shadj
  * @since 2017-12-24
  */
-public interface SysParamService extends BaseService<SysParamModel> {
+public interface SysParamService extends BaseService<SysParamEntity> {
 
     /**
      * 分页查询参数配置明细
@@ -22,7 +22,7 @@ public interface SysParamService extends BaseService<SysParamModel> {
      * @author shadj
      * @date 2017/12/24 14:45
      */
-    Page<SysParamModel> queryListPage(Page<SysParamModel> page);
+    Page<SysParamEntity> queryListPage(Page<SysParamEntity> page);
 
     /**
      * 根据参数key查询查询
@@ -32,6 +32,6 @@ public interface SysParamService extends BaseService<SysParamModel> {
      * @author wanyong
      * @date 2018-01-17 12:33
      */
-    SysParamModel queryByParamKey(String paramKey);
+    SysParamEntity queryByParamKey(String paramKey);
 
 }

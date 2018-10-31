@@ -1,9 +1,9 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.jww.base.am.model.SysRoleModel;
-import com.jww.base.am.model.SysUserModel;
-import com.jww.base.am.model.SysUserRoleModel;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jww.base.am.model.entity.SysRoleEntity;
+import com.jww.base.am.model.entity.SysUserEntity;
+import com.jww.base.am.model.entity.SysUserRoleEntity;
 import com.jww.common.core.base.BaseService;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author wanyong
  * @date 2017/11/17 16:43
  */
-public interface SysUserService extends BaseService<SysUserModel> {
+public interface SysUserService extends BaseService<SysUserEntity> {
 
     /**
      * 根据账号查找用户
@@ -24,7 +24,7 @@ public interface SysUserService extends BaseService<SysUserModel> {
      * @author wanyong
      * @date 2017-12-05 12:48
      */
-    SysUserModel queryByAccount(String account);
+    SysUserEntity queryByAccount(String account);
 
     /**
      * 分页查找所有用户
@@ -34,7 +34,7 @@ public interface SysUserService extends BaseService<SysUserModel> {
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    Page<SysUserModel> queryListPage(Page<SysUserModel> page);
+    Page<SysUserEntity> queryListPage(Page<SysUserEntity> page);
 
     /**
      * 根据ID集合批量删除
@@ -54,7 +54,7 @@ public interface SysUserService extends BaseService<SysUserModel> {
      * @author RickyWang
      * @date 17/12/25 15:47:20
      */
-    List<SysRoleModel> queryRoles(Long deptId);
+    List<SysRoleEntity> queryRoles(Long deptId);
 
     /**
      * 根据用户查询用户角色关系
@@ -64,7 +64,7 @@ public interface SysUserService extends BaseService<SysUserModel> {
      * @author RickyWang
      * @date 17/12/25 21:20:55
      */
-    List<SysUserRoleModel> queryUserRoles(Long userId);
+    List<SysUserRoleEntity> queryUserRoles(Long userId);
 
     /**
      * 根据用户ID查询
@@ -74,17 +74,17 @@ public interface SysUserService extends BaseService<SysUserModel> {
      * @author wanyong
      * @date 2017-12-27 12:09
      */
-    SysUserModel queryOne(Long id);
+    SysUserEntity queryOne(Long id);
 
     /**
      * 修改
      *
-     * @param sysUserModel 用户实体
+     * @param sysUserEntity 用户实体
      * @return boolean
      * @author wanyong
      * @date 2017-12-27 12:09
      */
-    boolean modifyUser(SysUserModel sysUserModel);
+    boolean modifyUser(SysUserEntity sysUserEntity);
 
     /**
      * 身份切换的用户列表
@@ -93,7 +93,7 @@ public interface SysUserService extends BaseService<SysUserModel> {
      * @author shadj
      * @date 2018/1/20 20:16
      */
-    List<SysUserModel> queryRunasList();
+    List<SysUserEntity> queryRunasList();
 
     /**
      * 查询所有用户
@@ -102,6 +102,6 @@ public interface SysUserService extends BaseService<SysUserModel> {
      * @author wanyong
      * @date 2018-01-24 13:49
      */
-    List<SysUserModel> queryList();
+    List<SysUserEntity> queryList();
 
 }

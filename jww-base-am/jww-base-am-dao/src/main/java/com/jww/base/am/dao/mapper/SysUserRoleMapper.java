@@ -1,7 +1,7 @@
 package com.jww.base.am.dao.mapper;
 
 import com.jww.common.core.base.BaseMapper;
-import com.jww.base.am.model.SysUserRoleModel;
+import com.jww.base.am.model.entity.SysUserRoleEntity;
 
 /**
  * 用户角色关系
@@ -9,5 +9,5 @@ import com.jww.base.am.model.SysUserRoleModel;
  * @author RickyWang
  * @date 17/12/25 19:49:20
  */
-public interface SysUserRoleMapper extends BaseMapper<SysUserRoleModel> {
+public interface SysUserRoleMapper extends BaseMapper<SysUserRoleEntity> {
 }

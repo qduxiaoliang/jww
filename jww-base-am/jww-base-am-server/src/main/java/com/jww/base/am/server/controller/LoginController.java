@@ -2,7 +2,7 @@ package com.jww.base.am.server.controller;
 
 import com.jww.base.am.api.SysUserService;
 import com.jww.base.am.common.AmConstants;
-import com.jww.base.am.model.SysUserModel;
+import com.jww.base.am.model.entity.SysUserEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.common.core.Constants;
 import com.jww.common.core.exception.BusinessException;
@@ -116,13 +116,13 @@ public class LoginController extends BaseController {
         // 清空验证码缓存
         CacheUtil.getCache().del(Constants.CacheNamespaceEnum.CAPTCHA.value() + loginModel.getCaptchaId());
         // 验证通过，返回前端所需的用户信息
-        SysUserModel currentUser = (SysUserModel) WebUtil.getCurrentUser();
-        SysUserModel sysUserModel = new SysUserModel();
-        sysUserModel.setId(currentUser.getId());
-        sysUserModel.setAccount(currentUser.getAccount());
-        sysUserModel.setUserName(currentUser.getUserName());
-        sysUserModel.setAvatar(currentUser.getAvatar());
-        return ResultUtil.ok(sysUserModel);
+        SysUserEntity currentUser = (SysUserEntity) WebUtil.getCurrentUser();
+        SysUserEntity sysUserEntity = new SysUserEntity();
+        sysUserEntity.setId(currentUser.getId());
+        sysUserEntity.setAccount(currentUser.getAccount());
+        sysUserEntity.setUserName(currentUser.getUserName());
+        sysUserEntity.setAvatar(currentUser.getAvatar());
+        return ResultUtil.ok(sysUserEntity);
     }
 
     /**
@@ -210,12 +210,12 @@ public class LoginController extends BaseController {
         if (currentUserId.equals(userId)) {
             return ResultUtil.ok();
         }
-        SysUserModel changeToUser = sysUserService.selectById(userId);
-        SysUserModel sysUserModel = new SysUserModel();
-        sysUserModel.setId(changeToUser.getId());
-        sysUserModel.setAccount(changeToUser.getAccount());
-        sysUserModel.setUserName(changeToUser.getUserName());
-        sysUserModel.setAvatar(changeToUser.getAvatar());
+        SysUserEntity changeToUser = sysUserService.selectById(userId);
+        SysUserEntity sysUserEntity = new SysUserEntity();
+        sysUserEntity.setId(changeToUser.getId());
+        sysUserEntity.setAccount(changeToUser.getAccount());
+        sysUserEntity.setUserName(changeToUser.getUserName());
+        sysUserEntity.setAvatar(changeToUser.getAvatar());
         // 如果要切换为admin，则需要判断目前是否为代理身份，如果是则需要循环释放授权
         if (AmConstants.USERID_ADMIN.equals(userId)) {
             if (!subject.isRunAs()) {
@@ -226,15 +226,15 @@ public class LoginController extends BaseController {
             }
             WebUtil.saveCurrentUser(changeToUser);
             WebUtil.saveCurrentUserId(changeToUser.getId());
-            return ResultUtil.ok(sysUserModel);
+            return ResultUtil.ok(sysUserEntity);
         }
         String realmName = subject.getPrincipals().getRealmNames().iterator().next();
         String changeToUserName = changeToUser.getAccount();
         subject.runAs(new SimplePrincipalCollection(changeToUserName, realmName));
         WebUtil.saveCurrentUser(changeToUser);
         WebUtil.saveCurrentUserId(changeToUser.getId());
-        sysUserModel.setIsRunas(1);
-        return ResultUtil.ok(sysUserModel);
+        sysUserEntity.setIsRunas(1);
+        return ResultUtil.ok(sysUserEntity);
     }
 
 }

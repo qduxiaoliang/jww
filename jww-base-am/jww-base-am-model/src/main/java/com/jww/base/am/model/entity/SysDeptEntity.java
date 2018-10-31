@@ -1,8 +1,8 @@
-package com.jww.base.am.model;
+package com.jww.base.am.model.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.jww.common.core.base.BaseModel;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.jww.common.core.base.BaseEntity;
 import lombok.Data;
 
 /**
@@ -11,11 +11,11 @@ import lombok.Data;
  * </p>
  *
  * @author wanyong
- * @since 2017-11-25
+ * @date 2017-11-25
  */
 @Data
 @TableName("sys_dept")
-public class SysDeptModel extends BaseModel {
+public class SysDeptEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
     /**

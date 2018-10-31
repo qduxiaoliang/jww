@@ -2,8 +2,8 @@ package com.jww.base.am.server.controller;
 
 import com.jww.base.am.api.SysDeptService;
 import com.jww.base.am.api.SysRoleService;
-import com.jww.base.am.model.SysDeptModel;
-import com.jww.base.am.model.SysRoleModel;
+import com.jww.base.am.model.entity.SysDeptEntity;
+import com.jww.base.am.model.entity.SysRoleEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.common.core.Constants;
 import com.jww.common.core.exception.BusinessException;
@@ -56,10 +56,10 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("sys:role:read")
     public ResultModel query(@RequestBody Long roleId) {
         Assert.notNull(roleId);
-        SysRoleModel sysRoleModel = sysRoleService.queryById(roleId);
-        SysDeptModel sysDeptModel = sysDeptService.queryById(sysRoleModel.getDeptId());
-        sysRoleModel.setDeptName(sysDeptModel.getDeptName());
-        return ResultUtil.ok(sysRoleModel);
+        SysRoleEntity sysRoleEntity = sysRoleService.queryById(roleId);
+        SysDeptEntity sysDeptEntity = sysDeptService.queryById(sysRoleEntity.getDeptId());
+        sysRoleEntity.setDeptName(sysDeptEntity.getDeptName());
+        return ResultUtil.ok(sysRoleEntity);
     }
 
     /**
@@ -80,7 +80,7 @@ public class SysRoleController extends BaseController {
     /**
      * 新增角色
      *
-     * @param sysRoleModel 角色实体
+     * @param sysRoleEntity 角色实体
      * @return ResultModel
      * @author wanyong
      * @date 2018-01-04 11:26
@@ -89,16 +89,16 @@ public class SysRoleController extends BaseController {
     @PostMapping("/add")
     @RequiresPermissions("sys:role:add")
     @SysLogOpt(module = "角色管理", value = "角色新增", operationType = Constants.LogOptEnum.ADD)
-    public ResultModel add(@Valid @RequestBody SysRoleModel sysRoleModel) {
-        sysRoleModel.setCreateBy(super.getCurrentUserId());
-        sysRoleModel.setUpdateBy(super.getCurrentUserId());
-        return ResultUtil.ok(sysRoleService.add(sysRoleModel));
+    public ResultModel add(@Valid @RequestBody SysRoleEntity sysRoleEntity) {
+        sysRoleEntity.setCreateBy(super.getCurrentUserId());
+        sysRoleEntity.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysRoleService.add(sysRoleEntity));
     }
 
     /**
      * 修改角色
      *
-     * @param sysRoleModel 角色实体
+     * @param sysRoleEntity 角色实体
      * @return ResultModel
      * @author wanyong
      * @date 2018-01-04 11:27
@@ -107,9 +107,9 @@ public class SysRoleController extends BaseController {
     @PostMapping("/modify")
     @RequiresPermissions("sys:role:update")
     @SysLogOpt(module = "角色管理", value = "角色修改", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modify(@Valid @RequestBody SysRoleModel sysRoleModel) {
-        sysRoleModel.setUpdateBy(super.getCurrentUserId());
-        sysRoleService.modifyById(sysRoleModel);
+    public ResultModel modify(@Valid @RequestBody SysRoleEntity sysRoleEntity) {
+        sysRoleEntity.setUpdateBy(super.getCurrentUserId());
+        sysRoleService.modifyById(sysRoleEntity);
         return ResultUtil.ok();
     }
 

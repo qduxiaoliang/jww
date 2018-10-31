@@ -1,11 +1,11 @@
-package com.jww.base.am.model;
+package com.jww.base.am.model.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.jww.common.core.base.BaseModel;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.jww.common.core.base.BaseEntity;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
@@ -14,11 +14,11 @@ import javax.validation.constraints.Size;
  * </p>
  *
  * @author wanyong
- * @since 2017-12-17
+ * @date 2017-12-17
  */
 @Data
 @TableName("sys_dic")
-public class SysDicModel extends BaseModel {
+public class SysDicEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -47,8 +47,10 @@ public class SysDicModel extends BaseModel {
      */
     @TableField("code_text")
     private String codeText;
+
     @TableField("parent_type")
     private String parentType;
+
     @TableField("parent_code")
     private String parentCode;
     /**
@@ -56,6 +58,7 @@ public class SysDicModel extends BaseModel {
      */
     @TableField("sort_no")
     private Integer sortNo;
+
     @TableField("editable_")
     private Integer editable;
     /**

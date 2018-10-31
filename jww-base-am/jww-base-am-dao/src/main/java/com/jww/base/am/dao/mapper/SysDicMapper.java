@@ -1,7 +1,7 @@
 package com.jww.base.am.dao.mapper;
 
 import com.jww.common.core.base.BaseMapper;
-import com.jww.base.am.model.SysDicModel;
+import com.jww.base.am.model.entity.SysDicEntity;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.jww.base.am.model.SysDicModel;
  * @author wanyong
  * @since 2017-12-17
  */
-public interface SysDicMapper extends BaseMapper<SysDicModel> {
+public interface SysDicMapper extends BaseMapper<SysDicEntity> {
 
 }

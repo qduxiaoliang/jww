@@ -1,6 +1,7 @@
 package com.jww.base.am.dao.mapper;
 
-import com.jww.base.am.model.SysTreeModel;
+import com.jww.base.am.model.entity.SysTreeEntity;
+import com.jww.common.core.base.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * @author wangyuxin
  * @since 2017-12-14
  */
-public interface SysTreeMapper extends com.baomidou.mybatisplus.mapper.BaseMapper<SysTreeModel> {
+public interface SysTreeMapper extends BaseMapper<SysTreeEntity> {
 
     /**
      * 查询部门树
@@ -23,7 +24,7 @@ public interface SysTreeMapper extends com.baomidou.mybatisplus.mapper.BaseMappe
      * @author RickyWang
      * @date 18/1/1 15:10:01
      */
-    List<SysTreeModel> selectDeptTree(@Param("id") Long id);
+    List<SysTreeEntity> selectDeptTree(@Param("id") Long id);
 
     /**
      * 查询菜单树
@@ -34,5 +35,5 @@ public interface SysTreeMapper extends com.baomidou.mybatisplus.mapper.BaseMappe
      * @author RickyWang
      * @date 18/1/1 15:10:21
      */
-    List<SysTreeModel> selectMenuTree(@Param("id") Long id, @Param("menuType") Integer menuType);
+    List<SysTreeEntity> selectMenuTree(@Param("id") Long id, @Param("menuType") Integer menuType);
 }

@@ -1,7 +1,7 @@
 package com.jww.base.am.dao.mapper;
 
 import com.jww.common.core.base.BaseMapper;
-import com.jww.base.am.model.SysParamModel;
+import com.jww.base.am.model.entity.SysParamEntity;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.jww.base.am.model.SysParamModel;
  * @author shadj
  * @since 2017-12-24
  */
-public interface SysParamMapper extends BaseMapper<SysParamModel> {
+public interface SysParamMapper extends BaseMapper<SysParamEntity> {
 
 }

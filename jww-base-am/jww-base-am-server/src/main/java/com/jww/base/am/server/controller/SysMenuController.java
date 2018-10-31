@@ -2,8 +2,8 @@ package com.jww.base.am.server.controller;
 
 
 import com.jww.base.am.api.SysMenuService;
-import com.jww.base.am.model.SysMenuModel;
-import com.jww.base.am.model.SysTreeModel;
+import com.jww.base.am.model.entity.SysMenuEntity;
+import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.common.core.Constants;
 import com.jww.common.core.model.PageModel;
@@ -135,14 +135,14 @@ public class SysMenuController extends BaseController {
     @RequiresPermissions("sys:menu:read")
     public ResultModel query(@PathVariable(value = "id") Long id) {
         Assert.notNull(id);
-        SysMenuModel sysMenuModel = sysMenuService.queryById(id);
-        return ResultUtil.ok(sysMenuModel);
+        SysMenuEntity sysMenuEntity = sysMenuService.queryById(id);
+        return ResultUtil.ok(sysMenuEntity);
     }
 
     /**
      * 根据ID修改菜单
      *
-     * @param sysMenuModel 菜单实体
+     * @param sysMenuEntity 菜单实体
      * @return ResultModel
      * @author shadj
      * @date 2017/12/18 21:54
@@ -151,17 +151,17 @@ public class SysMenuController extends BaseController {
     @PostMapping("/modify")
     @RequiresPermissions("sys:menu:update")
     @SysLogOpt(module = "菜单管理", value = "菜单修改", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modify(@RequestBody SysMenuModel sysMenuModel) {
-        sysMenuModel.setUpdateBy(super.getCurrentUserId());
-        sysMenuModel.setUpdateTime(new Date());
-        sysMenuService.modifyById(sysMenuModel);
+    public ResultModel modify(@RequestBody SysMenuEntity sysMenuEntity) {
+        sysMenuEntity.setUpdateBy(super.getCurrentUserId());
+        sysMenuEntity.setUpdateTime(new Date());
+        sysMenuService.modifyById(sysMenuEntity);
         return ResultUtil.ok();
     }
 
     /**
      * 新增菜单
      *
-     * @param sysMenuModel 菜单实体
+     * @param sysMenuEntity 菜单实体
      * @return ResultModel
      * @author shadj
      * @date 2017/12/18 21:54
@@ -170,15 +170,15 @@ public class SysMenuController extends BaseController {
     @PostMapping("/add")
     @RequiresPermissions("sys:menu:add")
     @SysLogOpt(module = "菜单管理", value = "菜单新增", operationType = Constants.LogOptEnum.ADD)
-    public ResultModel add(@Valid @RequestBody SysMenuModel sysMenuModel) {
-        if (sysMenuModel != null) {
+    public ResultModel add(@Valid @RequestBody SysMenuEntity sysMenuEntity) {
+        if (sysMenuEntity != null) {
             Date now = new Date();
-            sysMenuModel.setCreateTime(now);
-            sysMenuModel.setCreateBy(super.getCurrentUserId());
-            sysMenuModel.setUpdateBy(super.getCurrentUserId());
-            sysMenuModel.setUpdateTime(now);
+            sysMenuEntity.setCreateTime(now);
+            sysMenuEntity.setCreateBy(super.getCurrentUserId());
+            sysMenuEntity.setUpdateBy(super.getCurrentUserId());
+            sysMenuEntity.setUpdateTime(now);
         }
-        sysMenuService.add(sysMenuModel);
+        sysMenuService.add(sysMenuEntity);
         return ResultUtil.ok();
     }
 
@@ -194,7 +194,7 @@ public class SysMenuController extends BaseController {
     @PostMapping("/roleFuncTree")
     @RequiresPermissions("sys:menu:read")
     public ResultModel queryFuncMenuTree(@RequestBody Long roleId) {
-        List<SysTreeModel> treeModelList = sysMenuService.queryFuncMenuTree(roleId);
+        List<SysTreeEntity> treeModelList = sysMenuService.queryFuncMenuTree(roleId);
         return ResultUtil.ok(treeModelList);
     }
 
@@ -209,7 +209,7 @@ public class SysMenuController extends BaseController {
     @PostMapping("/funcTree")
     @RequiresPermissions("sys:menu:read")
     public ResultModel queryFuncMenuTree() {
-        List<SysTreeModel> treeModelList = sysMenuService.queryFuncMenuTree(null);
+        List<SysTreeEntity> treeModelList = sysMenuService.queryFuncMenuTree(null);
         return ResultUtil.ok(treeModelList);
     }
 
@@ -226,7 +226,7 @@ public class SysMenuController extends BaseController {
     @GetMapping("/queryTree/{menuType}/{menuId}")
     @RequiresPermissions("sys:menu:read")
     public ResultModel queryTree(@PathVariable(required = false, value = "menuType") Integer menuType, @PathVariable(value = "menuId") Long menuId) {
-        List<SysTreeModel> list = sysMenuService.queryTree(menuId, menuType);
+        List<SysTreeEntity> list = sysMenuService.queryTree(menuId, menuType);
         return ResultUtil.ok(list);
     }
 
@@ -242,7 +242,7 @@ public class SysMenuController extends BaseController {
     @GetMapping("/queryTree/{menuType}")
     @RequiresPermissions("sys:menu:read")
     public ResultModel queryTree(@PathVariable(required = false, value = "menuType") Integer menuType) {
-        List<SysTreeModel> list = sysMenuService.queryTree(null, menuType);
+        List<SysTreeEntity> list = sysMenuService.queryTree(null, menuType);
         return ResultUtil.ok(list);
     }
 }

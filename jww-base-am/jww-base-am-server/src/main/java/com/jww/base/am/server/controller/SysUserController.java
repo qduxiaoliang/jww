@@ -2,8 +2,8 @@ package com.jww.base.am.server.controller;
 
 import com.jww.base.am.api.SysUserService;
 import com.jww.base.am.common.AmConstants;
-import com.jww.base.am.model.SysUserModel;
-import com.jww.base.am.model.SysUserRoleModel;
+import com.jww.base.am.model.entity.SysUserEntity;
+import com.jww.base.am.model.entity.SysUserRoleEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.common.core.Constants;
 import com.jww.common.core.exception.BusinessException;
@@ -58,9 +58,9 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("sys:user:read")
     public ResultModel query(@PathVariable(value = "id") Long id) {
         Assert.notNull(id);
-        SysUserModel sysUserModel = sysUserService.queryOne(id);
-        sysUserModel.setPassword(null);
-        return ResultUtil.ok(sysUserModel);
+        SysUserEntity sysUserEntity = sysUserService.queryOne(id);
+        sysUserEntity.setPassword(null);
+        return ResultUtil.ok(sysUserEntity);
     }
 
     @ApiOperation(value = "查询所有用户")
@@ -76,8 +76,8 @@ public class SysUserController extends BaseController {
     public ResultModel querySelectUsers() {
         Long currentUserId = super.getCurrentUserId();
         if (!AmConstants.USERID_ADMIN.equals(currentUserId)) {
-            List<SysUserModel> list = new ArrayList<>();
-            list.add((SysUserModel) super.getCurrentUser());
+            List<SysUserEntity> list = new ArrayList<>();
+            list.add((SysUserEntity) super.getCurrentUser());
             return ResultUtil.ok(list);
         }
         return ResultUtil.ok(sysUserService.queryList());
@@ -101,7 +101,7 @@ public class SysUserController extends BaseController {
     /**
      * 新增用户
      *
-     * @param sysUserModel 用户实体
+     * @param sysUserEntity 用户实体
      * @return ResultModel
      * @author wanyong
      * @date 2017-12-03 10:18
@@ -110,19 +110,19 @@ public class SysUserController extends BaseController {
     @PostMapping("/add")
     @RequiresPermissions("sys:user:add")
     @SysLogOpt(module = "用户管理", value = "用户新增", operationType = Constants.LogOptEnum.ADD)
-    public ResultModel add(@Valid @RequestBody SysUserModel sysUserModel) {
-        SysUserModel existSysUserModel = sysUserService.queryByAccount(sysUserModel.getAccount());
-        if (ObjectUtil.isNotNull(existSysUserModel)) {
+    public ResultModel add(@Valid @RequestBody SysUserEntity sysUserEntity) {
+        SysUserEntity existSysUserEntity = sysUserService.queryByAccount(sysUserEntity.getAccount());
+        if (ObjectUtil.isNotNull(existSysUserEntity)) {
             throw new BusinessException("已存在相同账号的用户");
         }
-        if (StrUtil.isBlank(sysUserModel.getPassword()) || !AmConstants.USERID_ADMIN.equals(super.getCurrentUserId())) {
+        if (StrUtil.isBlank(sysUserEntity.getPassword()) || !AmConstants.USERID_ADMIN.equals(super.getCurrentUserId())) {
             // 设置初始密码: 123456
-            sysUserModel.setPassword(SecurityUtil.encryptPassword("123456"));
+            sysUserEntity.setPassword(SecurityUtil.encryptPassword("123456"));
         } else {
-            sysUserModel.setPassword(SecurityUtil.encryptPassword(sysUserModel.getPassword()));
+            sysUserEntity.setPassword(SecurityUtil.encryptPassword(sysUserEntity.getPassword()));
         }
-        sysUserModel.setCreateBy(super.getCurrentUserId());
-        sysUserService.add(sysUserModel);
+        sysUserEntity.setCreateBy(super.getCurrentUserId());
+        sysUserService.add(sysUserEntity);
         return ResultUtil.ok();
     }
 
@@ -148,7 +148,7 @@ public class SysUserController extends BaseController {
     /**
      * 修改用户
      *
-     * @param sysUserModel 用户实体
+     * @param sysUserEntity 用户实体
      * @return ResultModel
      * @author wanyong
      * @date 2018-01-04 11:33
@@ -157,22 +157,22 @@ public class SysUserController extends BaseController {
     @PostMapping("/modify")
     @RequiresPermissions("sys:user:update")
     @SysLogOpt(module = "用户管理", value = "用户修改", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modify(@RequestBody SysUserModel sysUserModel) {
-        sysUserModel.setCreateBy(super.getCurrentUserId());
-        sysUserModel.setUpdateTime(new Date());
-        sysUserModel.setAccount(null);
-        if (StrUtil.isNotBlank(sysUserModel.getPassword()) && AmConstants.USERID_ADMIN.equals(super.getCurrentUserId())) {
-            sysUserModel.setPassword(SecurityUtil.encryptPassword(sysUserModel.getPassword()));
+    public ResultModel modify(@RequestBody SysUserEntity sysUserEntity) {
+        sysUserEntity.setCreateBy(super.getCurrentUserId());
+        sysUserEntity.setUpdateTime(new Date());
+        sysUserEntity.setAccount(null);
+        if (StrUtil.isNotBlank(sysUserEntity.getPassword()) && AmConstants.USERID_ADMIN.equals(super.getCurrentUserId())) {
+            sysUserEntity.setPassword(SecurityUtil.encryptPassword(sysUserEntity.getPassword()));
         } else {
-            sysUserModel.setPassword(null);
+            sysUserEntity.setPassword(null);
         }
-        return ResultUtil.ok(sysUserService.modifyUser(sysUserModel));
+        return ResultUtil.ok(sysUserService.modifyUser(sysUserEntity));
     }
 
     /**
      * 个人资料修改
      *
-     * @param sysUserModel 用户实体
+     * @param sysUserEntity 用户实体
      * @return ResultModel
      * @author wanyong
      * @date 2018-01-04 11:33
@@ -180,14 +180,14 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "修改个人资料", notes = "根据用户ID修改用户个人资料")
     @PostMapping("/modifyMySelf")
     @SysLogOpt(module = "用户管理", value = "个人资料修改", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modifyMySelf(@RequestBody SysUserModel sysUserModel) {
-        if (!sysUserModel.getId().equals(WebUtil.getCurrentUserId())) {
+    public ResultModel modifyMySelf(@RequestBody SysUserEntity sysUserEntity) {
+        if (!sysUserEntity.getId().equals(WebUtil.getCurrentUserId())) {
             throw new BusinessException("不能修改其他用户信息");
         }
-        sysUserModel.setCreateBy(super.getCurrentUserId());
-        sysUserModel.setUpdateTime(new Date());
-        sysUserModel.setAccount(null);
-        return ResultUtil.ok(sysUserService.modifyById(sysUserModel));
+        sysUserEntity.setCreateBy(super.getCurrentUserId());
+        sysUserEntity.setUpdateTime(new Date());
+        sysUserEntity.setAccount(null);
+        return ResultUtil.ok(sysUserService.modifyById(sysUserEntity));
     }
 
     /**
@@ -203,14 +203,14 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("sys:user:read")
     public ResultModel queryUserRoles(@PathVariable(value = "userId") Long userId) {
         Assert.notNull(userId);
-        List<SysUserRoleModel> list = sysUserService.queryUserRoles(userId);
+        List<SysUserRoleEntity> list = sysUserService.queryUserRoles(userId);
         return ResultUtil.ok(list);
     }
 
     /**
      * 修改密码
      *
-     * @param sysUserModel 用户实体
+     * @param sysUserEntity 用户实体
      * @return ResultModel
      * @author wanyong
      * @date 2017/12/30 22:18
@@ -219,19 +219,19 @@ public class SysUserController extends BaseController {
     @PostMapping("/modifyPassword")
     @RequiresPermissions("sys:user:update")
     @SysLogOpt(module = "用户管理", value = "修改密码", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modifyPassword(@RequestBody SysUserModel sysUserModel) {
-        Assert.notEmpty(sysUserModel.getOldPassword());
-        Assert.notEmpty(sysUserModel.getPassword());
-        String encryptOldPassword = SecurityUtil.encryptPassword(sysUserModel.getOldPassword());
-        SysUserModel currentSysUserModel = sysUserService.queryById(super.getCurrentUserId());
-        if (!encryptOldPassword.equals(currentSysUserModel.getPassword())) {
+    public ResultModel modifyPassword(@RequestBody SysUserEntity sysUserEntity) {
+        Assert.notEmpty(sysUserEntity.getOldPassword());
+        Assert.notEmpty(sysUserEntity.getPassword());
+        String encryptOldPassword = SecurityUtil.encryptPassword(sysUserEntity.getOldPassword());
+        SysUserEntity currentSysUserEntity = sysUserService.queryById(super.getCurrentUserId());
+        if (!encryptOldPassword.equals(currentSysUserEntity.getPassword())) {
             throw new BusinessException("旧密码不正确");
         }
-        String encryptPassword = SecurityUtil.encryptPassword(sysUserModel.getPassword());
-        sysUserModel.setPassword(encryptPassword);
-        sysUserModel.setId(super.getCurrentUserId());
-        sysUserModel.setAccount(null);
-        return ResultUtil.ok(sysUserService.modifyById(sysUserModel));
+        String encryptPassword = SecurityUtil.encryptPassword(sysUserEntity.getPassword());
+        sysUserEntity.setPassword(encryptPassword);
+        sysUserEntity.setId(super.getCurrentUserId());
+        sysUserEntity.setAccount(null);
+        return ResultUtil.ok(sysUserService.modifyById(sysUserEntity));
     }
 
 }

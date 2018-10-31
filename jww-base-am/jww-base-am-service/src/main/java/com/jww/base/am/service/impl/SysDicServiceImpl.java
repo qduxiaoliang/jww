@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.jww.base.am.api.SysDicService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDicMapper;
-import com.jww.base.am.model.SysDicModel;
+import com.jww.base.am.model.entity.SysDicEntity;
 import com.jww.common.core.Constants;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.xiaoleilu.hutool.util.ObjectUtil;
@@ -31,13 +31,13 @@ import java.util.Map;
  */
 @Service("sysDicService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.DIC)
-public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicModel> implements SysDicService {
+public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicEntity> implements SysDicService {
 
     @Override
-    public Page<SysDicModel> queryListPage(Page<SysDicModel> page) {
-        SysDicModel sysDicModel = new SysDicModel();
-        sysDicModel.setIsDel(0);
-        EntityWrapper<SysDicModel> entityWrapper = new EntityWrapper<>(sysDicModel);
+    public Page<SysDicEntity> queryListPage(Page<SysDicEntity> page) {
+        SysDicEntity sysDicEntity = new SysDicEntity();
+        sysDicEntity.setIsDel(0);
+        EntityWrapper<SysDicEntity> entityWrapper = new EntityWrapper<>(sysDicEntity);
         if (ObjectUtil.isNotNull(page.getCondition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<String, Object> paramMap = page.getCondition();
@@ -55,52 +55,52 @@ public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicModel
 
     @Override
     @Cacheable
-    public List<SysDicModel> queryTypeList() {
-        EntityWrapper<SysDicModel> entityWrapper = new EntityWrapper<>(new SysDicModel());
+    public List<SysDicEntity> queryTypeList() {
+        EntityWrapper<SysDicEntity> entityWrapper = new EntityWrapper<>(new SysDicEntity());
         entityWrapper.setSqlSelect("DISTINCT type_text,type_");
         return super.selectList(entityWrapper);
     }
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.DIC, allEntries = true)
-    public SysDicModel add(SysDicModel sysDicModel) {
-        return super.add(sysDicModel);
+    public SysDicEntity add(SysDicEntity sysDicEntity) {
+        return super.add(sysDicEntity);
     }
 
     @Override
     @Cacheable
-    public List<SysDicModel> queryListByType(String type) {
-        SysDicModel sysDicModel = new SysDicModel();
-        sysDicModel.setType(type);
-        sysDicModel.setIsDel(0);
-        sysDicModel.setEnable(1);
-        EntityWrapper<SysDicModel> entityWrapper = new EntityWrapper<>(sysDicModel);
+    public List<SysDicEntity> queryListByType(String type) {
+        SysDicEntity sysDicEntity = new SysDicEntity();
+        sysDicEntity.setType(type);
+        sysDicEntity.setIsDel(0);
+        sysDicEntity.setEnable(1);
+        EntityWrapper<SysDicEntity> entityWrapper = new EntityWrapper<>(sysDicEntity);
         return super.selectList(entityWrapper);
     }
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.DIC, allEntries = true)
     public boolean deleteBatchIds(List<? extends Serializable> idList) {
-        List<SysDicModel> sysDicModelList = new ArrayList<SysDicModel>();
+        List<SysDicEntity> sysDicEntityList = new ArrayList<SysDicEntity>();
         idList.forEach(id -> {
-            SysDicModel entity = new SysDicModel();
+            SysDicEntity entity = new SysDicEntity();
             entity.setId((Long) id);
             entity.setIsDel(1);
             entity.setUpdateTime(new Date());
-            sysDicModelList.add(entity);
+            sysDicEntityList.add(entity);
         });
-        return super.updateBatchById(sysDicModelList);
+        return super.updateBatchById(sysDicEntityList);
     }
 
     @Override
     @Cacheable
-    public SysDicModel queryByTypeAndCode(String type, String code) {
-        SysDicModel sysDicModel = new SysDicModel();
-        sysDicModel.setType(type);
-        sysDicModel.setCode(code);
-        sysDicModel.setIsDel(0);
-        sysDicModel.setEnable(1);
-        EntityWrapper<SysDicModel> entityWrapper = new EntityWrapper<>(sysDicModel);
+    public SysDicEntity queryByTypeAndCode(String type, String code) {
+        SysDicEntity sysDicEntity = new SysDicEntity();
+        sysDicEntity.setType(type);
+        sysDicEntity.setCode(code);
+        sysDicEntity.setIsDel(0);
+        sysDicEntity.setEnable(1);
+        EntityWrapper<SysDicEntity> entityWrapper = new EntityWrapper<>(sysDicEntity);
         return super.selectOne(entityWrapper);
     }
 }

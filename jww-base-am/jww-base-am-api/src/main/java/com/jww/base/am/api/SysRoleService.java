@@ -1,8 +1,8 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jww.base.am.model.entity.SysRoleEntity;
 import com.jww.common.core.base.BaseService;
-import com.jww.base.am.model.SysRoleModel;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @author wanyong
  * @since 2017-12-17
  */
-public interface SysRoleService extends BaseService<SysRoleModel> {
+public interface SysRoleService extends BaseService<SysRoleEntity> {
 
     /**
      * 分页查找所有角色
@@ -24,30 +24,28 @@ public interface SysRoleService extends BaseService<SysRoleModel> {
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    Page<SysRoleModel> queryListPage(Page<SysRoleModel> page);
+    Page<SysRoleEntity> queryListPage(Page<SysRoleEntity> page);
 
 
     /**
      * 新增角色
      *
-     * @param sysRoleModel
+     * @param sysRoleEntity
      * @return SysRoleModel
      * @author wanyong
      * @date 2017-12-19 15:37
      */
-    @Override
-    SysRoleModel add(SysRoleModel sysRoleModel);
+    SysRoleEntity add(SysRoleEntity sysRoleEntity);
 
     /**
      * 根据角色ID修改
      *
-     * @param sysRoleModel
+     * @param sysRoleEntity
      * @return SysRoleModel
      * @author wanyong
      * @date 2017-12-24 14:41
      */
-    @Override
-    SysRoleModel modifyById(SysRoleModel sysRoleModel);
+    SysRoleEntity modifyById(SysRoleEntity sysRoleEntity);
 
     /**
      * 查询部门下所有角色
@@ -57,5 +55,5 @@ public interface SysRoleService extends BaseService<SysRoleModel> {
      * @author shadj
      * @date 2017/12/29 17:31
      */
-    List<SysRoleModel> queryRoles(Long deptId);
+    List<SysRoleEntity> queryRoles(Long deptId);
 }

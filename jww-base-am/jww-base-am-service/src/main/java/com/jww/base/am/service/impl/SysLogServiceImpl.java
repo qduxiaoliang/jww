@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.jww.base.am.api.SysLogService;
 import com.jww.base.am.dao.mapper.SysLogMapper;
-import com.jww.base.am.model.SysLogModel;
+import com.jww.base.am.model.entity.SysLogEntity;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.xiaoleilu.hutool.util.ObjectUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
@@ -27,14 +27,14 @@ import java.util.Map;
  */
 @Service("sysLogService")
 @Slf4j
-public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogModel> implements SysLogService {
+public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogEntity> implements SysLogService {
 
     @Autowired
     private SysLogMapper sysLogMapper;
 
     @Override
-    public Page<SysLogModel> queryListPage(Page<SysLogModel> page) {
-        EntityWrapper<SysLogModel> entityWrapper = new EntityWrapper<>();
+    public Page<SysLogEntity> queryListPage(Page<SysLogEntity> page) {
+        EntityWrapper<SysLogEntity> entityWrapper = new EntityWrapper<>();
         if (ObjectUtil.isNotNull(page.getCondition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<String, Object> paramMap = page.getCondition();
@@ -54,7 +54,7 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogModel
 
     @Override
     public boolean clearLog(Integer keepDays) {
-        EntityWrapper<SysLogModel> entityWrapper = new EntityWrapper<>();
+        EntityWrapper<SysLogEntity> entityWrapper = new EntityWrapper<>();
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.DATE, -keepDays);

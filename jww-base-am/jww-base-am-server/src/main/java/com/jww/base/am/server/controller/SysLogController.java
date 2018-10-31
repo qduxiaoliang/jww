@@ -2,7 +2,7 @@ package com.jww.base.am.server.controller;
 
 
 import com.jww.base.am.api.SysLogService;
-import com.jww.base.am.model.SysLogModel;
+import com.jww.base.am.model.entity.SysLogEntity;
 import com.jww.common.core.model.PageModel;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.ResultModel;
@@ -44,8 +44,8 @@ public class SysLogController extends BaseController {
     @ApiOperation(value = "分页查询日志列表", notes = "根据分页参数查询日志列表")
     @PostMapping("/queryListPage")
     @RequiresPermissions("sys:log:read")
-    public ResultModel queryListPage(@RequestBody PageModel<SysLogModel> pageModel) {
-        pageModel = (PageModel<SysLogModel>) sysLogService.queryListPage(pageModel);
+    public ResultModel queryListPage(@RequestBody PageModel<SysLogEntity> pageModel) {
+        pageModel = (PageModel<SysLogEntity>) sysLogService.queryListPage(pageModel);
         return ResultUtil.ok(pageModel);
     }
 }

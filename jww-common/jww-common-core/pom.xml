@@ -11,6 +11,7 @@
 
     <artifactId>jww-common-core</artifactId>
 
+
     <!-- 数据库相关 -->
     <dependencies>
         <!-- lombok -->

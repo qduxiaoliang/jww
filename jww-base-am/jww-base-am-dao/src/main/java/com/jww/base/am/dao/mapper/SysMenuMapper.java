@@ -1,7 +1,7 @@
 package com.jww.base.am.dao.mapper;
 
 import com.jww.common.core.base.BaseMapper;
-import com.jww.base.am.model.SysMenuModel;
+import com.jww.base.am.model.entity.SysMenuEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author wanyong
  * @since 2017-11-29
  */
-public interface SysMenuMapper extends BaseMapper<SysMenuModel> {
+public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
 
     /**
      * 根据用户ID查询菜单树
@@ -24,7 +24,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenuModel> {
      * @author wanyong
      * @date 2017-12-03 00:51
      */
-    List<SysMenuModel> selectMenuTreeByUserId(@Param("userId") Long userId);
+    List<SysMenuEntity> selectMenuTreeByUserId(@Param("userId") Long userId);
 
     /**
      * 查询所有父级菜单
@@ -33,5 +33,5 @@ public interface SysMenuMapper extends BaseMapper<SysMenuModel> {
      * @author shadj
      * @date 2018/1/25 22:37
      */
-    List<SysMenuModel> selectParentMenu();
+    List<SysMenuEntity> selectParentMenu();
 }

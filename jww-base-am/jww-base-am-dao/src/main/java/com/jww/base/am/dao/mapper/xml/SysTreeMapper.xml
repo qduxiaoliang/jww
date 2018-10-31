@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jww.base.am.dao.mapper.SysTreeMapper">
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.jww.base.am.model.SysTreeModel">
+    <resultMap id="BaseResultMap" type="com.jww.base.am.model.entity.SysTreeEntity">
         <result column="id" property="id"/>
         <result column="parentId" property="parentId"/>
         <result column="name" property="name"/>

@@ -1,7 +1,7 @@
 package com.jww.base.am.server.controller;
 
 import com.jww.base.am.api.SysDicService;
-import com.jww.base.am.model.SysDicModel;
+import com.jww.base.am.model.entity.SysDicEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.common.core.Constants;
 import com.jww.common.core.exception.BusinessException;
@@ -53,8 +53,8 @@ public class SysDicController extends BaseController {
     @RequiresPermissions("sys:dic:read")
     public ResultModel query(@RequestBody Long dicId) {
         Assert.notNull(dicId);
-        SysDicModel sysDicModel = sysDicService.queryById(dicId);
-        return ResultUtil.ok(sysDicModel);
+        SysDicEntity sysDicEntity = sysDicService.queryById(dicId);
+        return ResultUtil.ok(sysDicEntity);
     }
 
     /**
@@ -76,7 +76,7 @@ public class SysDicController extends BaseController {
     /**
      * 新增字典
      *
-     * @param sysDicModel 字典实体
+     * @param sysDicEntity 字典实体
      * @return ResultModel
      * @author wanyong
      * @date 2018-01-03 13:28
@@ -85,16 +85,16 @@ public class SysDicController extends BaseController {
     @PostMapping("/add")
     @RequiresPermissions("sys:dic:add")
     @SysLogOpt(module = "字典管理", value = "字典新增", operationType = Constants.LogOptEnum.ADD)
-    public ResultModel add(@Valid @RequestBody SysDicModel sysDicModel) {
-        sysDicModel.setCreateBy(super.getCurrentUserId());
-        sysDicModel.setUpdateBy(super.getCurrentUserId());
-        return ResultUtil.ok(sysDicService.add(sysDicModel));
+    public ResultModel add(@Valid @RequestBody SysDicEntity sysDicEntity) {
+        sysDicEntity.setCreateBy(super.getCurrentUserId());
+        sysDicEntity.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysDicService.add(sysDicEntity));
     }
 
     /**
      * 修改字典
      *
-     * @param sysDicModel 字典实体
+     * @param sysDicEntity 字典实体
      * @return com.jww.common.web.model.ResultModel
      * @author RickyWang
      * @date 17/12/25 21:29:09
@@ -103,9 +103,9 @@ public class SysDicController extends BaseController {
     @PostMapping("/modify")
     @RequiresPermissions("sys:dic:update")
     @SysLogOpt(module = "字典管理", value = "字典修改", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modify(@Valid @RequestBody SysDicModel sysDicModel) {
-        sysDicModel.setUpdateBy(super.getCurrentUserId());
-        sysDicService.modifyById(sysDicModel);
+    public ResultModel modify(@Valid @RequestBody SysDicEntity sysDicEntity) {
+        sysDicEntity.setUpdateBy(super.getCurrentUserId());
+        sysDicService.modifyById(sysDicEntity);
         return ResultUtil.ok();
     }
 

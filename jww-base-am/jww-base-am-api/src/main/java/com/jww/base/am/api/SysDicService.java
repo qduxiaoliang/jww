@@ -1,7 +1,7 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.jww.base.am.model.SysDicModel;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jww.base.am.model.entity.SysDicEntity;
 import com.jww.common.core.base.BaseService;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author wanyong
  * @since 2017-12-17
  */
-public interface SysDicService extends BaseService<SysDicModel> {
+public interface SysDicService extends BaseService<SysDicEntity> {
 
     /**
      * 分页查找所有字典明细
@@ -24,7 +24,7 @@ public interface SysDicService extends BaseService<SysDicModel> {
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    Page<SysDicModel> queryListPage(Page<SysDicModel> page);
+    Page<SysDicEntity> queryListPage(Page<SysDicEntity> page);
 
     /**
      * 查询字典类型集合
@@ -33,18 +33,17 @@ public interface SysDicService extends BaseService<SysDicModel> {
      * @author wanyong
      * @date 2018-01-10 13:01
      */
-    List<SysDicModel> queryTypeList();
+    List<SysDicEntity> queryTypeList();
 
     /**
      * 新增字典(新增前需要进行唯一主键检验)
      *
-     * @param sysDicModel
+     * @param sysDicEntity
      * @return SysDicModel
      * @author wanyong
      * @date 2018-01-10 17:38
      */
-    @Override
-    SysDicModel add(SysDicModel sysDicModel);
+    SysDicEntity add(SysDicEntity sysDicEntity);
 
     /**
      * 根据字典类型值查询字典集合
@@ -54,7 +53,7 @@ public interface SysDicService extends BaseService<SysDicModel> {
      * @author wanyong
      * @date 2018-01-10 18:18
      */
-    List<SysDicModel> queryListByType(String type);
+    List<SysDicEntity> queryListByType(String type);
 
     /**
      * 根据字典类型和字典值查询字典
@@ -65,6 +64,5 @@ public interface SysDicService extends BaseService<SysDicModel> {
      * @author wanyong
      * @date 2018-01-17 01:15
      */
-    SysDicModel queryByTypeAndCode(String type, String code);
-
+    SysDicEntity queryByTypeAndCode(String type, String code);
 }

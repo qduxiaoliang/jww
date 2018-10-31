@@ -1,8 +1,8 @@
-package com.jww.base.am.model;
+package com.jww.base.am.model.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.jww.common.core.base.BaseModel;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.jww.common.core.base.BaseEntity;
 import lombok.Data;
 
 /**
@@ -10,19 +10,24 @@ import lombok.Data;
  * 用户授权表
  * </p>
  *
- * @author wanyong
- * @since 2017-11-29
+ * @author waner
+ * @date 2017-11-29
  */
 @Data
-@TableName("sys_user_role")
-public class SysUserRoleModel extends BaseModel {
+@TableName("sys_user_menu")
+public class SysUserMenuEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     @TableField("user_id")
     private Long userId;
-    @TableField("role_id")
-    private Long roleId;
+    @TableField("menu_id")
+    private Long menuId;
+    /**
+     * 权限标识
+     */
+    @TableField("permission_")
+    private String permission;
     /**
      * 是否启用
      */

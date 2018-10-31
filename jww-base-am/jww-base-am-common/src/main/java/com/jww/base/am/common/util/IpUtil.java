@@ -1,9 +1,7 @@
 package com.jww.base.am.common.util;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.jww.common.core.Constants;
-import com.jww.common.redis.util.CacheUtil;
-import com.xiaoleilu.hutool.util.ObjectUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,8 +13,8 @@ import java.util.regex.Pattern;
 /**
  * IP工具类
  *
- * @author wanyong
- * @since 2018-01-07
+ * @author waner
+ * @date 2018-01-07
  */
 public class IpUtil {
 
@@ -84,11 +82,7 @@ public class IpUtil {
             return "内网ip";
         }
         String ipDetail = null;
-        // 缓存中存在则直接返回缓存结果
-        Object cacheIpObj = CacheUtil.getCache().get(Constants.CacheNamespaceEnum.IP.value() + ip);
-        if (cacheIpObj != null) {
-            return (String) cacheIpObj;
-        }
+        //todo 缓存中存在则直接返回缓存结果
         String res = queryIP(ip);
         if (res == null) {
             return null;
@@ -102,11 +96,7 @@ public class IpUtil {
         if (code == 0) {
             JSONObject data = resJ.getJSONObject("data");
             ipDetail = data.get("country").toString() + data.get("region").toString() + data.get("city").toString() + data.get("isp").toString();
-            //将查询结果放入缓存
-            if (!CacheUtil.getCache().exists(Constants.CacheNamespaceEnum.IP.value() + ip)) {
-                CacheUtil.getCache().set(Constants.CacheNamespaceEnum.IP.value() + ip, ipDetail, 86400 * 7);
-            }
-
+            //todo 将查询结果放入缓存
         } else {
             return unknowIp;
         }

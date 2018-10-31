@@ -1,8 +1,8 @@
 package com.jww.base.am.dao.mapper;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jww.base.am.model.entity.SysDeptEntity;
 import com.jww.common.core.base.BaseMapper;
-import com.jww.base.am.model.SysDeptModel;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,17 +13,18 @@ import java.util.List;
  * @author wanyong
  * @date 2017-11-25
  */
-public interface SysDeptMapper extends BaseMapper<SysDeptModel> {
+public interface SysDeptMapper extends BaseMapper<SysDeptEntity> {
 
     /**
      * 分页查询
-     * @param page 分页参数
+     *
+     * @param page     分页参数
      * @param deptName 部门名称
      * @return List<SysDeptModel>
      * @author wanyong
      * @date 2017-12-27 11:57
      */
-    List<SysDeptModel> selectPage(Page<SysDeptModel> page, @Param("deptName") String deptName);
+    List<SysDeptEntity> selectPage(Page<SysDeptEntity> page, @Param("deptName") String deptName);
 
     /**
      * 根据部门ID查询
@@ -33,5 +34,5 @@ public interface SysDeptMapper extends BaseMapper<SysDeptModel> {
      * @author wanyong
      * @date 2017-12-27 11:58
      */
-    SysDeptModel selectOne(@Param("id") Long id);
+    SysDeptEntity selectOne(@Param("id") Long id);
 }

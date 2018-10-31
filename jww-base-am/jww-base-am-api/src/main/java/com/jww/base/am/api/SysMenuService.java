@@ -1,9 +1,9 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jww.base.am.model.entity.SysMenuEntity;
+import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.common.core.base.BaseService;
-import com.jww.base.am.model.SysMenuModel;
-import com.jww.base.am.model.SysTreeModel;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @author wanyong
  * @since 2017-11-29
  */
-public interface SysMenuService extends BaseService<SysMenuModel> {
+public interface SysMenuService extends BaseService<SysMenuEntity> {
 
     /**
      * 查找所有菜单
@@ -24,7 +24,7 @@ public interface SysMenuService extends BaseService<SysMenuModel> {
      * @author wanyong
      * @date 2017-12-02 13:59
      */
-    List<SysMenuModel> queryList();
+    List<SysMenuEntity> queryList();
 
     /**
      * 分页查询所有菜单
@@ -34,7 +34,7 @@ public interface SysMenuService extends BaseService<SysMenuModel> {
      * @author shadj
      * @date 2017/12/18 13:52
      */
-    Page<SysMenuModel> queryListPage(Page<SysMenuModel> page);
+    Page<SysMenuEntity> queryListPage(Page<SysMenuEntity> page);
 
     /**
      * 根据用户ID查找菜单树（包含目录和菜单，不包含按钮）
@@ -44,7 +44,7 @@ public interface SysMenuService extends BaseService<SysMenuModel> {
      * @author wanyong
      * @date 2017-12-03 00:56
      */
-    List<SysTreeModel> queryMenuTreeByUserId(Long userId);
+    List<SysTreeEntity> queryMenuTreeByUserId(Long userId);
 
     /**
      * 查找功能菜单树（包含目录、菜单和按钮）
@@ -53,7 +53,7 @@ public interface SysMenuService extends BaseService<SysMenuModel> {
      * @author wanyong
      * @date 2017-12-19 11:14
      */
-    List<SysTreeModel> queryFuncMenuTree();
+    List<SysTreeEntity> queryFuncMenuTree();
 
     /**
      * 根据角色ID查找功能菜单树（包含目录、菜单和按钮）
@@ -63,18 +63,18 @@ public interface SysMenuService extends BaseService<SysMenuModel> {
      * @author wanyong
      * @date 2017-12-19 11:14
      */
-    List<SysTreeModel> queryFuncMenuTree(Long roleId);
+    List<SysTreeEntity> queryFuncMenuTree(Long roleId);
 
     /**
      * 查询菜单树，供页面选择父菜单使用，过滤自己及子菜单
      *
-     * @param  id
-     * @param  menuType
-     * @return  List<SysTreeModel>
+     * @param id
+     * @param menuType
+     * @return List<SysTreeModel>
      * @author shadj
      * @date 2017/12/22 22:59
      */
-    List<SysTreeModel> queryTree(Long id, Integer menuType);
+    List<SysTreeEntity> queryTree(Long id, Integer menuType);
 
     /**
      * 删除单个菜单（设置删除状态为是）
@@ -103,5 +103,5 @@ public interface SysMenuService extends BaseService<SysMenuModel> {
      * @author shadj
      * @date 2018/1/25 22:37
      */
-    List<SysMenuModel> queryParentMenu();
+    List<SysMenuEntity> queryParentMenu();
 }

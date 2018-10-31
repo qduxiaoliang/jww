@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.jww</groupId>
             <artifactId>jww-common-db</artifactId>
-            <version>2.0.0</version>
+            <version>${jww-common.version}</version>
         </dependency>
         <!-- shardingjdbc -->
         <dependency>

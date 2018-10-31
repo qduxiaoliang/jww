@@ -3,7 +3,7 @@ package com.jww.base.am.server.shiro.realm;
 import com.alibaba.fastjson.JSON;
 import com.jww.base.am.api.SysAuthorizeService;
 import com.jww.base.am.api.SysUserService;
-import com.jww.base.am.model.SysUserModel;
+import com.jww.base.am.model.entity.SysUserEntity;
 import com.jww.common.web.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
@@ -63,15 +63,15 @@ public class SysUserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
-        SysUserModel sysUserModel = sysUserService.queryByAccount(usernamePasswordToken.getUsername());
-        if (null == sysUserModel) {
+        SysUserEntity sysUserEntity = sysUserService.queryByAccount(usernamePasswordToken.getUsername());
+        if (null == sysUserEntity) {
             throw new UnknownAccountException();
         }
-        if (!sysUserModel.getPassword().equals(new String(usernamePasswordToken.getPassword()))) {
+        if (!sysUserEntity.getPassword().equals(new String(usernamePasswordToken.getPassword()))) {
             throw new IncorrectCredentialsException();
         }
-        WebUtil.saveCurrentUser(sysUserModel);
-        WebUtil.saveCurrentUserId(sysUserModel.getId());
-        return new SimpleAuthenticationInfo(sysUserModel.getAccount(), sysUserModel.getPassword(), sysUserModel.getUserName());
+        WebUtil.saveCurrentUser(sysUserEntity);
+        WebUtil.saveCurrentUserId(sysUserEntity.getId());
+        return new SimpleAuthenticationInfo(sysUserEntity.getAccount(), sysUserEntity.getPassword(), sysUserEntity.getUserName());
     }
 }

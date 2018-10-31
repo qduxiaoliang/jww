@@ -1,7 +1,7 @@
 package com.jww.base.am.server.async;
 
 import com.jww.base.am.api.SysLogService;
-import com.jww.base.am.model.SysLogModel;
+import com.jww.base.am.model.entity.SysLogEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ public class AsyncTask {
     private SysLogService sysLogService;
 
     @Async
-    public void logInsert(SysLogModel t){
+    public void logInsert(SysLogEntity t){
         sysLogService.insert(t);
     }
 }

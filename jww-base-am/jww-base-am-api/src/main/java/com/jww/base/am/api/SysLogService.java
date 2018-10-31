@@ -1,8 +1,8 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jww.base.am.model.entity.SysLogEntity;
 import com.jww.common.core.base.BaseService;
-import com.jww.base.am.model.SysLogModel;
 
 /**
  * 日志业务类
@@ -10,7 +10,7 @@ import com.jww.base.am.model.SysLogModel;
  * @author RickyWang
  * @date 17/12/26 12:41:05
  */
-public interface SysLogService extends BaseService<SysLogModel> {
+public interface SysLogService extends BaseService<SysLogEntity> {
     /**
      * 分页查询日志
      *
@@ -19,7 +19,7 @@ public interface SysLogService extends BaseService<SysLogModel> {
      * @author RickyWang
      * @date 18/1/1 15:03:43
      */
-    public Page<SysLogModel> queryListPage(Page<SysLogModel> page);
+    public Page<SysLogEntity> queryListPage(Page<SysLogEntity> page);
 
     /**
      * 清除日志

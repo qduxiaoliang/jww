@@ -1,12 +1,12 @@
-package com.jww.base.am.model;
+package com.jww.base.am.model.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.jww.common.core.base.BaseModel;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.jww.common.core.base.BaseEntity;
 import lombok.Data;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -16,11 +16,11 @@ import javax.validation.constraints.Size;
  * </p>
  *
  * @author wanyong
- * @since 2017-11-28
+ * @date 2017-11-28
  */
 @Data
 @TableName("sys_user")
-public class SysUserModel extends BaseModel {
+public class SysUserEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 

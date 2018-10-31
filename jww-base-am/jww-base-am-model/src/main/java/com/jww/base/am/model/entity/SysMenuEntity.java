@@ -1,8 +1,8 @@
-package com.jww.base.am.model;
+package com.jww.base.am.model.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.jww.common.core.base.BaseModel;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.jww.common.core.base.BaseEntity;
 import lombok.Data;
 
 import java.util.List;
@@ -13,11 +13,11 @@ import java.util.List;
  * </p>
  *
  * @author wanyong
- * @since 2017-11-29
+ * @date 2017-11-29
  */
 @Data
 @TableName("sys_menu")
-public class SysMenuModel extends BaseModel {
+public class SysMenuEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -92,7 +92,7 @@ public class SysMenuModel extends BaseModel {
     @TableField(exist = false)
     private String permissionText;
     @TableField(exist = false)
-    private List<SysMenuModel> menuBeans;
+    private List<SysMenuEntity> menuBeans;
     /**
      * end 页面所需字段（数据库没有）
      */

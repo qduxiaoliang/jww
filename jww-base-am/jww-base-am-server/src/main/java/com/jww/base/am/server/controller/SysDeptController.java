@@ -1,8 +1,8 @@
 package com.jww.base.am.server.controller;
 
 import com.jww.base.am.api.SysDeptService;
-import com.jww.base.am.model.SysDeptModel;
-import com.jww.base.am.model.SysTreeModel;
+import com.jww.base.am.model.entity.SysDeptEntity;
+import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.common.core.Constants;
 import com.jww.common.core.model.PageModel;
@@ -49,8 +49,8 @@ public class SysDeptController extends BaseController {
     @RequiresPermissions("sys:dept:read")
     public ResultModel query(@PathVariable Long id) {
         Assert.notNull(id);
-        SysDeptModel sysDeptModel = sysDeptService.queryOne(id);
-        return ResultUtil.ok(sysDeptModel);
+        SysDeptEntity sysDeptEntity = sysDeptService.queryOne(id);
+        return ResultUtil.ok(sysDeptEntity);
     }
 
     /**
@@ -64,15 +64,15 @@ public class SysDeptController extends BaseController {
     @ApiOperation(value = "分页查询部门列表", notes = "根据分页参数查询部门列表")
     @PostMapping("/queryListPage")
     @RequiresPermissions("sys:dept:read")
-    public ResultModel queryListPage(@RequestBody PageModel<SysDeptModel> pageModel) {
-        pageModel = (PageModel<SysDeptModel>) sysDeptService.queryListPage(pageModel);
+    public ResultModel queryListPage(@RequestBody PageModel<SysDeptEntity> pageModel) {
+        pageModel = (PageModel<SysDeptEntity>) sysDeptService.queryListPage(pageModel);
         return ResultUtil.ok(pageModel);
     }
 
     /**
      * 新增部门方法
      *
-     * @param sysDeptModel 部门实体
+     * @param sysDeptEntity 部门实体
      * @return com.jww.common.web.model.ResultModel
      * @author RickyWang
      * @date 17/12/25 21:28:41
@@ -81,18 +81,18 @@ public class SysDeptController extends BaseController {
     @PostMapping("/add")
     @RequiresPermissions("sys:dept:add")
     @SysLogOpt(module = "部门管理", value = "部门新增", operationType = Constants.LogOptEnum.ADD)
-    public ResultModel add(@Valid @RequestBody SysDeptModel sysDeptModel) {
-        if (sysDeptModel != null) {
-            sysDeptModel.setCreateBy(super.getCurrentUserId());
-            sysDeptModel.setUpdateBy(super.getCurrentUserId());
+    public ResultModel add(@Valid @RequestBody SysDeptEntity sysDeptEntity) {
+        if (sysDeptEntity != null) {
+            sysDeptEntity.setCreateBy(super.getCurrentUserId());
+            sysDeptEntity.setUpdateBy(super.getCurrentUserId());
         }
-        return ResultUtil.ok(sysDeptService.addDept(sysDeptModel));
+        return ResultUtil.ok(sysDeptService.addDept(sysDeptEntity));
     }
 
     /**
      * 修改部门方法
      *
-     * @param sysDeptModel 部门实体
+     * @param sysDeptEntity 部门实体
      * @return com.jww.common.web.model.ResultModel
      * @author RickyWang
      * @date 17/12/25 21:29:09
@@ -101,10 +101,10 @@ public class SysDeptController extends BaseController {
     @PutMapping("/modify")
     @RequiresPermissions("sys:dept:update")
     @SysLogOpt(module = "部门管理", value = "部门修改", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modify(@RequestBody SysDeptModel sysDeptModel) {
-        sysDeptModel.setUpdateBy(super.getCurrentUserId());
-        sysDeptModel.setUpdateTime(new Date());
-        sysDeptService.modifyById(sysDeptModel);
+    public ResultModel modify(@RequestBody SysDeptEntity sysDeptEntity) {
+        sysDeptEntity.setUpdateBy(super.getCurrentUserId());
+        sysDeptEntity.setUpdateTime(new Date());
+        sysDeptService.modifyById(sysDeptEntity);
         return ResultUtil.ok();
     }
 
@@ -137,7 +137,7 @@ public class SysDeptController extends BaseController {
     @GetMapping("/queryTree/{id}")
     @RequiresPermissions("sys:dept:read")
     public ResultModel queryTree(@PathVariable(value = "id", required = false) Long id) {
-        List<SysTreeModel> list = sysDeptService.queryTree(id);
+        List<SysTreeEntity> list = sysDeptService.queryTree(id);
         return ResultUtil.ok(list);
     }
 
@@ -152,7 +152,7 @@ public class SysDeptController extends BaseController {
     @GetMapping("/queryTree")
     @RequiresPermissions("sys:dept:read")
     public ResultModel queryTree() {
-        List<SysTreeModel> list = sysDeptService.queryTree();
+        List<SysTreeEntity> list = sysDeptService.queryTree();
         return ResultUtil.ok(list);
     }
 

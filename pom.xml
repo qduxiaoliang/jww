@@ -23,5 +23,4 @@
         <!-- maven编译插件版本 -->
         <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
     </properties>
-
 </project>

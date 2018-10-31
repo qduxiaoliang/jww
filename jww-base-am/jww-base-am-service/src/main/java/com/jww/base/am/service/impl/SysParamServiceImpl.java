@@ -1,15 +1,15 @@
 package com.jww.base.am.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.jww.base.am.api.SysParamService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysParamMapper;
-import com.jww.base.am.model.SysParamModel;
-import com.jww.common.core.Constants;
+import com.jww.base.am.model.entity.SysParamEntity;
 import com.jww.common.core.base.BaseServiceImpl;
-import com.xiaoleilu.hutool.util.ObjectUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,13 +31,13 @@ import java.util.Map;
  */
 @Service("sysParamService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.PARAM)
-public class SysParamServiceImpl extends BaseServiceImpl<SysParamMapper, SysParamModel> implements SysParamService {
+public class SysParamServiceImpl extends BaseServiceImpl<SysParamMapper, SysParamEntity> implements SysParamService {
 
     @Override
-    public Page<SysParamModel> queryListPage(Page<SysParamModel> page) {
-        SysParamModel sysParamModel = new SysParamModel();
-        sysParamModel.setIsDel(0);
-        EntityWrapper<SysParamModel> entityWrapper = new EntityWrapper<>(sysParamModel);
+    public Page<SysParamEntity> queryListPage(Page<SysParamEntity> page) {
+        SysParamEntity sysParamEntity = new SysParamEntity();
+        sysParamEntity.setIsDel(0);
+        QueryWrapper<SysParamEntity> entityWrapper = new QueryWrapper<>(sysParamEntity);
         if (ObjectUtil.isNotNull(page.getCondition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<String, Object> paramMap = page.getCondition();
@@ -54,32 +54,32 @@ public class SysParamServiceImpl extends BaseServiceImpl<SysParamMapper, SysPara
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.PARAM, allEntries = true)
-    public SysParamModel add(SysParamModel paramModel) {
+    public SysParamEntity add(SysParamEntity paramModel) {
         return super.add(paramModel);
     }
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.PARAM, allEntries = true)
     public boolean deleteBatchIds(List<? extends Serializable> idList) {
-        List<SysParamModel> sysParamModelList = new ArrayList<SysParamModel>();
+        List<SysParamEntity> sysParamEntityList = new ArrayList<SysParamEntity>();
         idList.forEach(id -> {
-            SysParamModel entity = new SysParamModel();
+            SysParamEntity entity = new SysParamEntity();
             entity.setId((Long) id);
             entity.setIsDel(1);
             entity.setUpdateTime(new Date());
-            sysParamModelList.add(entity);
+            sysParamEntityList.add(entity);
         });
-        return super.updateBatchById(sysParamModelList);
+        return super.updateBatchById(sysParamEntityList);
     }
 
     @Override
     @Cacheable
-    public SysParamModel queryByParamKey(String paramKey) {
-        SysParamModel sysParamModel = new SysParamModel();
-        sysParamModel.setEnable(1);
-        sysParamModel.setIsDel(0);
-        sysParamModel.setParamKey(paramKey);
-        EntityWrapper<SysParamModel> entityWrapper = new EntityWrapper<>(sysParamModel);
+    public SysParamEntity queryByParamKey(String paramKey) {
+        SysParamEntity sysParamEntity = new SysParamEntity();
+        sysParamEntity.setEnable(1);
+        sysParamEntity.setIsDel(0);
+        sysParamEntity.setParamKey(paramKey);
+        EntityWrapper<SysParamEntity> entityWrapper = new EntityWrapper<>(sysParamEntity);
         return super.selectOne(entityWrapper);
     }
 }

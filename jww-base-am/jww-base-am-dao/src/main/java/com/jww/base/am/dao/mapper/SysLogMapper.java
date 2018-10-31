@@ -1,7 +1,7 @@
 package com.jww.base.am.dao.mapper;
 
 import com.jww.common.core.base.BaseMapper;
-import com.jww.base.am.model.SysLogModel;
+import com.jww.base.am.model.entity.SysLogEntity;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.jww.base.am.model.SysLogModel;
  * @author RickyWang
  * @since 2017-12-26
  */
-public interface SysLogMapper extends BaseMapper<SysLogModel> {
+public interface SysLogMapper extends BaseMapper<SysLogEntity> {
 
 }

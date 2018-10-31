@@ -1,8 +1,8 @@
 package com.jww.base.am.dao.mapper;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jww.base.am.model.entity.SysUserEntity;
 import com.jww.common.core.base.BaseMapper;
-import com.jww.base.am.model.SysUserModel;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author wanyong
  * @date 2017/11/17 15:51
  */
-public interface SysUserMapper extends BaseMapper<SysUserModel> {
+public interface SysUserMapper extends BaseMapper<SysUserEntity> {
 
     /**
      * 根据关键字分页查询
@@ -24,7 +24,7 @@ public interface SysUserMapper extends BaseMapper<SysUserModel> {
      * @author wanyong
      * @date 2017-12-27 12:06
      */
-    List<SysUserModel> selectPage(Page<SysUserModel> page, @Param("searchKey") String searchKey);
+    List<SysUserEntity> selectPage(Page<SysUserEntity> page, @Param("searchKey") String searchKey);
 
     /**
      * 根据用户ID查询
@@ -34,5 +34,5 @@ public interface SysUserMapper extends BaseMapper<SysUserModel> {
      * @author wanyong
      * @date 2017-12-27 12:07
      */
-    SysUserModel selectOne(@Param("id") Long id);
+    SysUserEntity selectOne(@Param("id") Long id);
 }

@@ -5,7 +5,7 @@ import com.jww.base.am.api.SysAuthorizeService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysAuthorizeMapper;
 import com.jww.base.am.dao.mapper.SysMenuMapper;
-import com.jww.base.am.model.SysMenuModel;
+import com.jww.base.am.model.entity.SysMenuEntity;
 import com.xiaoleilu.hutool.collection.CollUtil;
 import com.xiaoleilu.hutool.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +35,12 @@ public class SysAuthorizeServiceImpl implements SysAuthorizeService {
         List<String> permissions = new ArrayList<String>();
         //如果是超级管理员，则查询所有权限code
         if (AmConstants.USERID_ADMIN.equals(userId)) {
-            EntityWrapper<SysMenuModel> wrapper = new EntityWrapper<SysMenuModel>();
+            EntityWrapper<SysMenuEntity> wrapper = new EntityWrapper<SysMenuEntity>();
             wrapper.eq("is_del", 0);
-            List<SysMenuModel> list = sysMenuMapper.selectList(wrapper);
+            List<SysMenuEntity> list = sysMenuMapper.selectList(wrapper);
             if (CollUtil.isNotEmpty(list)) {
-                for (SysMenuModel sysMenuModel : list) {
-                    permissions.add(sysMenuModel.getPermission());
+                for (SysMenuEntity sysMenuEntity : list) {
+                    permissions.add(sysMenuEntity.getPermission());
                 }
             }
             permissions.add(AmConstants.PERMISSION_ADMIN);

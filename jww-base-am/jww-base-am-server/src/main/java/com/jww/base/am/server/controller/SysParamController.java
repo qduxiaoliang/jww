@@ -1,7 +1,7 @@
 package com.jww.base.am.server.controller;
 
 import com.jww.base.am.api.SysParamService;
-import com.jww.base.am.model.SysParamModel;
+import com.jww.base.am.model.entity.SysParamEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.common.core.Constants;
 import com.jww.common.core.exception.BusinessException;
@@ -51,8 +51,8 @@ public class SysParamController extends BaseController {
     @RequiresPermissions("sys:param:read")
     public ResultModel query(@RequestBody Long paramId) {
         Assert.notNull(paramId);
-        SysParamModel sysParamModel = sysParamService.queryById(paramId);
-        return ResultUtil.ok(sysParamModel);
+        SysParamEntity sysParamEntity = sysParamService.queryById(paramId);
+        return ResultUtil.ok(sysParamEntity);
     }
 
     /**
@@ -74,7 +74,7 @@ public class SysParamController extends BaseController {
     /**
      * 新增参数
      *
-     * @param sysParamModel 参数实体
+     * @param sysParamEntity 参数实体
      * @return ResultModel
      * @author shadj
      * @date 2017/12/18 21:54
@@ -83,16 +83,16 @@ public class SysParamController extends BaseController {
     @PostMapping("/add")
     @RequiresPermissions("sys:param:add")
     @SysLogOpt(module = "参数管理", value = "参数新增", operationType = Constants.LogOptEnum.ADD)
-    public ResultModel add(@Valid @RequestBody SysParamModel sysParamModel) {
-        sysParamModel.setCreateBy(super.getCurrentUserId());
-        sysParamModel.setUpdateBy(super.getCurrentUserId());
-        return ResultUtil.ok(sysParamService.add(sysParamModel));
+    public ResultModel add(@Valid @RequestBody SysParamEntity sysParamEntity) {
+        sysParamEntity.setCreateBy(super.getCurrentUserId());
+        sysParamEntity.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysParamService.add(sysParamEntity));
     }
 
     /**
      * 修改参数
      *
-     * @param sysParamModel 参数实体
+     * @param sysParamEntity 参数实体
      * @return ResultModel
      * @author wanyong
      * @date 2018-01-03 22:36
@@ -101,9 +101,9 @@ public class SysParamController extends BaseController {
     @PostMapping("/modify")
     @RequiresPermissions("sys:param:update")
     @SysLogOpt(module = "参数管理", value = "参数修改", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modify(@RequestBody SysParamModel sysParamModel) {
-        sysParamModel.setUpdateBy(super.getCurrentUserId());
-        sysParamService.modifyById(sysParamModel);
+    public ResultModel modify(@RequestBody SysParamEntity sysParamEntity) {
+        sysParamEntity.setUpdateBy(super.getCurrentUserId());
+        sysParamService.modifyById(sysParamEntity);
         return ResultUtil.ok();
     }
 

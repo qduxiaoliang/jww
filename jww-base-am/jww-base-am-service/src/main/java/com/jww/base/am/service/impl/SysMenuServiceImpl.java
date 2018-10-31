@@ -9,8 +9,8 @@ import com.jww.base.am.common.AmConstants.AmCacheName;
 import com.jww.base.am.dao.mapper.SysMenuMapper;
 import com.jww.base.am.dao.mapper.SysRoleMenuMapper;
 import com.jww.base.am.dao.mapper.SysTreeMapper;
-import com.jww.base.am.model.SysMenuModel;
-import com.jww.base.am.model.SysTreeModel;
+import com.jww.base.am.model.entity.SysMenuEntity;
+import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ import java.util.Map;
 @Slf4j
 @Service("sysMenuService")
 @CacheConfig(cacheNames = AmCacheName.MENU)
-public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuModel> implements SysMenuService {
+public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEntity> implements SysMenuService {
 
     @Autowired
     private SysMenuMapper sysMenuMapper;
@@ -53,23 +52,23 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
 
     @Override
     @Cacheable
-    public List<SysMenuModel> queryList() {
-        SysMenuModel sysMenuModel = new SysMenuModel();
+    public List<SysMenuEntity> queryList() {
+        SysMenuEntity sysMenuEntity = new SysMenuEntity();
         // 状态为：启用
-        sysMenuModel.setEnable(1);
+        sysMenuEntity.setEnable(1);
         // 是否删除：否
-        sysMenuModel.setIsDel(0);
-        EntityWrapper<SysMenuModel> entityWrapper = new EntityWrapper<>(sysMenuModel);
+        sysMenuEntity.setIsDel(0);
+        EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<>(sysMenuEntity);
         entityWrapper.orderBy(" parent_id, sort_no ", true);
         return super.selectList(entityWrapper);
     }
 
     @Override
-    public Page<SysMenuModel> queryListPage(Page<SysMenuModel> page) {
-        SysMenuModel menu = new SysMenuModel();
+    public Page<SysMenuEntity> queryListPage(Page<SysMenuEntity> page) {
+        SysMenuEntity menu = new SysMenuEntity();
         menu.setEnable(1);
         menu.setIsDel(0);
-        EntityWrapper<SysMenuModel> wrapper = new EntityWrapper<>(menu);
+        EntityWrapper<SysMenuEntity> wrapper = new EntityWrapper<>(menu);
         wrapper.eq("a.is_del", 0).eq("a.enable_", 1);
         if (ObjectUtil.isNotNull(page.getCondition())) {
             StringBuilder conditionSql = new StringBuilder();
@@ -92,45 +91,45 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
 
     @Override
     @Cacheable
-    public List<SysTreeModel> queryMenuTreeByUserId(Long userId) {
-        List<SysMenuModel> sysMenuModelList = null;
+    public List<SysTreeEntity> queryMenuTreeByUserId(Long userId) {
+        List<SysMenuEntity> sysMenuEntityList = null;
         // 如果是超级管理员，则查询所有目录菜单
         if (AmConstants.USERID_ADMIN.equals(userId)) {
-            SysMenuModel sysMenuModel = new SysMenuModel();
-            sysMenuModel.setEnable(1);
-            sysMenuModel.setIsShow(1);
-            sysMenuModel.setIsDel(0);
-            EntityWrapper<SysMenuModel> wrapper = new EntityWrapper<>(sysMenuModel);
+            SysMenuEntity sysMenuEntity = new SysMenuEntity();
+            sysMenuEntity.setEnable(1);
+            sysMenuEntity.setIsShow(1);
+            sysMenuEntity.setIsDel(0);
+            EntityWrapper<SysMenuEntity> wrapper = new EntityWrapper<>(sysMenuEntity);
             wrapper.ne("menu_type", 2);
             wrapper.orderBy("parent_id, sort_no", true);
-            sysMenuModelList = sysMenuMapper.selectList(wrapper);
+            sysMenuEntityList = sysMenuMapper.selectList(wrapper);
         } else {
-            sysMenuModelList = sysMenuMapper.selectMenuTreeByUserId(userId);
+            sysMenuEntityList = sysMenuMapper.selectMenuTreeByUserId(userId);
         }
-        return convertTreeData(sysMenuModelList, null);
+        return convertTreeData(sysMenuEntityList, null);
     }
 
     @Override
     @Cacheable
-    public List<SysTreeModel> queryFuncMenuTree() {
-        List<SysMenuModel> sysMenuModelList = queryList();
-        return convertTreeData(sysMenuModelList, null);
+    public List<SysTreeEntity> queryFuncMenuTree() {
+        List<SysMenuEntity> sysMenuEntityList = queryList();
+        return convertTreeData(sysMenuEntityList, null);
     }
 
     @Override
     @Cacheable(value = AmCacheName.ROLE)
-    public List<SysTreeModel> queryFuncMenuTree(Long roleId) {
-        List<SysMenuModel> sysMenuModelList = queryList();
+    public List<SysTreeEntity> queryFuncMenuTree(Long roleId) {
+        List<SysMenuEntity> sysMenuEntityList = queryList();
         List<Long> menuIdList = sysRoleMenuMapper.selectMenuIdListByRoleId(roleId);
         System.out.println("menuIdList:" + JSON.toJSONString(menuIdList));
-        return convertTreeData(sysMenuModelList, menuIdList.toArray());
+        return convertTreeData(sysMenuEntityList, menuIdList.toArray());
     }
 
     @Override
     @Cacheable
-    public List<SysTreeModel> queryTree(Long id, Integer menuType) {
-        List<SysTreeModel> sysTreeModelList = sysTreeMapper.selectMenuTree(id, menuType);
-        List<SysTreeModel> list = SysTreeModel.getTree(sysTreeModelList);
+    public List<SysTreeEntity> queryTree(Long id, Integer menuType) {
+        List<SysTreeEntity> sysTreeEntityList = sysTreeMapper.selectMenuTree(id, menuType);
+        List<SysTreeEntity> list = SysTreeEntity.getTree(sysTreeEntityList);
         return list;
     }
 
@@ -139,21 +138,21 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
     @CacheEvict(value = AmCacheName.MENU,allEntries = true)
     public Boolean delete(Long id) {
         //查询是否有子菜单，如果有则返回false，否则允许删除
-        EntityWrapper<SysMenuModel> entityWrapper = new EntityWrapper<SysMenuModel>();
-        SysMenuModel sysMenuModel = new SysMenuModel();
-        sysMenuModel.setParentId((Long) id);
-        sysMenuModel.setIsDel(0);
-        entityWrapper.setEntity(sysMenuModel);
-        List<SysMenuModel> childs = super.selectList(entityWrapper);
+        EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<SysMenuEntity>();
+        SysMenuEntity sysMenuEntity = new SysMenuEntity();
+        sysMenuEntity.setParentId((Long) id);
+        sysMenuEntity.setIsDel(0);
+        entityWrapper.setEntity(sysMenuEntity);
+        List<SysMenuEntity> childs = super.selectList(entityWrapper);
         if (CollectionUtil.isNotEmpty(childs)) {
             log.error("删除菜单[id:{}]失败，请先删除子菜单", id);
             throw new BusinessException("删除菜单失败，请先删除子菜单");
         }
-        sysMenuModel = new SysMenuModel();
-        sysMenuModel.setId(id);
-        sysMenuModel.setIsDel(1);
-        sysMenuModel = super.modifyById(sysMenuModel);
-        if (sysMenuModel != null) {
+        sysMenuEntity = new SysMenuEntity();
+        sysMenuEntity.setId(id);
+        sysMenuEntity.setIsDel(1);
+        sysMenuEntity = super.modifyById(sysMenuEntity);
+        if (sysMenuEntity != null) {
             return true;
         }
         return false;
@@ -186,70 +185,70 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
      * @date 2018/1/25 22:37
      */
     @Override
-    public List<SysMenuModel> queryParentMenu() {
+    public List<SysMenuEntity> queryParentMenu() {
         return sysMenuMapper.selectParentMenu();
     }
 
     @Override
     @CacheEvict(value = AmCacheName.MENU, allEntries = true)
     @DistributedLock(value = "#sysMenuModel.getParentId()")
-    public SysMenuModel add(SysMenuModel sysMenuModel) {
+    public SysMenuEntity add(SysMenuEntity sysMenuEntity) {
         //名称重复验证，同一目录下，菜单名称不能相同
-        SysMenuModel menuModel = new SysMenuModel();
-        menuModel.setParentId(sysMenuModel.getParentId());
-        menuModel.setMenuName(sysMenuModel.getMenuName());
-        EntityWrapper<SysMenuModel> entityWrapper = new EntityWrapper<>(menuModel);
-        List<SysMenuModel> sysMenuModelList = super.selectList(entityWrapper);
-        if (CollUtil.isNotEmpty(sysMenuModelList)) {
+        SysMenuEntity menuModel = new SysMenuEntity();
+        menuModel.setParentId(sysMenuEntity.getParentId());
+        menuModel.setMenuName(sysMenuEntity.getMenuName());
+        EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<>(menuModel);
+        List<SysMenuEntity> sysMenuEntityList = super.selectList(entityWrapper);
+        if (CollUtil.isNotEmpty(sysMenuEntityList)) {
             throw new BusinessException("同一目录下，菜单名称不能相同");
         }
-        return super.add(sysMenuModel);
+        return super.add(sysMenuEntity);
     }
 
     @Override
     @CacheEvict(value = AmCacheName.MENU, allEntries = true)
-    public SysMenuModel modifyById(SysMenuModel sysMenuModel) {
-        if(StrUtil.isNotBlank(sysMenuModel.getMenuName())){
+    public SysMenuEntity modifyById(SysMenuEntity sysMenuEntity) {
+        if(StrUtil.isNotBlank(sysMenuEntity.getMenuName())){
             //名称重复验证，同一目录下，菜单名称不能相同（需要排除自己）
-            SysMenuModel menuModel = new SysMenuModel();
-            menuModel.setParentId(sysMenuModel.getParentId());
-            menuModel.setMenuName(sysMenuModel.getMenuName());
+            SysMenuEntity menuModel = new SysMenuEntity();
+            menuModel.setParentId(sysMenuEntity.getParentId());
+            menuModel.setMenuName(sysMenuEntity.getMenuName());
             menuModel.setIsDel(0);
-            EntityWrapper<SysMenuModel> entityWrapper = new EntityWrapper<>(menuModel);
-            entityWrapper.ne("id_", sysMenuModel.getId());
-            List<SysMenuModel> sysMenuModelList = super.selectList(entityWrapper);
-            if (CollUtil.isNotEmpty(sysMenuModelList)) {
+            EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<>(menuModel);
+            entityWrapper.ne("id_", sysMenuEntity.getId());
+            List<SysMenuEntity> sysMenuEntityList = super.selectList(entityWrapper);
+            if (CollUtil.isNotEmpty(sysMenuEntityList)) {
                 throw new BusinessException("同一目录下，菜单名称不能相同");
             }
         }
-        return super.modifyById(sysMenuModel);
+        return super.modifyById(sysMenuEntity);
     }
 
     /**
      * 获取树模型结构数据
      *
-     * @param sysMenuModelList
+     * @param sysMenuEntityList
      * @param checkedMenuIds
      * @return List<SysTreeModel>
      * @author wanyong
      * @date 2017-12-19 10:55
      */
-    private List<SysTreeModel> convertTreeData(List<SysMenuModel> sysMenuModelList, Object[] checkedMenuIds) {
-        Map<Long, List<SysTreeModel>> map = new HashMap<>(3);
-        for (SysMenuModel sysMenuModel : sysMenuModelList) {
-            if (sysMenuModel != null && map.get(sysMenuModel.getParentId()) == null) {
-                List<SysTreeModel> children = new ArrayList<>();
-                map.put(sysMenuModel.getParentId(), children);
+    private List<SysTreeEntity> convertTreeData(List<SysMenuEntity> sysMenuEntityList, Object[] checkedMenuIds) {
+        Map<Long, List<SysTreeEntity>> map = new HashMap<>(3);
+        for (SysMenuEntity sysMenuEntity : sysMenuEntityList) {
+            if (sysMenuEntity != null && map.get(sysMenuEntity.getParentId()) == null) {
+                List<SysTreeEntity> children = new ArrayList<>();
+                map.put(sysMenuEntity.getParentId(), children);
             }
-            map.get(sysMenuModel.getParentId()).add(convertTreeModel(sysMenuModel, checkedMenuIds));
+            map.get(sysMenuEntity.getParentId()).add(convertTreeModel(sysMenuEntity, checkedMenuIds));
         }
-        List<SysTreeModel> result = new ArrayList<>();
-        for (SysMenuModel sysMenuModel : sysMenuModelList) {
-            boolean flag = sysMenuModel != null && sysMenuModel.getParentId() == null || sysMenuModel.getParentId() == 0;
+        List<SysTreeEntity> result = new ArrayList<>();
+        for (SysMenuEntity sysMenuEntity : sysMenuEntityList) {
+            boolean flag = sysMenuEntity != null && sysMenuEntity.getParentId() == null || sysMenuEntity.getParentId() == 0;
             if (flag) {
-                SysTreeModel sysTreeModel = convertTreeModel(sysMenuModel, checkedMenuIds);
-                sysTreeModel.setChildren(getChild(map, sysMenuModel.getId()));
-                result.add(sysTreeModel);
+                SysTreeEntity sysTreeEntity = convertTreeModel(sysMenuEntity, checkedMenuIds);
+                sysTreeEntity.setChildren(getChild(map, sysMenuEntity.getId()));
+                result.add(sysTreeEntity);
             }
         }
         return result;
@@ -264,10 +263,10 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
      * @author wanyong
      * @date 2017-12-19 10:56
      */
-    private List<SysTreeModel> getChild(Map<Long, List<SysTreeModel>> map, Long id) {
-        List<SysTreeModel> treeModelList = map.get(id);
+    private List<SysTreeEntity> getChild(Map<Long, List<SysTreeEntity>> map, Long id) {
+        List<SysTreeEntity> treeModelList = map.get(id);
         if (treeModelList != null) {
-            for (SysTreeModel treeModel : treeModelList) {
+            for (SysTreeEntity treeModel : treeModelList) {
                 if (treeModel != null) {
                     treeModel.setChildren(getChild(map, treeModel.getId()));
                 }
@@ -279,22 +278,22 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuMo
     /**
      * 把菜单模型对象转换成树模型对象
      *
-     * @param sysMenuModel
+     * @param sysMenuEntity
      * @param checkedMenuIds
      * @return SysTreeModel
      * @author wanyong
      * @date 2017-12-19 14:22
      */
-    private SysTreeModel convertTreeModel(SysMenuModel sysMenuModel, Object[] checkedMenuIds) {
-        SysTreeModel sysTreeModel = new SysTreeModel();
-        sysTreeModel.setId(sysMenuModel.getId());
-        sysTreeModel.setName(sysMenuModel.getMenuName());
-        sysTreeModel.setIcon(sysMenuModel.getIconcls());
-        sysTreeModel.setSpread(sysMenuModel.getExpand() == 1);
-        sysTreeModel.setHref(sysMenuModel.getRequest());
-        sysTreeModel.setPermission(sysMenuModel.getPermission());
-        sysTreeModel.setChecked(checkedMenuIds != null && ArrayUtil.contains(checkedMenuIds, sysMenuModel.getId()));
-        sysTreeModel.setDisabled(false);
-        return sysTreeModel;
+    private SysTreeEntity convertTreeModel(SysMenuEntity sysMenuEntity, Object[] checkedMenuIds) {
+        SysTreeEntity sysTreeEntity = new SysTreeEntity();
+        sysTreeEntity.setId(sysMenuEntity.getId());
+        sysTreeEntity.setName(sysMenuEntity.getMenuName());
+        sysTreeEntity.setIcon(sysMenuEntity.getIconcls());
+        sysTreeEntity.setSpread(sysMenuEntity.getExpand() == 1);
+        sysTreeEntity.setHref(sysMenuEntity.getRequest());
+        sysTreeEntity.setPermission(sysMenuEntity.getPermission());
+        sysTreeEntity.setChecked(checkedMenuIds != null && ArrayUtil.contains(checkedMenuIds, sysMenuEntity.getId()));
+        sysTreeEntity.setDisabled(false);
+        return sysTreeEntity;
     }
 }
