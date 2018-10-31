@@ -20,4 +20,9 @@
         <module>jww-base-am-service</module>
         <module>jww-base-am-server</module>
     </modules>
+
+    <properties>
+        <!-- 当前版本 -->
+        <jww-common.version>${project.version}</jww-common.version>
+    </properties>
 </project>

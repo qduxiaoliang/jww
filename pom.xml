@@ -13,4 +13,15 @@
         <module>jww-common</module>
         <module>jww-base-am</module>
     </modules>
+
+    <properties>
+        <!-- 工程编码 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- jdk版本 -->
+        <java.version>1.8</java.version>
+        <!-- maven编译插件版本 -->
+        <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
+    </properties>
+
 </project>

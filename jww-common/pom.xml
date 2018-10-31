@@ -24,18 +24,12 @@
         <module>jww-common-db</module>
         <module>jww-common-oss</module>
         <module>jww-common-ship</module>
+        <module>jww-common-dependencies</module>
     </modules>
 
     <properties>
         <!-- 当前版本 -->
         <jww-common.version>${project.version}</jww-common.version>
-        <!-- 工程编码 -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- jdk版本 -->
-        <java.version>1.8</java.version>
-        <!-- maven编译插件版本 -->
-        <maven.compiler.plugin.version>3.7.0</maven.compiler.plugin.version>
 
         <spring-boot.version>2.0.6.RELEASE</spring-boot.version>
         <spring-cloud.version>Finchley.SR2</spring-cloud.version>
