@@ -1,6 +1,6 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysDicEntity;
 import com.jww.common.core.base.BaseService;
 
@@ -24,7 +24,7 @@ public interface SysDicService extends BaseService<SysDicEntity> {
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    Page<SysDicEntity> queryListPage(Page<SysDicEntity> page);
+    IPage<SysDicEntity> queryListPage(IPage<SysDicEntity> page);
 
     /**
      * 查询字典类型集合

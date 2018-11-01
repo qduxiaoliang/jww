@@ -1,6 +1,6 @@
 package com.jww.base.am.dao.mapper;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysUserEntity;
 import com.jww.common.core.base.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,7 +24,7 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @author wanyong
      * @date 2017-12-27 12:06
      */
-    List<SysUserEntity> selectPage(Page<SysUserEntity> page, @Param("searchKey") String searchKey);
+    List<SysUserEntity> selectPage(IPage<SysUserEntity> page, @Param("searchKey") String searchKey);
 
     /**
      * 根据用户ID查询

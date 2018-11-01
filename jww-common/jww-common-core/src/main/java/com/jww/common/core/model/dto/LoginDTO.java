@@ -1,4 +1,4 @@
-package com.jww.common.core.model;
+package com.jww.common.core.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @date 2017/11/12 11:54
  */
 @ToString
-public class LoginModel implements Serializable {
+public class LoginDTO implements Serializable {
     private static final long serialVersionUID = 3951474329069548585L;
 
     /**

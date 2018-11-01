@@ -1,20 +1,20 @@
 package com.jww.base.am.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.api.SysRoleMenuService;
 import com.jww.base.am.api.SysRoleService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysRoleMapper;
 import com.jww.base.am.dao.mapper.SysRoleMenuMapper;
-import com.jww.base.am.model.entity.SysRoleMenuEntity;
 import com.jww.base.am.model.entity.SysRoleEntity;
+import com.jww.base.am.model.entity.SysRoleMenuEntity;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
-import com.xiaoleilu.hutool.lang.Assert;
-import com.xiaoleilu.hutool.util.CollectionUtil;
-import com.xiaoleilu.hutool.util.ObjectUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -49,14 +49,13 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
 
-    @Override
-    public Page<SysRoleEntity> queryListPage(Page<SysRoleEntity> page) {
+    public IPage<SysRoleEntity> queryListPage(IPage<SysRoleEntity> page) {
         SysRoleEntity sysRoleEntity = new SysRoleEntity();
         sysRoleEntity.setIsDel(0);
-        EntityWrapper<SysRoleEntity> entityWrapper = new EntityWrapper<>(sysRoleEntity);
-        if (ObjectUtil.isNotNull(page.getCondition())) {
+        QueryWrapper<SysRoleEntity> entityWrapper = new QueryWrapper<>(sysRoleEntity);
+        if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
-            Map<String, Object> paramMap = page.getCondition();
+            Map<Object, Object> paramMap = page.condition();
             String deptId = "dept_id";
             paramMap.forEach((k, v) -> {
                 if (StrUtil.isNotBlank(v + "")) {
@@ -67,14 +66,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
                     }
                 }
             });
-            entityWrapper.and(StrUtil.removeSuffix(conditionSql.toString(), "AND "));
+            // entityWrapper.and(StrUtil.removeSuffix(conditionSql.toString(), "AND "));
         }
-        page.setCondition(null);
-
+        // page.setCondition(null);
         return page.setRecords(sysRoleMapper.selectRoleList(page, entityWrapper));
     }
 
-    @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = AmConstants.AmCacheName.ROLE, allEntries = true)
     public SysRoleEntity add(SysRoleEntity sysRoleEntity) {
@@ -83,20 +80,19 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
         checkModel.setIsDel(0);
         checkModel.setRoleName(sysRoleEntity.getRoleName());
         checkModel.setDeptId(sysRoleEntity.getDeptId());
-        EntityWrapper<SysRoleEntity> entityWrapper = new EntityWrapper<>(checkModel);
-        if (ObjectUtil.isNotNull(super.selectOne(entityWrapper))) {
+        QueryWrapper<SysRoleEntity> queryWrapper = new QueryWrapper<>(checkModel);
+        if (ObjectUtil.isNotNull(super.getOne(queryWrapper))) {
             throw new BusinessException("已存在相同名称的角色");
         }
-        SysRoleEntity result = super.add(sysRoleEntity);
+        super.save(sysRoleEntity);
         // 这里增加CollectionUtil.isNotEmpty(sysRoleModel.getMenuIdList())判断是由于新增角色时允许不选择权限
-        if (result != null && CollectionUtil.isNotEmpty(sysRoleEntity.getMenuIdList())) {
-            sysRoleMenuService.insertBatch(getRoleMenuListByMenuIds(sysRoleEntity, sysRoleEntity.getMenuIdList()));
+        if (sysRoleEntity != null && CollectionUtil.isNotEmpty(sysRoleEntity.getMenuIdList())) {
+            sysRoleMenuService.saveBatch(getRoleMenuListByMenuIds(sysRoleEntity, sysRoleEntity.getMenuIdList()));
         }
-        return result;
+        return sysRoleEntity;
     }
 
 
-    @Override
     @CacheEvict(value = AmConstants.AmCacheName.ROLE, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public SysRoleEntity modifyById(SysRoleEntity sysRoleEntity) {
@@ -105,10 +101,10 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
         if (CollectionUtil.isNotEmpty(sysRoleEntity.getMenuIdList())) {
             SysRoleMenuEntity sysRoleMenuEntity = new SysRoleMenuEntity();
             sysRoleMenuEntity.setRoleId(sysRoleEntity.getId());
-            EntityWrapper<SysRoleMenuEntity> entityWrapper = new EntityWrapper<>(sysRoleMenuEntity);
+            QueryWrapper<SysRoleMenuEntity> entityWrapper = new QueryWrapper<>(sysRoleMenuEntity);
             // 关系数据相对不重要，直接数据库删除
-            sysRoleMenuService.delete(entityWrapper);
-            sysRoleMenuService.insertBatch(getRoleMenuListByMenuIds(sysRoleEntity, sysRoleEntity.getMenuIdList()));
+            sysRoleMenuService.remove(entityWrapper);
+            sysRoleMenuService.saveBatch(getRoleMenuListByMenuIds(sysRoleEntity, sysRoleEntity.getMenuIdList()));
         }
         return result;
     }
@@ -139,14 +135,13 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
     @Cacheable
     public List<SysRoleEntity> queryRoles(Long deptId) {
         Assert.notNull(deptId);
-        EntityWrapper<SysRoleEntity> entityWrapper = new EntityWrapper<>();
+        QueryWrapper<SysRoleEntity> entityWrapper = new QueryWrapper<>();
         entityWrapper.eq("dept_id", deptId);
         return sysRoleMapper.selectList(entityWrapper);
     }
 
-    @Override
     @CacheEvict(value = AmConstants.AmCacheName.ROLE, allEntries = true)
-    public boolean deleteBatchIds(List<? extends Serializable> idList) {
+    public boolean removeByIds(List<? extends Serializable> idList) {
         List<SysRoleEntity> roleModelList = new ArrayList<SysRoleEntity>();
         idList.forEach(id -> {
             SysRoleEntity entity = new SysRoleEntity();
@@ -157,4 +152,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
         });
         return super.updateBatchById(roleModelList);
     }
+
+
 }

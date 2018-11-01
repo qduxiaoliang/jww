@@ -1,6 +1,6 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysDeptEntity;
 import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.common.core.base.BaseService;
@@ -43,7 +43,7 @@ public interface SysDeptService extends BaseService<SysDeptEntity> {
      * @author RickyWang
      * @date 18/1/1 15:05:30
      */
-    Page<SysDeptEntity> queryListPage(Page<SysDeptEntity> page);
+    IPage<SysDeptEntity> queryListPage(IPage<SysDeptEntity> page);
 
     /**
      * 查询单个部门

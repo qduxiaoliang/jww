@@ -1,17 +1,17 @@
 package com.jww.base.am.server.aspect;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.jww.base.am.common.util.IpUtil;
 import com.jww.base.am.model.entity.SysLogEntity;
 import com.jww.base.am.model.entity.SysUserEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.server.async.AsyncTask;
-import com.jww.common.core.Constants;
+import com.jww.common.core.constant.enums.LogOptEnum;
+import com.jww.common.core.constant.enums.ResultCodeEnum;
 import com.jww.common.core.util.RegexUtil;
-import com.jww.common.web.model.ResultModel;
-import com.jww.common.web.util.WebUtil;
-import com.xiaoleilu.hutool.http.HttpUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
+import com.jww.common.web.model.dto.ResultDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -60,7 +60,7 @@ public class LogAspect {
         } finally {
             try {
                 //查询类型不新增日志
-                if (sysLogEntity.getOperationType() != Constants.LogOptEnum.QUERY.value()) {
+                if (sysLogEntity.getOperationType() != LogOptEnum.QUERY.value()) {
                     logAfter(result, sysLogEntity);
                     if (!StrUtil.isBlank(sysLogEntity.getUserName())) {
                         sysLogEntity.setCreateTime(new Date());
@@ -107,7 +107,8 @@ public class LogAspect {
         sysLogEntity.setCreateTime(new Date());
         sysLogEntity.setCreateBy(0L);
         sysLogEntity.setUpdateBy(0L);
-        SysUserEntity currentUser = (SysUserEntity) WebUtil.getCurrentUser();
+        // SysUserEntity currentUser = (SysUserEntity) WebUtil.getCurrentUser();
+        SysUserEntity currentUser = null;
         if (currentUser != null) {
             sysLogEntity.setUserName(currentUser.getUserName());
             sysLogEntity.setAccount(currentUser.getAccount());
@@ -118,18 +119,19 @@ public class LogAspect {
 
     private boolean logAfter(Object result, SysLogEntity sysLogEntity) {
         if (sysLogEntity.getUserName() == null) {
-            SysUserEntity currentUser = (SysUserEntity) WebUtil.getCurrentUser();
+            // SysUserEntity currentUser = (SysUserEntity) WebUtil.getCurrentUser();
+            SysUserEntity currentUser = null;
             if (currentUser != null) {
                 sysLogEntity.setUserName(currentUser.getUserName());
                 sysLogEntity.setAccount(currentUser.getAccount());
             }
         }
-        ResultModel response = null;
+        ResultDTO response = null;
         if (result != null) {
-            response = (ResultModel) result;
+            response = (ResultDTO) result;
         }
         //返回结果
-        if (response == null || response.code == Constants.ResultCodeEnum.SUCCESS.value()) {
+        if (response == null || response.code == ResultCodeEnum.SUCCESS.value()) {
             sysLogEntity.setResult(1);
         } else {
             sysLogEntity.setResult(0);

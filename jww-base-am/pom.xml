@@ -23,6 +23,18 @@
 
     <properties>
         <!-- 当前版本 -->
-        <jww-common.version>${project.version}</jww-common.version>
+        <jww-common.version>2.0.0</jww-common.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.jww</groupId>
+                <artifactId>jww-common-dependencies</artifactId>
+                <version>${jww-common.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

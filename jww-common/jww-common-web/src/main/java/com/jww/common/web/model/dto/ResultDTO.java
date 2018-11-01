@@ -1,4 +1,4 @@
-package com.jww.common.web.model;
+package com.jww.common.web.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultModel<T> {
+public class ResultDTO<T> {
 
-    public ResultModel(int code, String message, T data) {
+    public ResultDTO(int code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;

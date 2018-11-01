@@ -1,6 +1,6 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysParamEntity;
 import com.jww.common.core.base.BaseService;
 
@@ -22,7 +22,7 @@ public interface SysParamService extends BaseService<SysParamEntity> {
      * @author shadj
      * @date 2017/12/24 14:45
      */
-    Page<SysParamEntity> queryListPage(Page<SysParamEntity> page);
+    IPage<SysParamEntity> queryListPage(IPage<SysParamEntity> page);
 
     /**
      * 根据参数key查询查询

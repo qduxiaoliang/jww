@@ -1,19 +1,18 @@
 package com.jww.base.am.server.controller;
 
+import cn.hutool.core.lang.Assert;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.api.SysDicService;
 import com.jww.base.am.model.entity.SysDicEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
-import com.jww.common.core.Constants;
+import com.jww.common.core.constant.enums.LogOptEnum;
 import com.jww.common.core.exception.BusinessException;
-import com.jww.common.core.model.PageModel;
 import com.jww.common.web.BaseController;
-import com.jww.common.web.model.ResultModel;
+import com.jww.common.web.model.dto.ResultDTO;
 import com.jww.common.web.util.ResultUtil;
-import com.xiaoleilu.hutool.lang.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,49 +42,48 @@ public class SysDicController extends BaseController {
      * 根据字典ID查询字典
      *
      * @param dicId 字典主键
-     * @return ResultModel<SysDicModel>
+     * @return ResultDTO<SysDicModel>
      * @author wanyong
      * @date 2017-12-05 13:35
      */
     @ApiOperation(value = "查询字典", notes = "根据字典主键ID查询字典")
     @ApiImplicitParam(name = "id", value = "字典ID", required = true, dataType = "Long")
     @PostMapping("/query")
-    @RequiresPermissions("sys:dic:read")
-    public ResultModel query(@RequestBody Long dicId) {
+    // @RequiresPermissions("sys:dic:read")
+    public ResultDTO query(@RequestBody Long dicId) {
         Assert.notNull(dicId);
-        SysDicEntity sysDicEntity = sysDicService.queryById(dicId);
+        SysDicEntity sysDicEntity = sysDicService.getById(dicId);
         return ResultUtil.ok(sysDicEntity);
     }
 
     /**
      * 分页查询字典列表
      *
-     * @param pageModel 分页实体
-     * @return ResultModel
+     * @param page 分页实体
+     * @return ResultDTO
      * @author wanyong
      * @date 2018-01-03 12:53
      */
     @ApiOperation(value = "分页查询字典", notes = "根据字典主键ID查询字典")
     @PostMapping("/listPage")
-    @RequiresPermissions("sys:dic:read")
-    public ResultModel queryListPage(@RequestBody PageModel pageModel) {
-        pageModel = (PageModel) sysDicService.queryListPage(pageModel);
-        return ResultUtil.ok(pageModel);
+    // @RequiresPermissions("sys:dic:read")
+    public ResultDTO queryListPage(@RequestBody IPage page) {
+        return ResultUtil.ok(sysDicService.queryListPage(page));
     }
 
     /**
      * 新增字典
      *
      * @param sysDicEntity 字典实体
-     * @return ResultModel
+     * @return ResultDTO
      * @author wanyong
      * @date 2018-01-03 13:28
      */
     @ApiOperation(value = "新增字典", notes = "根据字典实体新增字典")
     @PostMapping("/add")
-    @RequiresPermissions("sys:dic:add")
-    @SysLogOpt(module = "字典管理", value = "字典新增", operationType = Constants.LogOptEnum.ADD)
-    public ResultModel add(@Valid @RequestBody SysDicEntity sysDicEntity) {
+    // @RequiresPermissions("sys:dic:add")
+    @SysLogOpt(module = "字典管理", value = "字典新增", operationType = LogOptEnum.ADD)
+    public ResultDTO add(@Valid @RequestBody SysDicEntity sysDicEntity) {
         sysDicEntity.setCreateBy(super.getCurrentUserId());
         sysDicEntity.setUpdateBy(super.getCurrentUserId());
         return ResultUtil.ok(sysDicService.add(sysDicEntity));
@@ -95,15 +93,15 @@ public class SysDicController extends BaseController {
      * 修改字典
      *
      * @param sysDicEntity 字典实体
-     * @return com.jww.common.web.model.ResultModel
+     * @return com.jww.common.web.model.dto.ResultDTO
      * @author RickyWang
      * @date 17/12/25 21:29:09
      */
     @ApiOperation(value = "修改字典", notes = "根据字典ID修改字典")
     @PostMapping("/modify")
-    @RequiresPermissions("sys:dic:update")
-    @SysLogOpt(module = "字典管理", value = "字典修改", operationType = Constants.LogOptEnum.MODIFY)
-    public ResultModel modify(@Valid @RequestBody SysDicEntity sysDicEntity) {
+    // @RequiresPermissions("sys:dic:update")
+    @SysLogOpt(module = "字典管理", value = "字典修改", operationType = LogOptEnum.MODIFY)
+    public ResultDTO modify(@Valid @RequestBody SysDicEntity sysDicEntity) {
         sysDicEntity.setUpdateBy(super.getCurrentUserId());
         sysDicService.modifyById(sysDicEntity);
         return ResultUtil.ok();
@@ -113,32 +111,32 @@ public class SysDicController extends BaseController {
      * 根据字典ID集合批量删除
      *
      * @param ids 主键集合
-     * @return ResultModel
+     * @return ResultDTO
      * @author wanyong
      * @date 2017-12-23 02:46
      */
     @ApiOperation(value = "批量删除字典", notes = "根据主键ID集合批量删除字典")
     @PostMapping("/delBatchByIds")
-    @RequiresPermissions("sys:dic:delete")
-    @SysLogOpt(module = "字典管理", value = "字典批量删除", operationType = Constants.LogOptEnum.DELETE)
-    public ResultModel delBatchByIds(@RequestBody List<Long> ids) {
+    // @RequiresPermissions("sys:dic:delete")
+    @SysLogOpt(module = "字典管理", value = "字典批量删除", operationType = LogOptEnum.DELETE)
+    public ResultDTO delBatchByIds(@RequestBody List<Long> ids) {
         if (ids.size() == 0) {
             throw new BusinessException("字典ID集合不能为空");
         }
-        return ResultUtil.ok(sysDicService.deleteBatchIds(ids));
+        return ResultUtil.ok(sysDicService.removeByIds(ids));
     }
 
     /**
      * 查询字典类型列表
      *
-     * @return ResultModel
+     * @return ResultDTO
      * @author wanyong
      * @date 2018-01-10 13:00
      */
     @ApiOperation(value = "查询字典类型列表", notes = "查询字典类型列表")
     @PostMapping("/typeList")
-    @RequiresPermissions("sys:dic:read")
-    public ResultModel queryTypeList() {
+    // @RequiresPermissions("sys:dic:read")
+    public ResultDTO queryTypeList() {
         return ResultUtil.ok(sysDicService.queryTypeList());
     }
 
@@ -146,14 +144,14 @@ public class SysDicController extends BaseController {
      * 根据字典类型值查询字典集合
      *
      * @param type 字典类型值
-     * @return ResultModel
+     * @return ResultDTO
      * @author wanyong
      * @date 2018-01-10 18:14
      */
     @ApiOperation(value = "查询字典集合", notes = "根据字典类型值查询字典集合")
     @PostMapping("/listByType")
-    @RequiresPermissions("sys:dic:read")
-    public ResultModel queryListByType(@RequestBody String type) {
+    // @RequiresPermissions("sys:dic:read")
+    public ResultDTO queryListByType(@RequestBody String type) {
         Assert.notBlank(type);
         return ResultUtil.ok(sysDicService.queryListByType(type));
     }

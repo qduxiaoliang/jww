@@ -1,7 +1,9 @@
 package com.jww.base.am.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.api.SysDeptService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDeptMapper;
@@ -11,8 +13,6 @@ import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
-import com.xiaoleilu.hutool.lang.Assert;
-import com.xiaoleilu.hutool.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -42,13 +42,12 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     @CachePut
     @DistributedLock(value = "#sysDeptModel.getParentId()")
     public SysDeptEntity addDept(SysDeptEntity sysDeptEntity) {
-        EntityWrapper<SysDeptEntity> wrapper = new EntityWrapper<>();
-
+        QueryWrapper<SysDeptEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", sysDeptEntity.getParentId());
         wrapper.eq("dept_name", sysDeptEntity.getDeptName());
         wrapper.eq("is_del", 0);
         List<SysDeptEntity> deptModelList = sysDeptMapper.selectList(wrapper);
-        if (ObjectUtil.isNotNull(super.selectOne(wrapper))) {
+        if (ObjectUtil.isNotNull(super.getOne(wrapper))) {
             throw new BusinessException("同级部门名称不能重复");
         }
         sysDeptEntity.setUnitId(Long.valueOf(1));
@@ -68,8 +67,8 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     }
 
     @Override
-    public Page<SysDeptEntity> queryListPage(Page<SysDeptEntity> page) {
-        String deptName = page.getCondition() == null ? null : page.getCondition().get("dept_name").toString();
+    public IPage<SysDeptEntity> queryListPage(IPage<SysDeptEntity> page) {
+        String deptName = page.condition() == null ? null : page.condition().get("dept_name").toString();
         List<SysDeptEntity> list = sysDeptMapper.selectPage(page, deptName);
         page.setRecords(list);
         return page;
@@ -138,7 +137,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     @Cacheable
     public List<SysDeptEntity> querySubDept(Long id) {
         Assert.notNull(id);
-        EntityWrapper<SysDeptEntity> wrapper = new EntityWrapper<>();
+        QueryWrapper<SysDeptEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", id);
         wrapper.eq("is_del", 0);
         return sysDeptMapper.selectList(wrapper);
@@ -147,7 +146,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     @Override
     public int querySubDeptCount(Long id) {
         Assert.notNull(id);
-        EntityWrapper<SysDeptEntity> wrapper = new EntityWrapper<>();
+        QueryWrapper<SysDeptEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", id);
         wrapper.eq("is_del", 0);
         return sysDeptMapper.selectCount(wrapper);
@@ -156,7 +155,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     @Override
     public int querySubDeptCount(Long[] ids) {
         Assert.notNull(ids);
-        EntityWrapper<SysDeptEntity> wrapper = new EntityWrapper<>();
+        QueryWrapper<SysDeptEntity> wrapper = new QueryWrapper<>();
         wrapper.in("parent_id", ids);
         wrapper.eq("is_del", 0);
         return sysDeptMapper.selectCount(wrapper);

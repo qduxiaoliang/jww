@@ -1,16 +1,15 @@
 package com.jww.base.am.server.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.api.SysLogService;
 import com.jww.base.am.model.entity.SysLogEntity;
-import com.jww.common.core.model.PageModel;
 import com.jww.common.web.BaseController;
-import com.jww.common.web.model.ResultModel;
+import com.jww.common.web.model.dto.ResultDTO;
 import com.jww.common.web.util.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,17 +35,16 @@ public class SysLogController extends BaseController {
     /**
      * 查询日志分页方法
      *
-     * @param pageModel
-     * @return com.jww.common.web.model.ResultModel
+     * @param page
+     * @return com.jww.common.web.model.dto.ResultDTO
      * @author RickyWang
      * @date 17/12/26 12:28:13
      */
     @ApiOperation(value = "分页查询日志列表", notes = "根据分页参数查询日志列表")
     @PostMapping("/queryListPage")
-    @RequiresPermissions("sys:log:read")
-    public ResultModel queryListPage(@RequestBody PageModel<SysLogEntity> pageModel) {
-        pageModel = (PageModel<SysLogEntity>) sysLogService.queryListPage(pageModel);
-        return ResultUtil.ok(pageModel);
+    // @RequiresPermissions("sys:log:read")
+    public ResultDTO queryListPage(@RequestBody IPage<SysLogEntity> page) {
+        return ResultUtil.ok(sysLogService.queryListPage(page));
     }
 }
 

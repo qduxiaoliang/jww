@@ -15,9 +15,9 @@
         <dependency>
             <groupId>com.jww</groupId>
             <artifactId>jww-base-am-common</artifactId>
-            <version>${jww-common.version}</version>
+            <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.jww</groupId>
             <artifactId>jww-base-am-model</artifactId>

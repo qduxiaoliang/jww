@@ -1,13 +1,13 @@
 package com.jww.base.am.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jww.base.am.api.SysAuthorizeService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysAuthorizeMapper;
 import com.jww.base.am.dao.mapper.SysMenuMapper;
 import com.jww.base.am.model.entity.SysMenuEntity;
-import com.xiaoleilu.hutool.collection.CollUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ public class SysAuthorizeServiceImpl implements SysAuthorizeService {
         List<String> permissions = new ArrayList<String>();
         //如果是超级管理员，则查询所有权限code
         if (AmConstants.USERID_ADMIN.equals(userId)) {
-            EntityWrapper<SysMenuEntity> wrapper = new EntityWrapper<SysMenuEntity>();
+            QueryWrapper<SysMenuEntity> wrapper = new QueryWrapper<SysMenuEntity>();
             wrapper.eq("is_del", 0);
             List<SysMenuEntity> list = sysMenuMapper.selectList(wrapper);
             if (CollUtil.isNotEmpty(list)) {

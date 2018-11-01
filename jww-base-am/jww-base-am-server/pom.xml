@@ -15,13 +15,11 @@
         <dependency>
             <groupId>com.jww</groupId>
             <artifactId>jww-common-web</artifactId>
-            <version>${jww-common.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.jww</groupId>
             <artifactId>jww-common-dsession</artifactId>
-            <version>${jww-common.version}</version>
         </dependency>
 
         <dependency>

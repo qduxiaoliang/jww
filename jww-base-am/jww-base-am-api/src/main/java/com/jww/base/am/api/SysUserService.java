@@ -1,6 +1,6 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysRoleEntity;
 import com.jww.base.am.model.entity.SysUserEntity;
 import com.jww.base.am.model.entity.SysUserRoleEntity;
@@ -34,7 +34,7 @@ public interface SysUserService extends BaseService<SysUserEntity> {
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    Page<SysUserEntity> queryListPage(Page<SysUserEntity> page);
+    IPage<SysUserEntity> queryListPage(IPage<SysUserEntity> page);
 
     /**
      * 根据ID集合批量删除

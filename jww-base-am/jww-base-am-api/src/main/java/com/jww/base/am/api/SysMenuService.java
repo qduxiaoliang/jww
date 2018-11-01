@@ -1,6 +1,6 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysMenuEntity;
 import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.common.core.base.BaseService;
@@ -34,7 +34,7 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
      * @author shadj
      * @date 2017/12/18 13:52
      */
-    Page<SysMenuEntity> queryListPage(Page<SysMenuEntity> page);
+    IPage<SysMenuEntity> queryListPage(IPage<SysMenuEntity> page);
 
     /**
      * 根据用户ID查找菜单树（包含目录和菜单，不包含按钮）

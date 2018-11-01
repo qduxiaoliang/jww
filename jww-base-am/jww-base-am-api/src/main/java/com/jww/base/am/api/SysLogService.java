@@ -1,6 +1,6 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysLogEntity;
 import com.jww.common.core.base.BaseService;
 
@@ -19,7 +19,7 @@ public interface SysLogService extends BaseService<SysLogEntity> {
      * @author RickyWang
      * @date 18/1/1 15:03:43
      */
-    public Page<SysLogEntity> queryListPage(Page<SysLogEntity> page);
+    IPage<SysLogEntity> queryListPage(IPage<SysLogEntity> page);
 
     /**
      * 清除日志
@@ -29,5 +29,5 @@ public interface SysLogService extends BaseService<SysLogEntity> {
      * @author RickyWang
      * @date 18/1/1 15:03:43
      */
-    public boolean clearLog(Integer keepDays);
+    boolean clearLog(Integer keepDays);
 }

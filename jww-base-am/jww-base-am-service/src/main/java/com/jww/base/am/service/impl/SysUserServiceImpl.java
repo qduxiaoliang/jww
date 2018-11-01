@@ -1,7 +1,8 @@
 package com.jww.base.am.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import cn.hutool.core.lang.Assert;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.api.SysUserService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysRoleMapper;
@@ -12,7 +13,6 @@ import com.jww.base.am.model.entity.SysUserEntity;
 import com.jww.base.am.model.entity.SysUserRoleEntity;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
-import com.xiaoleilu.hutool.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -48,13 +48,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
         SysUserEntity sysUserEntity = new SysUserEntity();
         sysUserEntity.setAccount(account);
         sysUserEntity.setEnable(1);
-        EntityWrapper<SysUserEntity> entityWrapper = new EntityWrapper<>(sysUserEntity);
-        return super.selectOne(entityWrapper);
+        QueryWrapper<SysUserEntity> entityWrapper = new QueryWrapper<>(sysUserEntity);
+        return super.getOne(entityWrapper);
     }
 
     @Override
-    public Page<SysUserEntity> queryListPage(Page<SysUserEntity> page) {
-        String searchKey = page.getCondition() == null ? null : page.getCondition().get("searchKey").toString();
+    public IPage<SysUserEntity> queryListPage(IPage<SysUserEntity> page) {
+        String searchKey = page.condition() == null ? null : page.condition().get("searchKey").toString();
         List<SysUserEntity> list = sysUserMapper.selectPage(page, searchKey);
         page.setRecords(list);
         return page;
@@ -76,7 +76,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
             sysUserRoleEntity.setIsDel(1);
             sysUserRoleEntity.setUpdateTime(new Date());
             sysUserRoleEntity.setUpdateBy(sysUserEntity.getCreateBy());
-            EntityWrapper<SysUserRoleEntity> wrapper = new EntityWrapper<>();
+            QueryWrapper<SysUserRoleEntity> wrapper = new QueryWrapper<>();
             wrapper.eq("user_id", sysUserEntity.getId());
             sysUserRoleMapper.update(sysUserRoleEntity, wrapper);
         }
@@ -86,7 +86,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
     @Override
     public List<SysRoleEntity> queryRoles(Long deptId) {
         Assert.notNull(deptId);
-        EntityWrapper<SysRoleEntity> entityWrapper = new EntityWrapper<>();
+        QueryWrapper<SysRoleEntity> entityWrapper = new QueryWrapper<>();
         entityWrapper.eq("dept_id", deptId);
         return sysRoleMapper.selectList(entityWrapper);
     }
@@ -98,7 +98,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
     public SysUserEntity add(SysUserEntity sysUserEntity) {
         sysUserEntity.setCreateTime(new Date());
         sysUserEntity.setUpdateTime(new Date());
-        if (super.insert(sysUserEntity)) {
+        if (super.save(sysUserEntity)) {
             insertUserRole(sysUserEntity);
             return sysUserEntity;
         }
@@ -110,7 +110,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
     @CacheEvict(value = AmConstants.AmCacheName.USER, allEntries = true)
     public boolean modifyUser(SysUserEntity sysUserEntity) {
         boolean result = false;
-        EntityWrapper<SysUserRoleEntity> wrapper = new EntityWrapper<>();
+        QueryWrapper<SysUserRoleEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", sysUserEntity.getId());
         sysUserRoleMapper.delete(wrapper);
         insertUserRole(sysUserEntity);
@@ -123,15 +123,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
         SysUserEntity userModel = new SysUserEntity();
         userModel.setIsDel(0);
         userModel.setEnable(1);
-        EntityWrapper<SysUserEntity> wrapper = new EntityWrapper<>();
-        wrapper.setSqlSelect("id_", "user_name", "account_");
+        QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
+        // wrapper.setSqlSelect("id_", "user_name", "account_");
         return sysUserMapper.selectList(wrapper);
     }
 
     @Override
     public List<SysUserRoleEntity> queryUserRoles(Long userId) {
         Assert.notNull(userId);
-        EntityWrapper<SysUserRoleEntity> wrapper = new EntityWrapper<>();
+        QueryWrapper<SysUserRoleEntity> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
         return sysUserRoleMapper.selectList(wrapper);
     }
@@ -162,7 +162,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
         SysUserEntity sysUserEntity = new SysUserEntity();
         sysUserEntity.setIsDel(0);
         sysUserEntity.setEnable(1);
-        EntityWrapper<SysUserEntity> entityWrapper = new EntityWrapper<>(sysUserEntity);
-        return super.selectList(entityWrapper);
+        QueryWrapper<SysUserEntity> entityWrapper = new QueryWrapper<>(sysUserEntity);
+        return super.list(entityWrapper);
     }
 }

@@ -1,8 +1,13 @@
 package com.jww.base.am.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.api.SysMenuService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.common.AmConstants.AmCacheName;
@@ -14,8 +19,6 @@ import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
-import com.xiaoleilu.hutool.collection.CollUtil;
-import com.xiaoleilu.hutool.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -58,21 +61,21 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
         sysMenuEntity.setEnable(1);
         // 是否删除：否
         sysMenuEntity.setIsDel(0);
-        EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<>(sysMenuEntity);
-        entityWrapper.orderBy(" parent_id, sort_no ", true);
-        return super.selectList(entityWrapper);
+        QueryWrapper<SysMenuEntity> entityWrapper = new QueryWrapper<>(sysMenuEntity);
+        entityWrapper.orderByAsc("parent_id,sort_no");
+        return super.list(entityWrapper);
     }
 
     @Override
-    public Page<SysMenuEntity> queryListPage(Page<SysMenuEntity> page) {
+    public IPage<SysMenuEntity> queryListPage(IPage<SysMenuEntity> page) {
         SysMenuEntity menu = new SysMenuEntity();
         menu.setEnable(1);
         menu.setIsDel(0);
-        EntityWrapper<SysMenuEntity> wrapper = new EntityWrapper<>(menu);
+        QueryWrapper<SysMenuEntity> wrapper = new QueryWrapper<>(menu);
         wrapper.eq("a.is_del", 0).eq("a.enable_", 1);
-        if (ObjectUtil.isNotNull(page.getCondition())) {
+        if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
-            Map<String, Object> paramMap = page.getCondition();
+            Map<Object, Object> paramMap = page.condition();
             paramMap.forEach((k, v) -> {
                 if (NumberUtil.isNumber(v + "")) {
                     conditionSql.append("a.").append(k + " = " + v + " and ");
@@ -81,12 +84,12 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
                 }
             });
             if (StrUtil.isNotBlank(conditionSql)) {
-                wrapper.where(StrUtil.removeSuffix(conditionSql.toString(), "and "));
+                // wrapper.where(StrUtil.removeSuffix(conditionSql.toString(), "and "));
             }
         }
-        wrapper.orderBy(" parent_id, sort_no ", true);
-        page.setCondition(null);
-        return super.selectPage(page, wrapper);
+        // wrapper.orderBy(" parent_id, sort_no ", true);
+        // page.setCondition(null);
+        return super.page(page, wrapper);
     }
 
     @Override
@@ -99,9 +102,9 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
             sysMenuEntity.setEnable(1);
             sysMenuEntity.setIsShow(1);
             sysMenuEntity.setIsDel(0);
-            EntityWrapper<SysMenuEntity> wrapper = new EntityWrapper<>(sysMenuEntity);
+            QueryWrapper<SysMenuEntity> wrapper = new QueryWrapper<>(sysMenuEntity);
             wrapper.ne("menu_type", 2);
-            wrapper.orderBy("parent_id, sort_no", true);
+            wrapper.orderByAsc("parent_id,sort_no");
             sysMenuEntityList = sysMenuMapper.selectList(wrapper);
         } else {
             sysMenuEntityList = sysMenuMapper.selectMenuTreeByUserId(userId);
@@ -135,16 +138,16 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
 
     @Override
     @DistributedLock
-    @CacheEvict(value = AmCacheName.MENU,allEntries = true)
+    @CacheEvict(value = AmCacheName.MENU, allEntries = true)
     public Boolean delete(Long id) {
         //查询是否有子菜单，如果有则返回false，否则允许删除
-        EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<SysMenuEntity>();
+        QueryWrapper<SysMenuEntity> entityWrapper = new QueryWrapper<SysMenuEntity>();
         SysMenuEntity sysMenuEntity = new SysMenuEntity();
         sysMenuEntity.setParentId((Long) id);
         sysMenuEntity.setIsDel(0);
         entityWrapper.setEntity(sysMenuEntity);
-        List<SysMenuEntity> childs = super.selectList(entityWrapper);
-        if (CollectionUtil.isNotEmpty(childs)) {
+        List<SysMenuEntity> childs = super.list(entityWrapper);
+        if (CollUtil.isNotEmpty(childs)) {
             log.error("删除菜单[id:{}]失败，请先删除子菜单", id);
             throw new BusinessException("删除菜单失败，请先删除子菜单");
         }
@@ -197,8 +200,8 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
         SysMenuEntity menuModel = new SysMenuEntity();
         menuModel.setParentId(sysMenuEntity.getParentId());
         menuModel.setMenuName(sysMenuEntity.getMenuName());
-        EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<>(menuModel);
-        List<SysMenuEntity> sysMenuEntityList = super.selectList(entityWrapper);
+        QueryWrapper<SysMenuEntity> entityWrapper = new QueryWrapper<>(menuModel);
+        List<SysMenuEntity> sysMenuEntityList = super.list(entityWrapper);
         if (CollUtil.isNotEmpty(sysMenuEntityList)) {
             throw new BusinessException("同一目录下，菜单名称不能相同");
         }
@@ -208,15 +211,15 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
     @Override
     @CacheEvict(value = AmCacheName.MENU, allEntries = true)
     public SysMenuEntity modifyById(SysMenuEntity sysMenuEntity) {
-        if(StrUtil.isNotBlank(sysMenuEntity.getMenuName())){
+        if (StrUtil.isNotBlank(sysMenuEntity.getMenuName())) {
             //名称重复验证，同一目录下，菜单名称不能相同（需要排除自己）
             SysMenuEntity menuModel = new SysMenuEntity();
             menuModel.setParentId(sysMenuEntity.getParentId());
             menuModel.setMenuName(sysMenuEntity.getMenuName());
             menuModel.setIsDel(0);
-            EntityWrapper<SysMenuEntity> entityWrapper = new EntityWrapper<>(menuModel);
+            QueryWrapper<SysMenuEntity> entityWrapper = new QueryWrapper<>(menuModel);
             entityWrapper.ne("id_", sysMenuEntity.getId());
-            List<SysMenuEntity> sysMenuEntityList = super.selectList(entityWrapper);
+            List<SysMenuEntity> sysMenuEntityList = super.list(entityWrapper);
             if (CollUtil.isNotEmpty(sysMenuEntityList)) {
                 throw new BusinessException("同一目录下，菜单名称不能相同");
             }

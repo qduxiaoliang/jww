@@ -1,15 +1,14 @@
 package com.jww.base.am.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.api.SysDicService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDicMapper;
 import com.jww.base.am.model.entity.SysDicEntity;
-import com.jww.common.core.Constants;
 import com.jww.common.core.base.BaseServiceImpl;
-import com.xiaoleilu.hutool.util.ObjectUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,31 +33,33 @@ import java.util.Map;
 public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicEntity> implements SysDicService {
 
     @Override
-    public Page<SysDicEntity> queryListPage(Page<SysDicEntity> page) {
+    public IPage<SysDicEntity> queryListPage(IPage<SysDicEntity> page) {
         SysDicEntity sysDicEntity = new SysDicEntity();
         sysDicEntity.setIsDel(0);
-        EntityWrapper<SysDicEntity> entityWrapper = new EntityWrapper<>(sysDicEntity);
-        if (ObjectUtil.isNotNull(page.getCondition())) {
+        QueryWrapper<SysDicEntity> entityWrapper = new QueryWrapper<>(sysDicEntity);
+        if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
-            Map<String, Object> paramMap = page.getCondition();
+            Map<Object, Object> paramMap = page.condition();
             paramMap.forEach((k, v) -> {
                 if (StrUtil.isNotBlank(v + "")) {
-                    conditionSql.append(k + " like '%" + v + "%' AND ");
+                    // conditionSql.append(k + " like '%" + v + "%' AND ");
+                    entityWrapper.like(k + "", v);
                 }
             });
-            entityWrapper.and(StrUtil.removeSuffix(conditionSql.toString(), "AND "));
+            // entityWrapper.and(StrUtil.removeSuffix(conditionSql.toString(), "AND "));
         }
-        entityWrapper.orderBy("typeText,sortNo");
-        page.setCondition(null);
-        return super.selectPage(page, entityWrapper);
+        // entityWrapper.orderBy("typeText,sortNo");
+        entityWrapper.orderByAsc("typeText,sortNo");
+        // page.setCondition(null);
+        return super.page(page, entityWrapper);
     }
 
     @Override
     @Cacheable
     public List<SysDicEntity> queryTypeList() {
-        EntityWrapper<SysDicEntity> entityWrapper = new EntityWrapper<>(new SysDicEntity());
-        entityWrapper.setSqlSelect("DISTINCT type_text,type_");
-        return super.selectList(entityWrapper);
+        QueryWrapper<SysDicEntity> entityWrapper = new QueryWrapper<>(new SysDicEntity());
+        // entityWrapper.setSqlSelect("DISTINCT type_text,type_");
+        return super.list(entityWrapper);
     }
 
     @Override
@@ -74,13 +75,12 @@ public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicEntit
         sysDicEntity.setType(type);
         sysDicEntity.setIsDel(0);
         sysDicEntity.setEnable(1);
-        EntityWrapper<SysDicEntity> entityWrapper = new EntityWrapper<>(sysDicEntity);
-        return super.selectList(entityWrapper);
+        QueryWrapper<SysDicEntity> entityWrapper = new QueryWrapper<>(sysDicEntity);
+        return super.list(entityWrapper);
     }
 
-    @Override
     @CacheEvict(value = AmConstants.AmCacheName.DIC, allEntries = true)
-    public boolean deleteBatchIds(List<? extends Serializable> idList) {
+    public boolean removeByIds(List<? extends Serializable> idList) {
         List<SysDicEntity> sysDicEntityList = new ArrayList<SysDicEntity>();
         idList.forEach(id -> {
             SysDicEntity entity = new SysDicEntity();
@@ -100,7 +100,7 @@ public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicEntit
         sysDicEntity.setCode(code);
         sysDicEntity.setIsDel(0);
         sysDicEntity.setEnable(1);
-        EntityWrapper<SysDicEntity> entityWrapper = new EntityWrapper<>(sysDicEntity);
-        return super.selectOne(entityWrapper);
+        QueryWrapper<SysDicEntity> entityWrapper = new QueryWrapper<>(sysDicEntity);
+        return super.getOne(entityWrapper);
     }
 }

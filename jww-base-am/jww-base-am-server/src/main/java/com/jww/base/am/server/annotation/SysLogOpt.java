@@ -1,6 +1,6 @@
 package com.jww.base.am.server.annotation;
 
-import com.jww.common.core.Constants;
+import com.jww.common.core.constant.enums.LogOptEnum;
 
 import java.lang.annotation.*;
 
@@ -15,7 +15,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface SysLogOpt {
     String value();
-    String module()  default "";  //模块名称 系统管理-用户管理－列表页面
-    String description()  default "";  //描述
-    Constants.LogOptEnum operationType() default Constants.LogOptEnum.UNKNOW;//操作类型
+
+    String module() default "";  //模块名称 系统管理-用户管理－列表页面
+
+    String description() default "";  //描述
+
+    LogOptEnum operationType() default LogOptEnum.UNKNOW;//操作类型
 }

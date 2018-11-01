@@ -13,7 +13,7 @@ public class AsyncTask {
     private SysLogService sysLogService;
 
     @Async
-    public void logInsert(SysLogEntity t){
-        sysLogService.insert(t);
+    public void logInsert(SysLogEntity t) {
+        sysLogService.save(t);
     }
 }

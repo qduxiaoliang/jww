@@ -2,7 +2,7 @@ package com.jww.common.web.util;
 
 import cn.hutool.core.util.StrUtil;
 import com.jww.common.core.constant.enums.ResultCodeEnum;
-import com.jww.common.web.model.ResultModel;
+import com.jww.common.web.model.dto.ResultDTO;
 
 /**
  * 返回结果工具类
@@ -12,24 +12,24 @@ import com.jww.common.web.model.ResultModel;
  */
 public class ResultUtil {
 
-    public static ResultModel ok() {
+    public static ResultDTO ok() {
         return ok(null);
     }
 
-    public static ResultModel ok(Object object) {
-        return new ResultModel(ResultCodeEnum.SUCCESS.value(),
+    public static ResultDTO ok(Object object) {
+        return new ResultDTO(ResultCodeEnum.SUCCESS.value(),
                 ResultCodeEnum.SUCCESS.message(), object);
     }
 
-    public static ResultModel fail(ResultCodeEnum resultCodeEnum) {
-        return new ResultModel(resultCodeEnum.value(), resultCodeEnum.message(), null);
+    public static ResultDTO fail(ResultCodeEnum resultCodeEnum) {
+        return new ResultDTO(resultCodeEnum.value(), resultCodeEnum.message(), null);
     }
 
-    public static ResultModel fail(int code, String message) {
-        return new ResultModel(code, message, null);
+    public static ResultDTO fail(int code, String message) {
+        return new ResultDTO(code, message, null);
     }
 
-    public static ResultModel fail(ResultCodeEnum resultCodeEnum, String message) {
-        return new ResultModel(resultCodeEnum.value(), StrUtil.isBlank(message) ? resultCodeEnum.message() : message, null);
+    public static ResultDTO fail(ResultCodeEnum resultCodeEnum, String message) {
+        return new ResultDTO(resultCodeEnum.value(), StrUtil.isBlank(message) ? resultCodeEnum.message() : message, null);
     }
 }

@@ -1,6 +1,6 @@
 package com.jww.base.am.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysRoleEntity;
 import com.jww.common.core.base.BaseService;
 
@@ -24,7 +24,7 @@ public interface SysRoleService extends BaseService<SysRoleEntity> {
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    Page<SysRoleEntity> queryListPage(Page<SysRoleEntity> page);
+    IPage<SysRoleEntity> queryListPage(IPage<SysRoleEntity> page);
 
 
     /**
@@ -35,6 +35,7 @@ public interface SysRoleService extends BaseService<SysRoleEntity> {
      * @author wanyong
      * @date 2017-12-19 15:37
      */
+    @Override
     SysRoleEntity add(SysRoleEntity sysRoleEntity);
 
     /**
@@ -45,6 +46,7 @@ public interface SysRoleService extends BaseService<SysRoleEntity> {
      * @author wanyong
      * @date 2017-12-24 14:41
      */
+    @Override
     SysRoleEntity modifyById(SysRoleEntity sysRoleEntity);
 
     /**

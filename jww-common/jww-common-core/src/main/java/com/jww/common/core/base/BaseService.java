@@ -9,4 +9,24 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @date 2017/11/12 11:56
  */
 public interface BaseService<T extends BaseEntity> extends IService<T> {
+
+    /**
+     * 新增
+     *
+     * @param entity 实体
+     * @return T
+     * @author wanyong
+     * @date 2017/12/6 13:28
+     */
+    T add(T entity);
+
+    /**
+     * 更新
+     *
+     * @param entity 实体
+     * @return T
+     * @author wanyong
+     * @date 2017/12/6 13:29
+     */
+    T modifyById(T entity);
 }
