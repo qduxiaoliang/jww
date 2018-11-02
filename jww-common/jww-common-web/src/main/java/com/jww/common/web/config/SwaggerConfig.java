@@ -41,10 +41,10 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("JWW接口文档")
-                .description("JWW | JWW")
+                .title("Jww接口文档")
+                .description("Jww | Jww")
                 // 作者信息
-                .contact(new Contact("JWW", "https://www.jww.com", "jww@jww.com"))
+                .contact(new Contact("Jww", "https://www.jww.com", "jww@jww.com"))
                 .version("2.0.0")
                 .build();
     }
