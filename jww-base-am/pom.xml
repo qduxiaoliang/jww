@@ -16,7 +16,6 @@
         <module>jww-base-am-common</module>
         <module>jww-base-am-dao</module>
         <module>jww-base-am-model</module>
-        <module>jww-base-am-api</module>
         <module>jww-base-am-service</module>
         <module>jww-base-am-server</module>
     </modules>

@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.api.SysLogService;
+import com.jww.base.am.service.SysLogService;
 import com.jww.base.am.dao.mapper.SysLogMapper;
 import com.jww.base.am.model.entity.SysLogEntity;
 import com.jww.common.core.base.BaseServiceImpl;
@@ -25,8 +25,8 @@ import java.util.Map;
  * @author RickyWang
  * @since 2017-12-26
  */
-@Service("sysLogService")
 @Slf4j
+@Service("sysLogService")
 public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogEntity> implements SysLogService {
 
     @Autowired

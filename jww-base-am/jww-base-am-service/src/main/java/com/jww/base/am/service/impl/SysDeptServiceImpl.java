@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.api.SysDeptService;
+import com.jww.base.am.service.SysDeptService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDeptMapper;
 import com.jww.base.am.dao.mapper.SysTreeMapper;

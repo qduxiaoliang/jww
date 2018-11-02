@@ -1,4 +1,4 @@
-package com.jww.base.am.api;
+package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.entity.SysDeptEntity;

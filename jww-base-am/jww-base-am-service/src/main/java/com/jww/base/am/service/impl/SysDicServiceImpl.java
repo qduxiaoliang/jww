@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.api.SysDicService;
+import com.jww.base.am.service.SysDicService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDicMapper;
 import com.jww.base.am.model.entity.SysDicEntity;

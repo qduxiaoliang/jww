@@ -1,4 +1,4 @@
-package com.jww.base.am.api;
+package com.jww.base.am.service;
 
 import java.util.List;
 

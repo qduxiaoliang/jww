@@ -1,4 +1,4 @@
-package com.jww.base.am.api;
+package com.jww.base.am.service;
 
 import com.jww.common.core.base.BaseService;
 import com.jww.base.am.model.entity.SysRoleMenuEntity;

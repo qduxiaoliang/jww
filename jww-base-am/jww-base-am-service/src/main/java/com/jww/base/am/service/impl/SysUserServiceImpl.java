@@ -3,7 +3,7 @@ package com.jww.base.am.service.impl;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.api.SysUserService;
+import com.jww.base.am.service.SysUserService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysRoleMapper;
 import com.jww.base.am.dao.mapper.SysUserMapper;

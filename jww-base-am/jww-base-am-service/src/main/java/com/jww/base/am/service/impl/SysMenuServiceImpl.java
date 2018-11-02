@@ -8,7 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.api.SysMenuService;
+import com.jww.base.am.service.SysMenuService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.common.AmConstants.AmCacheName;
 import com.jww.base.am.dao.mapper.SysMenuMapper;
