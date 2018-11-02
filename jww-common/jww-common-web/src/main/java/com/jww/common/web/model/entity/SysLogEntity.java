@@ -1,4 +1,4 @@
-package com.jww.common.log.model;
+package com.jww.common.web.model.entity;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import java.util.Date;
  * @date 2017/11/9 17:37
  */
 @Data
-public class SysLogModel implements Serializable {
+public class SysLogEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;

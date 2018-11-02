@@ -17,7 +17,6 @@
         <module>jww-common-web</module>
         <module>jww-common-redis</module>
         <module>jww-common-http</module>
-        <module>jww-common-log</module>
         <module>jww-common-core</module>
         <module>jww-common-pay</module>
         <module>jww-common-dsession</module>

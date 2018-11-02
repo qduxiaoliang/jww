@@ -1,4 +1,4 @@
-package com.jww.common.log.web;
+package com.jww.common.web.aspect;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.http.HttpUtil;
