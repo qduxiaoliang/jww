@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @EnableAsync
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.jww.base.am.service.impl"})
+@ComponentScan(basePackages = {"com.jww.**"})
 @MapperScan(basePackages = {"com.jww.base.am.dao.mapper"})
 public class JwwBaseAmServerApplication {
     public static void main(String[] args) {

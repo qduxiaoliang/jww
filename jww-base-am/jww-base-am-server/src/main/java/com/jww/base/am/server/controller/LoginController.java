@@ -1,8 +1,8 @@
 package com.jww.base.am.server.controller;
 
 import cn.hutool.core.lang.Assert;
-import com.jww.base.am.api.SysUserService;
 import com.jww.base.am.server.annotation.SysLogOpt;
+import com.jww.base.am.service.SysUserService;
 import com.jww.common.core.constant.enums.LogOptEnum;
 import com.jww.common.core.constant.enums.ResultCodeEnum;
 import com.jww.common.core.model.dto.LoginDTO;

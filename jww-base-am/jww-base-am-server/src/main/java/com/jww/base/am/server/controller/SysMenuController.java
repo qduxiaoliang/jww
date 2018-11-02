@@ -3,10 +3,10 @@ package com.jww.base.am.server.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.api.SysMenuService;
 import com.jww.base.am.model.entity.SysMenuEntity;
 import com.jww.base.am.model.entity.SysTreeEntity;
 import com.jww.base.am.server.annotation.SysLogOpt;
+import com.jww.base.am.service.SysMenuService;
 import com.jww.common.core.constant.enums.LogOptEnum;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.dto.ResultDTO;

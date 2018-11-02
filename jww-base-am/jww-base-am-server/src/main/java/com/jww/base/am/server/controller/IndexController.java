@@ -1,7 +1,7 @@
 package com.jww.base.am.server.controller;
 
-import com.jww.base.am.api.SysAuthorizeService;
-import com.jww.base.am.api.SysMenuService;
+import com.jww.base.am.service.SysAuthorizeService;
+import com.jww.base.am.service.SysMenuService;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.dto.ResultDTO;
 import com.jww.common.web.util.ResultUtil;

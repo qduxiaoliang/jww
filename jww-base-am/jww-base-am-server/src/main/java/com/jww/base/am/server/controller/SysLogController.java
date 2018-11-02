@@ -2,8 +2,8 @@ package com.jww.base.am.server.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.api.SysLogService;
 import com.jww.base.am.model.entity.SysLogEntity;
+import com.jww.base.am.service.SysLogService;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.dto.ResultDTO;
 import com.jww.common.web.util.ResultUtil;
