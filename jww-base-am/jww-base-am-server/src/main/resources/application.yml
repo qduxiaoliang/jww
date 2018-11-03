@@ -32,3 +32,14 @@ sharding:
         masterDataSourceName: ds-master
         slaveDataSourceNames: [ds-slave-0,ds-slave-1]
         loadBalanceAlgorithmType: round_robin
+
+swagger:
+  api:
+    enabled: true
+    name: Jww Name
+    title: Jww Title
+    description: Jww Description
+    version: 2.0.0
+    contactUser: Jww User
+    contactUrl: Jww Url
+    contactEmail: Jww Email

@@ -17,6 +17,7 @@
             <artifactId>jww-common-core</artifactId>
             <version>${jww-common.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.jww</groupId>
             <artifactId>jww-common-http</artifactId>
@@ -33,24 +34,21 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
-        <!-- swagger 相关 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger2.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.waner</groupId>
+            <artifactId>spring-boot-starter-swagger</artifactId>
+            <version>2.1.0.RELEASE</version>
         </dependency>
     </dependencies>
 
