@@ -1,8 +1,8 @@
 spring:
   redis:
-    host: localhost
+    host: 119.29.114.28
     port: 6379
-    password: 123456
+    password: Jww~0731520
 
 sharding:
   jdbc:
@@ -12,20 +12,20 @@ sharding:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.jdbc.Driver
         username: root
-        password: 123456
-        jdbc-url: jdbc:mysql://localhost:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+        password: Jww~0731520
+        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       ds-slave-0:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.jdbc.Driver
         username: root
-        password: 123456
-        jdbc-url: jdbc:mysql://localhost:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+        password: Jww~0731520
+        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       ds-slave-1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.jdbc.Driver
         username: root
-        password: 123456
-        jdbc-url: jdbc:mysql://localhost:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+        password: Jww~0731520
+        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
     config:
       masterslave:
         name: ds
@@ -36,10 +36,10 @@ sharding:
 swagger:
   api:
     enabled: true
-    name: Jww Name
-    title: Jww Title
-    description: Jww Description
+    name: Jww
+    title: Jww Swagger Api
+    description: Jww接口文档
     version: 2.0.0
-    contactUser: Jww User
-    contactUrl: Jww Url
-    contactEmail: Jww Email
+    contactUser: Jww
+    contactUrl: http://www.jww.com
+    contactEmail: admin@jww.com

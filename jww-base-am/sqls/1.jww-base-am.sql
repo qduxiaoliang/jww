@@ -294,7 +294,7 @@ CREATE TABLE `sys_user` (
   `account_` varchar(20) DEFAULT NULL COMMENT '登陆帐户',
   `password_` varchar(50) DEFAULT NULL COMMENT '密码',
   `user_type` varchar(2) DEFAULT '1' COMMENT '用户类型(1普通用户2管理员3系统用户)',
-  `user_name` varchar(30) DEFAULT NULL COMMENT '姓名',
+  `username` varchar(30) DEFAULT NULL COMMENT '姓名',
   `name_pinyin` varchar(64) DEFAULT NULL COMMENT '姓名拼音',
   `sex_` int(1) NOT NULL DEFAULT '0' COMMENT '性别(0:未知;1:男;2:女)',
   `avatar_` varchar(500) DEFAULT NULL COMMENT '头像',

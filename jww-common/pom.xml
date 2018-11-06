@@ -39,7 +39,7 @@
         <!-- velocity模板引擎，mybatis-plus代码生成器需要 -->
         <velocity-engine-core.version>2.0</velocity-engine-core.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
-        <sharding-jdbc-spring-boot-starter.version>3.0.0.M4</sharding-jdbc-spring-boot-starter.version>
+        <sharding-jdbc-spring-boot-starter.version>3.0.0</sharding-jdbc-spring-boot-starter.version>
 
         <!-- 阿里云OSS -->
         <aliyun-sdk-oss.version>3.0.0</aliyun-sdk-oss.version>
@@ -48,6 +48,8 @@
 
         <!-- 支付 -->
         <com.egzosn.pay.version>2.11.3</com.egzosn.pay.version>
+
+        <swagger-spring-boot-starter.version>2.0.6.RELEASE</swagger-spring-boot-starter.version>
     </properties>
 
     <dependencyManagement>

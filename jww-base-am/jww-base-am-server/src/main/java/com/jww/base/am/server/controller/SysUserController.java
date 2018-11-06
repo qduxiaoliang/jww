@@ -61,8 +61,14 @@ public class SysUserController extends BaseController {
         return ResultUtil.ok(sysUserEntity);
     }
 
+    /**
+     * 查询所有用户
+     *
+     * @author wanyong
+     * @date 2018/11/6 20:25
+     */
     @ApiOperation(value = "查询所有用户")
-    @PostMapping("/list")
+    @GetMapping("/list")
     // @RequiresPermissions("sys:user:read")
     public ResultDTO queryList() {
         return ResultUtil.ok(sysUserService.queryList());
