@@ -3,90 +3,121 @@ package com.jww.base.am.model.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jww.common.core.base.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+
+import java.sql.Timestamp;
 
 /**
- * 日志表
+ * 日志表Entity
  *
- * @author RickyWang
- * @date 17/12/26 12:41:27
+ * @author wanyong
+ * @date 2018-01-22
  */
-@ToString
+@Data
 @TableName("sys_log")
 public class SysLogEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 登陆帐户
+     * 服务ID
      */
-    @TableField("account_")
-    @Getter
-    @Setter
-    private String account;
+    @TableField("service_name")
+    private String serviceName;
+
     /**
      * 用户名
      */
-    @TableField("user_name")
-    @Getter
-    @Setter
-    private String userName;
+    @TableField("username_")
+    private String username;
+
     /**
-     * 用户操作
+     * 姓名
      */
-    @TableField("operation_")
-    @Getter
-    @Setter
-    private String operation;
+    @TableField("full_name")
+    private String fullName;
+
     /**
-     * 操作类型
+     * 日志标题
      */
-    @TableField("operation_type")
-    @Getter
-    @Setter
-    private Integer operationType;
+    @TableField("title_")
+    private String title;
+
     /**
-     * 请求方法
+     * 操作类型(1:新增/2:查询/3:修改/4:删除/5:导入/6:导出)
      */
-    @TableField("method_")
-    @Getter
-    @Setter
-    private String method;
+    @TableField("type_")
+    private Integer type;
+
     /**
-     * 请求参数
+     * 用户代理
+     */
+    @TableField("user_agent")
+    private String userAgent;
+
+    /**
+     * 请求URI
+     */
+    @TableField("request_uri")
+    private String requestUri;
+
+    /**
+     * HTTP方式
+     */
+    @TableField("http_method")
+    private String httpMethod;
+
+    /**
+     * 操作提交的数据
      */
     @TableField("params_")
-    @Getter
-    @Setter
     private String params;
+
     /**
-     * 操作结果
+     * 操作结果(0:失败/1:成功)
      */
     @TableField("result_")
-    @Getter
-    @Setter
     private Integer result;
+
     /**
-     * 执行时长(毫秒)
+     * 请求时间
+     */
+    @TableField("request_time")
+    private Timestamp requestTime;
+
+    /**
+     * 执行时间
      */
     @TableField("time_")
-    @Getter
-    @Setter
-    private Long time;
+    private Integer time;
+
     /**
-     * IP地址
+     * 操作IP地址
      */
     @TableField("ip_")
-    @Getter
-    @Setter
     private String ip;
+
     /**
-     * IP地址详情
+     * ip运营商
      */
     @TableField("ip_detail")
-    @Getter
-    @Setter
     private String ipDetail;
+
+    /**
+     * 异常信息
+     */
+    @TableField("exception_")
+    private String exception;
+
+    /**
+     * 请求token
+     */
+    @TableField("request_token")
+    private String requestToken;
+
+    /**
+     * 备注
+     */
+    @TableField("remark_")
+    private String remark;
 }

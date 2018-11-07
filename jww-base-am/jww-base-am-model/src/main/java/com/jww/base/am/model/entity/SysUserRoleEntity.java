@@ -1,17 +1,18 @@
 package com.jww.base.am.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jww.common.core.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+
 /**
- * <p>
- * 用户授权表
- * </p>
+ * 用户角色表实体
  *
  * @author wanyong
- * @since 2017-11-29
+ * @date 2017-10-29
  */
 @Data
 @TableName("sys_user_role")
@@ -19,24 +20,23 @@ public class SysUserRoleEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 用户ID
+     */
     @TableField("user_id")
     private Long userId;
 
+    /**
+     * 角色ID
+     */
     @TableField("role_id")
     private Long roleId;
+
     /**
-     * 是否启用
+     * 删除标记
      */
-    @TableField("enable_")
-    private Integer enable;
-    /**
-     * 是否删除(0:未删除;1:已删除)
-     */
+    @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
     @TableField("is_del")
+    @TableLogic
     private Integer isDel;
-    /**
-     * 备注
-     */
-    @TableField("remark_")
-    private String remark;
 }

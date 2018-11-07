@@ -25,14 +25,4 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
      * @date 2017-12-27 12:06
      */
     List<SysUserEntity> selectPage(IPage<SysUserEntity> page, @Param("searchKey") String searchKey);
-
-    /**
-     * 根据用户ID查询
-     *
-     * @param id 用户ID
-     * @return SysUserModel
-     * @author wanyong
-     * @date 2017-12-27 12:07
-     */
-    SysUserEntity selectOne(@Param("id") Long id);
 }

@@ -1,6 +1,7 @@
 package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.jww.base.am.model.dto.SysUserDTO;
 import com.jww.base.am.model.entity.SysRoleEntity;
 import com.jww.base.am.model.entity.SysUserEntity;
 import com.jww.base.am.model.entity.SysUserRoleEntity;
@@ -17,14 +18,14 @@ import java.util.List;
 public interface SysUserService extends BaseService<SysUserEntity> {
 
     /**
-     * 根据账号查找用户
+     * 根据用户名查找用户
      *
-     * @param account 账号
-     * @return SysUserModel
+     * @param username 账号
+     * @return SysUserEntity
      * @author wanyong
      * @date 2017-12-05 12:48
      */
-    SysUserEntity queryByAccount(String account);
+    SysUserEntity queryByUsername(String username);
 
     /**
      * 分页查找所有用户
@@ -67,24 +68,14 @@ public interface SysUserService extends BaseService<SysUserEntity> {
     List<SysUserRoleEntity> queryUserRoles(Long userId);
 
     /**
-     * 根据用户ID查询
-     *
-     * @param id 用户ID
-     * @return SysUserModel
-     * @author wanyong
-     * @date 2017-12-27 12:09
-     */
-    SysUserEntity queryOne(Long id);
-
-    /**
      * 修改
      *
-     * @param sysUserEntity 用户实体
+     * @param sysUserDTO 用户传输实体
      * @return boolean
      * @author wanyong
      * @date 2017-12-27 12:09
      */
-    boolean modifyUser(SysUserEntity sysUserEntity);
+    boolean modify(SysUserDTO sysUserDTO);
 
     /**
      * 身份切换的用户列表

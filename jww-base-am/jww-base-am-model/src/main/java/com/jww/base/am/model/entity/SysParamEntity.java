@@ -1,20 +1,17 @@
 package com.jww.base.am.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jww.common.core.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 /**
- * <p>
- * 全局参数表
- * </p>
+ * 参数表Entity
  *
- * @author shadj
- * @since 2017-12-24
+ * @author wanyong
+ * @date 2018-01-22
  */
 @Data
 @TableName("sys_param")
@@ -25,32 +22,38 @@ public class SysParamEntity extends BaseEntity {
     /**
      * 参数键名
      */
-    @NotBlank(message = "参数名称不能为空")
-    @Size(min = 1, max = 50, message = "参数名称长度必须在1至50之间")
     @TableField("param_key")
     private String paramKey;
+
     /**
      * 参数键值
      */
-    @NotBlank(message = "参数值不能为空")
-    @Size(min = 0, max = 50, message = "参数值长度必须在1至50之间")
     @TableField("param_value")
     private String paramValue;
+
+    /**
+     * 参数分类ID
+     */
     @TableField("catalog_id")
     private Long catalogId;
-    /**
-     * 是否启用
-     */
-    @TableField("enable_")
-    private Integer enable;
-    /**
-     * 是否删除(0:未删除;1:已删除)
-     */
-    @TableField("is_del")
-    private Integer isDel;
+
     /**
      * 备注
      */
     @TableField("remark_")
     private String remark;
+
+    /**
+     * 启用标识（0-启用,1-禁用）
+     */
+    @ApiModelProperty(value = "启用标记（0-启用,1-禁用）", name = "isEnable")
+    private Integer isEnable;
+
+    /**
+     * 删除标记
+     */
+    @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
+    @TableField("is_del")
+    @TableLogic
+    private Integer isDel;
 }

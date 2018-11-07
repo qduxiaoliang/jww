@@ -170,7 +170,7 @@ public class SysUserController extends BaseController {
         } else {
             sysUserEntity.setPassword(null);
         }
-        return ResultUtil.ok(sysUserService.modifyUser(sysUserEntity));
+        return ResultUtil.ok(sysUserService.modify(sysUserEntity));
     }
 
     /**

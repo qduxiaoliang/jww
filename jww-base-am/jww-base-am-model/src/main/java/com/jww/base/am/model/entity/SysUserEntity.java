@@ -1,22 +1,20 @@
 package com.jww.base.am.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jww.common.core.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- * <p>
- * 用户管理
- * </p>
+ * 用户表实体
  *
  * @author wanyong
- * @date 2017-11-28
+ * @date 2017-10-29
  */
 @Data
 @TableName("sys_user")
@@ -25,137 +23,81 @@ public class SysUserEntity extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 登陆帐户
+     * 用户名
      */
-    @NotBlank(message = "账号不能为空")
-    @Size(min = 4, max = 20, message = "账号长度必须在4至20之间")
-    @TableField("account_")
-    private String account;
-    /**
-     * 密码
-     */
-    @Size(min = 6, max = 20, message = "密码长度必须在6至20之间")
-    @TableField("password_")
-    private String password;
-    /**
-     * 旧密码
-     */
-    @Size(min = 6, max = 20, message = "密码长度必须在6至20之间")
-    @TableField(exist = false)
-    private String oldPassword;
-    /**
-     * 用户类型(1普通用户2管理员3系统用户)
-     */
-    @TableField("user_type")
-    private String userType;
+    @TableField("username_")
+    private String userName;
+
     /**
      * 姓名
      */
-    @NotBlank(message = "姓名不能为空")
-    @Size(min = 2, max = 8, message = "姓名长度必须在2至8之间")
-    @TableField("user_name")
-    private String userName;
+    @TableField("full_name")
+    @Size(min = 1, max = 30, message = "用户姓名必须在1-30位之间")
+    private String fullName;
+
     /**
-     * 姓名拼音
+     * 密码
      */
-    @TableField("name_pinyin")
-    private String namePinyin;
+    @JsonIgnore
+    @TableField("password_")
+    private String password;
+
     /**
-     * 性别(0:未知;1:男;2:女)
+     * 随机盐
      */
-    @TableField("sex_")
-    private Integer sex;
+    @JsonIgnore
+    @TableField("salt_")
+    private String salt;
+
+    /**
+     * 姓名
+     */
+    @TableField("user_type")
+    private Integer userType;
+
+    /**
+     * 手机号
+     */
+    @TableField("phone_")
+    private String phone;
+
+    /**
+     * 联系电话
+     */
+    @TableField("tel_")
+    private String tel;
+
     /**
      * 头像
      */
     @TableField("avatar_")
     private String avatar;
+
     /**
-     * 电话
-     */
-    @TableField("phone_")
-    private String phone;
-    /**
-     * 邮箱
-     */
-    @Email(message = "邮箱格式不正确")
-    @TableField("email_")
-    private String email;
-    /**
-     * 身份证号码
-     */
-    @Pattern(regexp = "^(|\\d{18,18}|\\d{15,15}|(\\d{17,17}[x|X]))$", message = "身份证格式不正确")
-    @TableField("id_card")
-    private String idCard;
-    /**
-     * 微信
-     */
-    @TableField("wei_xin")
-    private String weiXin;
-    /**
-     * 微博
-     */
-    @TableField("wei_bo")
-    private String weiBo;
-    /**
-     * QQ
-     */
-    @TableField("qq_")
-    private String qq;
-    /**
-     * 出生日期
-     */
-    @TableField("birth_day")
-    private String birthDay;
-    /**
-     * 部门编号
+     * 部门ID
      */
     @TableField("dept_id")
     private Long deptId;
-    /**
-     * 部门名称
-     */
-    @TableField(exist = false)
-    private String deptName;
-    /**
-     * 职位
-     */
-    @TableField("position_")
-    private String position;
-    /**
-     * 详细地址
-     */
-    @TableField("address_")
-    private String address;
-    /**
-     * 工号
-     */
-    @TableField("staff_no")
-    private String staffNo;
-    /**
-     * 角色
-     */
-    @TableField(exist = false)
-    private Long[] role;
-    /**
-     * 是否启用
-     */
-    @TableField("enable_")
-    private Integer enable;
-    /**
-     * 是否删除(0:未删除;1:已删除)
-     */
-    @TableField("is_del")
-    private Integer isDel;
-    /**
-     * 备注
-     */
-    @TableField("remark_")
-    private String remark;
 
     /**
-     * 是否为代理用户
+     * 邮箱
      */
-    @TableField(exist = false)
-    private Integer isRunas = 0;
+    @TableField("email_")
+    private String email;
+
+    /**
+     * 启用标识（0-启用,1-禁用）
+     */
+    @TableField("is_enable")
+    @ApiModelProperty(value = "启用标记（0-启用,1-禁用）", name = "isEnable")
+    private Integer isEnable;
+
+    /**
+     * 删除标记
+     */
+    @TableLogic
+    @TableField("is_del")
+    @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
+    private Integer isDel;
+
 }

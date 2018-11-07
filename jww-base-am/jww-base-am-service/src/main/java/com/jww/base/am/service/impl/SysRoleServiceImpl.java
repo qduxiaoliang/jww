@@ -6,13 +6,14 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.service.SysRoleMenuService;
-import com.jww.base.am.service.SysRoleService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysRoleMapper;
 import com.jww.base.am.dao.mapper.SysRoleMenuMapper;
+import com.jww.base.am.model.dto.SysRoleDTO;
 import com.jww.base.am.model.entity.SysRoleEntity;
 import com.jww.base.am.model.entity.SysRoleMenuEntity;
+import com.jww.base.am.service.SysRoleMenuService;
+import com.jww.base.am.service.SysRoleService;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
 
-    public IPage<SysRoleEntity> queryListPage(IPage<SysRoleEntity> page) {
+    @Override
+    public IPage<SysRoleEntity> listPage(IPage<SysRoleEntity> page) {
         SysRoleEntity sysRoleEntity = new SysRoleEntity();
         sysRoleEntity.setIsDel(0);
         QueryWrapper<SysRoleEntity> entityWrapper = new QueryWrapper<>(sysRoleEntity);
@@ -74,29 +76,22 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
 
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = AmConstants.AmCacheName.ROLE, allEntries = true)
-    public SysRoleEntity add(SysRoleEntity sysRoleEntity) {
-        // 根据角色名称和部门检查是否存在相同的角色
-        SysRoleEntity checkModel = new SysRoleEntity();
-        checkModel.setIsDel(0);
-        checkModel.setRoleName(sysRoleEntity.getRoleName());
-        checkModel.setDeptId(sysRoleEntity.getDeptId());
-        QueryWrapper<SysRoleEntity> queryWrapper = new QueryWrapper<>(checkModel);
+    public SysRoleDTO add(SysRoleDTO sysRoleDTO) {
+        // 1、根据角色名称和部门检查是否存在相同的角色
+        SysRoleDTO checkSysRoleDTO = new SysRoleDTO();
+        checkSysRoleDTO.setRoleName(sysRoleDTO.getRoleName());
+        QueryWrapper<SysRoleEntity> queryWrapper = new QueryWrapper<>(checkSysRoleDTO);
         if (ObjectUtil.isNotNull(super.getOne(queryWrapper))) {
             throw new BusinessException("已存在相同名称的角色");
         }
-        super.save(sysRoleEntity);
-        // 这里增加CollectionUtil.isNotEmpty(sysRoleModel.getMenuIdList())判断是由于新增角色时允许不选择权限
-        if (sysRoleEntity != null && CollectionUtil.isNotEmpty(sysRoleEntity.getMenuIdList())) {
-            sysRoleMenuService.saveBatch(getRoleMenuListByMenuIds(sysRoleEntity, sysRoleEntity.getMenuIdList()));
-        }
-        return sysRoleEntity;
+        super.save(sysRoleDTO);
+        return sysRoleDTO;
     }
 
-
-    @CacheEvict(value = AmConstants.AmCacheName.ROLE, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public SysRoleEntity modifyById(SysRoleEntity sysRoleEntity) {
-        SysRoleEntity result = super.modifyById(sysRoleEntity);
+    @CacheEvict(value = AmConstants.AmCacheName.ROLE, allEntries = true)
+    public SysRoleDTO modifyById(SysRoleDTO sysRoleDTO) {
+        SysRoleEntity result = super.modifyById(sysRoleDTO);
         // 这里增加CollectionUtil.isNotEmpty(sysRoleModel.getMenuIdList())判断是由于删除角色时实际会调用modifyById方法去更新is_del字段，只有当修改角色时menuIdList才不会为空
         if (CollectionUtil.isNotEmpty(sysRoleEntity.getMenuIdList())) {
             SysRoleMenuEntity sysRoleMenuEntity = new SysRoleMenuEntity();

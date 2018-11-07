@@ -1,79 +1,83 @@
 package com.jww.base.am.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jww.common.core.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 /**
- * <p>
- * 数据字典明细表
- * </p>
+ * 字典表Entity
  *
  * @author wanyong
- * @date 2017-12-17
+ * @date 2018-01-22
  */
 @Data
 @TableName("sys_dic")
 public class SysDicEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+
     /**
-     * 类型值
+     * 类型
      */
-    @NotBlank(message = "字典类型不能为空")
-    @Size(min = 1, max = 50, message = "字典类型长度必须在1至50之间")
     @TableField("type_")
     private String type;
+
     /**
-     * 类型名称
+     * 字典类型名称
      */
-    @NotBlank(message = "字典类型名称不能为空")
-    @Size(min = 1, max = 50, message = "字典类型名称长度必须在1至50之间")
-    @TableField("type_text")
-    private String typeText;
+    @TableField("type_name")
+    private String typeName;
+
     /**
-     * 字典值
+     * 数据值
      */
-    @NotBlank(message = "字典值不能为空")
-    @Size(min = 1, max = 50, message = "字典值长度必须在1至50之间")
     @TableField("code_")
-    private String code;
+    private Long code;
+
     /**
-     * 字典名称
+     * 数据值名称
      */
-    @TableField("code_text")
-    private String codeText;
+    @TableField("code_name")
+    private Long codeName;
 
-    @TableField("parent_type")
-    private String parentType;
-
-    @TableField("parent_code")
-    private String parentCode;
     /**
-     * 排序
+     * 排序（升序）
      */
     @TableField("sort_no")
-    private Integer sortNo;
+    private Long sortNo;
 
-    @TableField("editable_")
-    private Integer editable;
     /**
-     * 是否启用
+     * 父id
      */
-    @TableField("enable_")
-    private Integer enable;
+    @TableField("parent_id")
+    private Long parentId;
+
     /**
-     * 是否删除(0:未删除;1:已删除)
+     * 是否可编辑（0:不可编辑/1:可编辑）
      */
-    @TableField("is_del")
-    private Integer isDel;
+    @TableField("is_editable")
+    private Long isEditable;
+
     /**
      * 备注
      */
     @TableField("remark_")
     private String remark;
+
+    /**
+     * 启用标识（0-启用,1-禁用）
+     */
+    @ApiModelProperty(value = "启用标记（0-启用,1-禁用）", name = "isEnable")
+    private Integer isEnable;
+
+    /**
+     * 删除标记
+     */
+    @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
+    @TableField("is_del")
+    @TableLogic
+    private Integer isDel;
 }

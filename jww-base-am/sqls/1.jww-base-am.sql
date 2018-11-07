@@ -13,116 +13,90 @@ File Encoding         : 65001
 Date: 2017-12-31 23:10:01
 */
 
-DROP DATABASE IF EXISTS `jww`;
-CREATE DATABASE IF NOT EXISTS `jww` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `jww`;
+DROP DATABASE IF EXISTS `jww-2.0.0`;
+CREATE DATABASE IF NOT EXISTS `jww-2.0.0` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `jww-2.0.0`;
 -- ----------------------------
 -- Table structure for sys_dept
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dept`;
 CREATE TABLE `sys_dept` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '部门编号',
-  `unit_id` bigint(20) NOT NULL COMMENT '隶属单位',
-  `dept_name` varchar(50) DEFAULT NULL COMMENT '部门名称',
-  `parent_id` bigint(20) DEFAULT NULL COMMENT '上级部门编号',
-  `sort_no` int(3) DEFAULT NULL COMMENT '排序号',
-  `leaf_` int(1) DEFAULT NULL COMMENT '叶子节点(0:树枝节点;1:叶子节点)',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `enable_` tinyint(1) DEFAULT NULL COMMENT '启用状态',
-  `remark_` varchar(100) DEFAULT NULL COMMENT '备注',
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL,
+  `id_` bigint(20) NOT NULL COMMENT '主键ID',
+  `parent_id` bigint(20) NOT NULL COMMENT '父ID',
+  `unit_id` bigint(20) DEFAULT NULL COMMENT '隶属单位ID',
+  `dept_name` varchar(16) NOT NULL COMMENT '部门名称',
+  `sort_no` tinyint(1) DEFAULT NULL COMMENT '排序',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `update_by` bigint(20) DEFAULT NULL,
+  `is_enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用(1:启用/0:禁用)',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除(1:是/0:否)',
   PRIMARY KEY (`id_`)
-) ENGINE=InnoDB AUTO_INCREMENT=947126071521034243 DEFAULT CHARSET=utf8 COMMENT='部门';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='部门表';
 
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-INSERT INTO `sys_dept` VALUES ('1', '1', 'JWW', '0', '1', '0', '0', '1', 'qw', '1', '2016-06-28 18:04:06', '1', '2017-12-30 23:34:59');
+INSERT INTO `sys_dept` VALUES ('1', '-1', null, '吉祥物流', '1', null, '2018-07-01 00:00:00', '1', '2018-07-01 00:00:00', null, '1', '0');
 
 -- ----------------------------
 -- Table structure for sys_dic
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dic`;
 CREATE TABLE `sys_dic` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT,
-  `type_` varchar(50) NOT NULL,
-  `code_` varchar(50) DEFAULT NULL,
-  `code_text` varchar(100) DEFAULT NULL,
-  `parent_type` varchar(50) DEFAULT NULL,
-  `parent_code` varchar(50) DEFAULT NULL,
-  `sort_no` int(2) DEFAULT NULL,
-  `editable_` tinyint(1) NOT NULL DEFAULT '1',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `enable_` tinyint(1) NOT NULL DEFAULT '1',
-  `remark_` varchar(500) DEFAULT NULL,
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id_` bigint(20) NOT NULL COMMENT '主键ID',
+  `type_` varchar(32) NOT NULL COMMENT '类型',
+  `type_name` varchar(32) NOT NULL COMMENT '字典类型名称',
+  `code_` varchar(32) NOT NULL DEFAULT '' COMMENT '数据值',
+  `code_name` varchar(32) NOT NULL DEFAULT '' COMMENT '数据值名称',
+  `sort_no` tinyint(1) NOT NULL DEFAULT '0' COMMENT '排序（升序）',
+  `parent_id` bigint(20) DEFAULT '0' COMMENT '父id',
+  `is_editable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否可编辑（0:不可编辑/1:可编辑）',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_by` bigint(20) DEFAULT NULL COMMENT '更新人',
+  `is_enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用(1:启用/0:禁用)',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除(1:是/0:否)',
   PRIMARY KEY (`id_`),
-  UNIQUE KEY `type__code_` (`type_`,`code_`,`is_del`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=947147856354037763 DEFAULT CHARSET=utf8 COMMENT='数据字典明细表';
-
--- ----------------------------
--- Records of sys_dic
--- ----------------------------
-INSERT INTO `sys_dic` VALUES ('1', 'SEX', '0', '未知', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2017-12-31 00:50:07');
-INSERT INTO `sys_dic` VALUES ('2', 'SEX', '1', '男', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:12');
-INSERT INTO `sys_dic` VALUES ('3', 'SEX', '2', '女', null, null, '3', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2017-12-30 23:35:11');
-INSERT INTO `sys_dic` VALUES ('4', 'LOCKED', '0', '激活', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:11');
-INSERT INTO `sys_dic` VALUES ('5', 'LOCKED', '1', '锁定', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:10');
-INSERT INTO `sys_dic` VALUES ('6', 'ROLETYPE', '1', '业务角色', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:09');
-INSERT INTO `sys_dic` VALUES ('7', 'ROLETYPE', '2', '管理角色', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:09');
-INSERT INTO `sys_dic` VALUES ('8', 'ROLETYPE', '3', '系统内置角色', null, null, '3', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:08');
-INSERT INTO `sys_dic` VALUES ('9', 'LEAF', '0', '树枝节点', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2017-12-27 15:24:38');
-INSERT INTO `sys_dic` VALUES ('10', 'LEAF', '1', '叶子节点', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:07');
-INSERT INTO `sys_dic` VALUES ('11', 'EDITABLE', '0', '只读', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:06');
-INSERT INTO `sys_dic` VALUES ('12', 'EDITABLE', '1', '可编辑', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:06');
-INSERT INTO `sys_dic` VALUES ('13', 'ENABLE', '0', '禁用', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:05');
-INSERT INTO `sys_dic` VALUES ('14', 'ENABLE', '1', '启用', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:04');
-INSERT INTO `sys_dic` VALUES ('15', 'AUTHORIZELEVEL', '1', '访问权限', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:03');
-INSERT INTO `sys_dic` VALUES ('16', 'AUTHORIZELEVEL', '2', '管理权限', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:02');
-INSERT INTO `sys_dic` VALUES ('17', 'MENUTYPE', '1', '系统菜单', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:03');
-INSERT INTO `sys_dic` VALUES ('18', 'MENUTYPE', '2', '业务菜单', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:01');
-INSERT INTO `sys_dic` VALUES ('19', 'USERTYPE', '1', '经办员', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:50');
-INSERT INTO `sys_dic` VALUES ('20', 'USERTYPE', '2', '管理员', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:48');
-INSERT INTO `sys_dic` VALUES ('21', 'USERTYPE', '3', '系统内置用户', null, null, '3', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:47');
-INSERT INTO `sys_dic` VALUES ('22', 'EXPAND', '0', '收缩', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:47');
-INSERT INTO `sys_dic` VALUES ('23', 'EXPAND', '1', '展开', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:46');
-INSERT INTO `sys_dic` VALUES ('24', 'CRUD', 'add', '新增', null, null, '1', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:56');
-INSERT INTO `sys_dic` VALUES ('25', 'CRUD', 'read', '查询', null, null, '2', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:58');
-INSERT INTO `sys_dic` VALUES ('26', 'CRUD', 'update', '修改', null, null, '3', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:59');
-INSERT INTO `sys_dic` VALUES ('27', 'CRUD', 'delete', '删除', null, null, '4', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:03:59');
-INSERT INTO `sys_dic` VALUES ('28', 'CRUD', 'open', '打开', null, null, '5', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:00');
-INSERT INTO `sys_dic` VALUES ('29', 'CRUD', 'close', '关闭', null, null, '6', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:01');
-INSERT INTO `sys_dic` VALUES ('30', 'CRUD', 'run', '执行', null, null, '7', '0', '0', '1', null, '1', '2016-06-28 18:04:06', '1', '2016-06-28 18:04:01');
+  KEY `normal_code` (`type_`,`code_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典表';
 
 -- ----------------------------
 -- Table structure for sys_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_name` varchar(30) DEFAULT NULL COMMENT '用户名',
-  `operation_` varchar(50) DEFAULT NULL COMMENT '用户操作',
-  `operation_type` tinyint(1) DEFAULT NULL COMMENT '操作类型',
-  `method_` varchar(200) DEFAULT NULL COMMENT '请求方法',
-  `params_` varchar(5000) DEFAULT NULL COMMENT '请求参数',
-  `result_` tinyint(1) DEFAULT NULL COMMENT '操作结果',
-  `time_` bigint(20) NOT NULL COMMENT '执行时长(毫秒)',
-  `ip_` varchar(64) DEFAULT NULL COMMENT 'IP地址',
-  `remark_` varchar(500) DEFAULT NULL,
-  `enable_` tinyint(1) NOT NULL DEFAULT '1',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL,
-  PRIMARY KEY (`id_`)
-) ENGINE=InnoDB AUTO_INCREMENT=947484293540982786 DEFAULT CHARSET=utf8 COMMENT='系统日志';
+  `id_` bigint(20) NOT NULL COMMENT '编号',
+  `service_name` varchar(32) NOT NULL COMMENT '服务ID',
+  `username_` varchar(16) NOT NULL COMMENT '用户名',
+  `full_name` varchar(16) DEFAULT NULL COMMENT '姓名',
+  `title_` varchar(64) NOT NULL DEFAULT '' COMMENT '日志标题',
+  `type_` tinyint(1) NOT NULL DEFAULT '1' COMMENT '操作类型(1:新增/2:查询/3:修改/4:删除/5:导入/6:导出)',
+  `user_agent` varchar(512) DEFAULT NULL COMMENT '用户代理',
+  `request_uri` varchar(255) NOT NULL COMMENT '请求URI',
+  `http_method` varchar(10) NOT NULL COMMENT 'HTTP方式',
+  `params_` text COMMENT '操作提交的数据',
+  `result_` tinyint(1) NOT NULL DEFAULT '1' COMMENT '操作结果(0:失败/1:成功)',
+  `request_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '请求时间',
+  `time_` int(11) NOT NULL COMMENT '执行时间',
+  `ip_` varchar(32) NOT NULL COMMENT '操作IP地址',
+  `ip_detail` varchar(64) DEFAULT NULL COMMENT 'ip运营商',
+  `exception_` text CHARACTER SET utf8 COMMENT '异常信息',
+  `request_token` varchar(255) DEFAULT NULL COMMENT '请求token',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_by` bigint(20) NOT NULL COMMENT '创建者',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` bigint(20) DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id_`),
+  KEY `sys_log_create_by` (`create_by`),
+  KEY `sys_log_type` (`type_`),
+  KEY `sys_log_create_date` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='日志表';
 
 -- ----------------------------
 -- Records of sys_log
@@ -131,81 +105,121 @@ CREATE TABLE `sys_log` (
 -- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_menu`;
-CREATE TABLE `sys_menu` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '菜单编号',
-  `menu_name` varchar(50) DEFAULT NULL COMMENT '菜单名称',
-  `menu_type` smallint(2) DEFAULT '2' COMMENT '菜单类型(0：目录1：菜单2：按钮)',
-  `parent_id` bigint(20) DEFAULT NULL COMMENT '上级菜单编号',
-  `iconcls_` varchar(50) DEFAULT NULL COMMENT '节点图标CSS类名',
-  `request_` varchar(100) DEFAULT NULL COMMENT '请求地址',
-  `expand_` tinyint(1) NOT NULL DEFAULT '0' COMMENT '展开状态(1:展开;0:收缩)',
-  `sort_no` int(2) DEFAULT NULL COMMENT '排序号',
-  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '叶子节点(0:树枝节点;1:叶子节点)',
-  `permission_` varchar(50) DEFAULT NULL COMMENT '权限标识',
-  `remark_` varchar(100) DEFAULT NULL COMMENT '备注',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `enable_` tinyint(1) DEFAULT '1',
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+DROP TABLE IF EXISTS `sys_resource`;
+CREATE TABLE `sys_resource` (
+  `id_` bigint(20) NOT NULL COMMENT '主键ID',
+  `resource_name` varchar(16) NOT NULL COMMENT '资源名称',
+  `resource_type` tinyint(1) NOT NULL COMMENT '资源类型(0:按钮/1:目录/2:菜单)',
+  `permission_` varchar(32) DEFAULT NULL COMMENT '资源权限标识',
+  `path_` varchar(128) DEFAULT NULL COMMENT '前端URL',
+  `request_url` varchar(128) DEFAULT NULL COMMENT '请求链接',
+  `method_` varchar(32) DEFAULT NULL COMMENT '请求方法',
+  `parent_id` bigint(20) NOT NULL COMMENT '父资源ID',
+  `icon_` varchar(32) DEFAULT NULL COMMENT '图标',
+  `component_` varchar(64) DEFAULT NULL COMMENT 'VUE页面',
+  `sys_type` varchar(32) DEFAULT '' COMMENT '系统类型',
+  `sort_no` tinyint(1) DEFAULT '1' COMMENT '排序值',
+  `resource_level` tinyint(1) DEFAULT '1' COMMENT '资源等级',
+  `is_show` tinyint(1) DEFAULT NULL COMMENT '是否显示(0:不显示/1:显示)',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_by` bigint(20) DEFAULT NULL COMMENT '更新人',
+  `is_enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用(1:启用/0:禁用)',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除（1:是/0:否）',
   PRIMARY KEY (`id_`)
-) ENGINE=InnoDB AUTO_INCREMENT=947128275107692546 DEFAULT CHARSET=utf8 COMMENT='菜单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='资源权限表';
 
+TRUNCATE TABLE `sys_resource`;
 -- ----------------------------
--- Records of sys_menu
+-- Records of sys_resource
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('1', '系统管理', '0', '0', 'icon-xitongguanli', '#', '1', '1', '1', '', null, '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-30 23:35:04');
-INSERT INTO `sys_menu` VALUES ('2', '用户管理', '1', '1', 'icon-yonghuguanli', 'page/user/userList.html', '0', '1', '1', '', null, '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-30 23:33:43');
-INSERT INTO `sys_menu` VALUES ('3', '部门管理', '1', '1', 'icon-bumenguanli', 'page/dept/deptList.html', '0', '2', '1', '', null, '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-28 22:41:08');
-INSERT INTO `sys_menu` VALUES ('4', '菜单管理', '1', '1', 'icon-caidanguanli', 'page/menu/menuList.html', '0', '3', '1', '', null, '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-28 22:41:28');
-INSERT INTO `sys_menu` VALUES ('5', '角色管理', '1', '1', 'icon-jiaoseguanli', 'page/role/roleList.html', '0', '4', '1', '', null, '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-29 15:51:49');
-INSERT INTO `sys_menu` VALUES ('7', '字典管理', '1', '1', 'icon-ccgl-shujuzidian-1', 'page/dic/dicList.html', '0', '7', '1', 'sys:dic', null, '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-29 23:10:16');
-INSERT INTO `sys_menu` VALUES ('8', '参数管理', '1', '1', 'icon-xitongcanshuguanli', 'page/param/paramList.html', '0', '8', '1', '', '', '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-28 22:42:19');
-INSERT INTO `sys_menu` VALUES ('9', '日志管理', '1', '1', 'icon-ccgl-shujuzidian-1', 'page/log/logList.html', '0', '9', '1', 'sys:log:read', '', '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-29 23:07:05');
-INSERT INTO `sys_menu` VALUES ('18', '新增', '2', '2', null, null, '0', '2', '1', 'sys:user:add,sys:role:read,sys:user:read', null, '0', '1', '1', '2017-12-19 11:22:58', '1', '2017-12-30 14:46:41');
-INSERT INTO `sys_menu` VALUES ('19', '修改', '2', '2', null, null, '0', '3', '1', 'sys:user:update,sys:role:read,sys:user:read', null, '0', '1', '1', '2017-12-19 12:35:36', '1', '2017-12-30 15:14:57');
-INSERT INTO `sys_menu` VALUES ('21', '删除', '2', '2', null, null, '0', '4', '1', 'sys:user:delete', null, '0', '1', '1', '2017-12-19 12:37:20', '1', '2017-12-19 12:37:23');
-INSERT INTO `sys_menu` VALUES ('22', '应用监控', '1', '1', 'icon-jiaoseguanli', 'druid/webapp.html', '0', '12', '1', 'sys:sql:read', null, '0', '1', '1', '2016-06-20 09:16:56', '1', '2017-12-28 22:44:36');
-INSERT INTO `sys_menu` VALUES ('945569164808769538', '新增', '2', '5', null, null, '0', '2', '1', 'sys:role:add,sys:menu:read', null, '0', '1', '1', '2017-12-26 16:17:11', '1', '2017-12-29 15:49:48');
-INSERT INTO `sys_menu` VALUES ('945569292122673153', '修改', '2', '5', null, null, '0', '3', '1', 'sys:role:update,sys:role:read,sys:menu:read', null, '0', '1', '1', '2017-12-26 16:17:42', '1', '2017-12-29 15:49:57');
-INSERT INTO `sys_menu` VALUES ('945569401908580354', '删除', '2', '5', null, null, '0', '4', '1', 'sys:role:delete', null, '0', '1', '1', '2017-12-26 16:18:08', '1', '2017-12-26 16:20:08');
-INSERT INTO `sys_menu` VALUES ('945570894350995458', '新增', '2', '3', null, null, '0', '2', '1', 'sys:dept:add', null, '0', '1', '1', '2017-12-26 16:24:04', '1', '2017-12-26 16:24:53');
-INSERT INTO `sys_menu` VALUES ('945570988546674689', '修改', '2', '3', null, null, '0', '3', '1', 'sys:dept:update,sys:dept:read', null, '0', '1', '1', '2017-12-26 16:24:26', '1', '2017-12-26 16:24:54');
-INSERT INTO `sys_menu` VALUES ('945571061959577601', '删除', '2', '3', null, null, '0', '4', '1', 'sys:dept:delete', null, '0', '1', '1', '2017-12-26 16:24:44', '1', '2017-12-26 16:24:56');
-INSERT INTO `sys_menu` VALUES ('945571423827349506', '新增', '2', '4', null, null, '0', '2', '1', 'sys:menu:add', null, '0', '1', '1', '2017-12-26 16:26:10', '1', '2017-12-26 16:26:51');
-INSERT INTO `sys_menu` VALUES ('945571487333306370', '修改', '2', '4', null, null, '0', '3', '1', 'sys:menu:update,sys:menu:read', null, '0', '1', '1', '2017-12-26 16:26:25', '1', '2017-12-26 16:26:53');
-INSERT INTO `sys_menu` VALUES ('945571554194706434', '删除', '2', '4', null, null, '0', '4', '1', 'sys:menu:delete', null, '0', '1', '1', '2017-12-26 16:26:41', '1', '2017-12-30 23:33:32');
-INSERT INTO `sys_menu` VALUES ('946651550468222977', '新增', '2', '8', null, null, '0', '2', '1', 'sys:param:add', null, '0', '1', '1', '2017-12-29 15:58:12', '1', '2017-12-29 23:34:44');
-INSERT INTO `sys_menu` VALUES ('946651788901822466', '修改', '2', '8', null, null, '0', '3', '1', 'sys:param:update,sys:param:read', null, '0', '1', '1', '2017-12-29 15:59:09', '1', '2017-12-30 15:07:09');
-INSERT INTO `sys_menu` VALUES ('946651900851990530', '删除', '2', '8', null, null, '0', '4', '1', 'sys:param:delete', null, '0', '1', '1', '2017-12-29 15:59:36', '1', '2017-12-29 23:34:48');
-INSERT INTO `sys_menu` VALUES ('946748446155739137', '查看', '2', '2', null, null, '0', '1', '1', 'sys:user:read,sys:role:read', null, '0', '1', '1', '2017-12-29 22:23:13', '1', '2017-12-30 23:25:49');
-INSERT INTO `sys_menu` VALUES ('946758013140967425', '查看', '2', '3', null, null, '0', '1', '1', 'sys:dept:read', null, '0', '1', '1', '2017-12-29 23:01:15', '1', '2017-12-30 23:24:45');
-INSERT INTO `sys_menu` VALUES ('946758083039043585', '查看', '2', '4', null, null, '0', '1', '1', 'sys:menu:read', null, '0', '1', '1', '2017-12-29 23:01:32', '1', '2017-12-29 23:35:15');
-INSERT INTO `sys_menu` VALUES ('946758190165762049', '查看', '2', '5', null, null, '0', '1', '1', 'sys:role:read', null, '0', '1', '1', '2017-12-29 23:01:57', '1', '2017-12-29 23:35:13');
-INSERT INTO `sys_menu` VALUES ('946758477211344898', '查看', '2', '7', null, null, '0', null, '1', 'sys:dic:read', null, '1', '1', '1', '2017-12-29 23:03:06', '1', '2017-12-29 23:07:17');
-INSERT INTO `sys_menu` VALUES ('946758541132537857', '查看', '2', '8', null, null, '0', '1', '1', 'sys:param:read', null, '0', '1', '1', '2017-12-29 23:03:21', '1', '2017-12-29 23:35:09');
-INSERT INTO `sys_menu` VALUES ('946758603266957313', '查看', '2', '9', null, null, '0', null, '1', 'sys:log:read', null, '1', '1', '1', '2017-12-29 23:03:36', '1', '2017-12-29 23:07:01');
+INSERT INTO `sys_resource` VALUES ('1', '系统管理', '1', NULL, '/system', NULL, NULL, '-1', 'icon_system', 'layout', '运营平台', '1', '1', NULL, NULL, '2017-11-07 20:56:00', '1', '2018-08-16 07:51:38', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('2', '基础管理', '1', NULL, '/basic', NULL, NULL, '-1', 'icon_basic', 'basic', '', '2', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:05:43', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('3', '企业管理', '1', NULL, '/enterprise', NULL, NULL, '-1', 'icon_enterprise', 'enterprise', NULL, '3', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:07:37', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('4', '资源管理', '1', NULL, '/resource', NULL, NULL, '-1', 'icon_resource', 'resource', NULL, '4', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:11:43', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('5', '行业知识', '1', NULL, '/industry', NULL, NULL, '-1', 'icon_industry', 'industry', NULL, '5', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:13:40', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('6', '信息管理', '1', NULL, '/information', NULL, NULL, '-1', 'icon_information', 'information', NULL, '6', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:14:17', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('8', '系统监控', '1', NULL, NULL, NULL, NULL, '-1', 'icon-iconbmgl', NULL, '运营平台', '2', '1', NULL, NULL, '2018-01-22 12:30:41', '1', '2018-08-05 20:09:06', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('101', '用户管理', '2', NULL, 'user_manage', '', NULL, '1', '', 'userManage', '运营平台', '2', '1', NULL, NULL, '2017-11-02 22:24:37', '1', '2018-08-16 08:05:04', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('102', '菜单管理', '2', NULL, 'menu_config', '', NULL, '1', '', 'menuConfig', '运营平台', '3', '1', NULL, NULL, '2017-11-08 09:57:27', '1', '2018-08-16 08:03:06', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('103', '角色管理', '2', NULL, 'role_manage', NULL, NULL, '1', '', 'roleManage', '运营平台', '4', '1', NULL, NULL, '2017-11-08 10:13:37', '1', '2018-08-16 08:04:26', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('104', '日志管理', '2', NULL, 'log', NULL, NULL, '1', 'icon-rizhiguanli', 'views/admin/log/index', '运营平台', '5', '1', NULL, NULL, '2017-11-20 14:06:22', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('105', '字典管理', '2', NULL, 'data_dictionary', NULL, NULL, '1', '', 'dataDictionary', '运营平台', '6', '1', NULL, NULL, '2017-11-29 11:30:52', '1', '2018-08-16 08:04:01', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('106', '部门管理', '2', NULL, 'dept', NULL, NULL, '1', 'icon-iconbmgl', 'views/admin/dept/index', '运营平台', '7', '1', NULL, NULL, '2018-01-20 13:17:19', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('107', '客户端管理', '2', '', 'client', '', '', '1', 'icon-bangzhushouji', 'views/admin/client/index', '运营平台', '9', '1', NULL, NULL, '2018-01-20 13:17:19', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('108', '路由管理', '2', NULL, 'route', NULL, NULL, '1', 'icon-luyou', 'views/admin/route/index', '运营平台', '8', '1', NULL, NULL, '2018-05-15 21:44:51', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('201', '机场管理', '2', NULL, 'airport_info', NULL, NULL, '2', NULL, 'airportInfo', '', '1', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:06:18', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('202', '航空公司管理', '2', '', 'air_company', '', '', '2', '', 'airCompany', '', '2', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:06:56', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('203', '航班时刻管理', '2', '', 'flight_time', '', '', '2', '', 'flightTime', '', '3', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:07:13', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('301', '企业认证', '2', '', 'enterprise_Certification', '', '', '3', '', 'enterpriseCertification', '', '1', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:08:04', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('302', '企业角色管理', '2', '', 'enterprise_role_manage', '', '', '3', '', 'enterpriseRole', '', '2', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:08:18', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('303', '企业用户管理', '2', '', 'enterprise_user_manage', '', '', '3', '', 'enterpriseUser', '', '3', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:08:35', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('401', '上门揽货', '2', '', 'store_pickup', '', '', '4', '', 'storePickup', '', '1', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:12:23', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('402', '航班运输', '2', '', 'flight_transport', '', '', '4', '', 'flightTransport', '', '2', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:12:55', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('403', '机场提货', '2', '', 'airport_delivery', '', '', '4', '', 'airportDelivery', '', '3', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:13:08', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('404', '送货上门', '2', '', 'home_delivery', '', '', '4', '', 'homeDelivery', '', '4', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:13:21', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('501', '知识发布', '2', '', 'knowledge_release', '', '', '5', '', 'knowledgeRelease', '', '1', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:13:53', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('502', '知识管理', '2', '', 'knowledge_manage', '', '', '5', '', 'knowledgeManage', '', '2', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:14:03', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('601', '新闻管理', '2', '', 'news_manage', '', '', '6', '', 'newsManage', '', '1', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:14:30', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('602', '招聘管理', '2', '', 'recruit_manage', '', '', '6', '', 'recruitManage', '', '2', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:14:45', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('603', '广告管理', '2', '', 'ad_manage', '', '', '6', '', 'adManage', '', '3', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:15:14', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('801', '服务监控', '2', NULL, 'http://127.0.0.1:8751', NULL, NULL, '8', 'icon-jiankong', NULL, '运营平台', '9', '1', NULL, NULL, '2018-01-23 10:53:33', '1', '2018-08-05 23:39:31', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('802', 'zipkin监控', '2', NULL, 'http://139.224.200.249:5002', NULL, NULL, '8', 'icon-jiankong', NULL, '运营平台', '11', '1', NULL, NULL, '2018-01-23 10:55:18', '1', '2018-08-05 23:39:33', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('803', 'pinpoint监控', '2', NULL, 'https://pinpoint.pig4cloud.com', NULL, NULL, '8', 'icon-xiazaihuancun', NULL, '运营平台', '10', '1', NULL, NULL, '2018-01-25 11:08:52', '1', '2018-08-05 23:39:41', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('804', '缓存状态', '2', NULL, 'http://139.224.200.249:8585', NULL, NULL, '8', 'icon-ecs-status', NULL, '运营平台', '12', '1', NULL, NULL, '2018-01-23 10:56:11', '1', '2018-08-05 23:39:43', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('805', 'ELK状态', '2', NULL, 'http://139.224.200.249:5601', NULL, NULL, '8', 'icon-ecs-status', NULL, '运营平台', '13', '1', NULL, NULL, '2018-01-23 10:55:47', '1', '2018-08-05 23:39:45', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('806', '接口文档', '2', NULL, 'http://127.0.0.1:9999/swagger-ui.html', NULL, NULL, '8', 'icon-wendangdocument72', NULL, '运营平台', '14', '1', NULL, NULL, '2018-01-23 10:56:43', '1', '2018-08-05 23:39:47', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('807', '任务监控', '2', NULL, 'http://139.224.200.249:8899', NULL, NULL, '8', 'icon-jiankong', NULL, '运营平台', '15', '1', NULL, NULL, '2018-01-23 10:55:18', '1', '2018-08-05 23:39:49', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1011', '用户查看', '0', NULL, NULL, '/admin/user/**', 'GET', '101', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-07 20:58:05', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1012', '用户新增', '0', 'sys_user_add', NULL, '/admin/user/*', 'POST', '101', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2017-11-08 09:52:09', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1013', '用户修改', '0', 'sys_user_mod', NULL, '/admin/user/**', 'PUT', '101', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2017-11-08 09:52:48', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1014', '用户删除', '0', 'sys_user_del', NULL, '/admin/user/*', 'DELETE', '101', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2017-11-08 09:54:01', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1015', '用户导出', '0', 'sys_user_export', NULL, '/admin/user/*', 'GET', '101', NULL, NULL, '运营平台', '5', '1', NULL, NULL, '2017-11-08 09:54:01', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1016', '重置密码', '0', 'sys_user_reset', NULL, '/admin/user/*', 'PUT', '101', NULL, NULL, '运营平台', '6', '1', NULL, NULL, '2017-11-08 09:54:01', '1', '2018-08-05 20:13:21', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1021', '菜单查看', '0', NULL, NULL, '/admin/menu/**', 'GET', '102', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-08 09:57:56', '1', '2018-08-05 23:40:16', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1022', '菜单新增', '0', 'sys_menu_add', NULL, '/admin/menu/*', 'POST', '102', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2017-11-08 10:15:53', '1', '2018-08-05 23:40:20', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1023', '菜单修改', '0', 'sys_menu_mod', NULL, '/admin/menu/*', 'PUT', '102', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2017-11-08 10:16:23', '1', '2018-08-05 23:40:23', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1024', '菜单删除', '0', 'sys_menu_del', NULL, '/admin/menu/*', 'DELETE', '102', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2017-11-08 10:16:43', '1', '2018-08-05 23:40:25', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1031', '角色查看', '0', NULL, NULL, '/admin/role/**', 'GET', '103', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-08 10:14:01', '1', '2018-08-05 20:15:39', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1032', '角色新增', '0', 'sys_role_add', NULL, '/admin/role/*', 'POST', '103', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2017-11-08 10:14:18', '1', '2018-08-05 20:15:44', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1033', '角色修改', '0', 'sys_role_mod', NULL, '/admin/role/*', 'PUT', '103', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2017-11-08 10:14:41', '1', '2018-08-05 20:15:46', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1034', '角色删除', '0', 'sys_role_del', NULL, '/admin/role/*', 'DELETE', '103', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2017-11-08 10:14:59', '1', '2018-08-05 20:15:49', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1035', '分配权限', '0', 'sys_role_perm', 'sys_authorization', '/admin/role/*', 'PUT', '1', NULL, 'sysAuthorization', '运营平台', '5', '1', '1', NULL, '2018-04-20 07:22:55', '1', '2018-08-16 22:59:19', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1041', '日志查看', '0', NULL, NULL, '/admin/log/**', 'GET', '104', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-20 14:07:25', '1', '2018-08-05 20:15:14', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1042', '日志删除', '0', 'sys_log_del', NULL, '/admin/log/*', 'DELETE', '104', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2017-11-20 20:37:37', '1', '2018-08-05 20:15:15', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1051', '字典查看', '0', NULL, NULL, '/admin/dict/**', 'GET', '105', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-19 22:04:24', '1', '2018-08-05 20:16:53', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1052', '字典新增', '0', 'sys_dict_add', NULL, '/admin/dict/**', 'POST', '105', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2018-05-11 22:34:55', '1', '2018-08-05 20:17:23', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1053', '字典修改', '0', 'sys_dict_mod', NULL, '/admin/dict/**', 'PUT', '105', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2018-05-11 22:36:03', '1', '2018-08-05 20:17:30', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1054', '字典删除', '0', 'sys_dict_del', NULL, '/admin/dict/**', 'DELETE', '105', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2017-11-29 11:30:11', '1', '2018-08-05 20:17:34', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1061', '部门查看', '0', '', NULL, '/admin/dept/**', 'GET', '106', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2018-01-20 13:17:19', '1', '2018-08-05 20:18:51', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1062', '部门新增', '0', 'sys_dept_add', NULL, '/admin/dept/**', 'POST', '106', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2018-01-20 14:56:16', '1', '2018-08-05 20:18:52', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1063', '部门修改', '0', 'sys_dept_mod', NULL, '/admin/dept/**', 'PUT', '106', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2018-01-20 14:56:59', '1', '2018-08-05 20:18:52', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1064', '部门删除', '0', 'sys_dept_del', NULL, '/admin/dept/**', 'DELETE', '106', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2018-01-20 14:57:28', '1', '2018-08-05 20:18:54', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1071', '客户端查看', '0', NULL, NULL, '/admin/client/**', 'GET', '107', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2018-05-15 21:39:57', '1', '2018-08-05 20:21:45', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1072', '客户端新增', '0', 'sys_client_add', NULL, '/admin/client/**', 'POST', '107', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2018-05-15 21:35:18', '1', '2018-08-05 20:21:46', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1073', '客户端修改', '0', 'sys_client_mod', NULL, '/admin/client/**', 'PUT', '107', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2018-05-15 21:37:06', '1', '2018-08-05 20:21:46', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1074', '客户端删除', '0', 'sys_client_del', NULL, '/admin/client/**', 'DELETE', '107', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2018-05-15 21:39:16', '1', '2018-08-05 20:21:47', NULL, '1', '0');
 
 -- ----------------------------
 -- Table structure for sys_param
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_param`;
 CREATE TABLE `sys_param` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '参数编号',
-  `param_key` varchar(50) DEFAULT NULL COMMENT '参数键名',
-  `param_value` varchar(100) DEFAULT NULL COMMENT '参数键值',
-  `catalog_id` bigint(20) DEFAULT NULL,
-  `remark_` varchar(100) DEFAULT NULL COMMENT '备注',
-  `enable_` tinyint(1) DEFAULT '1',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL,
+  `id_` bigint(20) NOT NULL COMMENT '主键',
+  `param_key` varchar(32) NOT NULL COMMENT '参数键名',
+  `param_value` varchar(32) NOT NULL COMMENT '参数键值',
+  `catalog_id` bigint(20) DEFAULT NULL COMMENT '参数分类ID',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` bigint(20) DEFAULT NULL COMMENT '更新人',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用(1:启用/0:禁用)',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除(1:是/0:否)',
   PRIMARY KEY (`id_`)
-) ENGINE=InnoDB AUTO_INCREMENT=946767126541475843 DEFAULT CHARSET=utf8 COMMENT='全局参数表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='全局参数表';
 
 -- ----------------------------
 -- Records of sys_param
@@ -216,160 +230,132 @@ CREATE TABLE `sys_param` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色编号',
-  `role_name` varchar(50) DEFAULT NULL COMMENT '角色名称',
-  `dept_id` bigint(20) DEFAULT NULL COMMENT '所属部门编号',
-  `role_type` int(1) NOT NULL DEFAULT '1' COMMENT '角色类型(1:业务角色;2:管理角色 ;3:系统内置角色)',
-  `enable_` tinyint(1) NOT NULL DEFAULT '1',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `remark_` varchar(100) DEFAULT NULL COMMENT '备注',
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id_` bigint(20) NOT NULL COMMENT '主键',
+  `role_name` varchar(16) NOT NULL COMMENT '角色名称',
+  `role_code` varchar(32) NOT NULL COMMENT '角色编码',
+  `role_desc` varchar(64) DEFAULT NULL COMMENT '角色描述',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_by` bigint(20) DEFAULT NULL COMMENT '更新人',
+  `is_enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用（1:启用/0:禁用）',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除（1:是/0:否）',
   PRIMARY KEY (`id_`)
-) ENGINE=InnoDB AUTO_INCREMENT=947150613936922626 DEFAULT CHARSET=utf8 COMMENT='角色信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '管理员', '1', '1', '1', '0', null, '1', '2016-06-20 09:16:56', '1', '2017-12-31 22:42:59');
+INSERT INTO `sys_role` VALUES ('1', '管理员', 'ROLE_ADMIN', '管理员', null, '2017-10-29 15:45:51', '1', '2018-04-22 11:40:29', null, '1', '0');
 
 -- ----------------------------
--- Table structure for sys_role_menu
+-- Table structure for sys_role_resource
 -- ----------------------------
-DROP TABLE IF EXISTS `sys_role_menu`;
-CREATE TABLE `sys_role_menu` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT,
-  `role_id` bigint(20) NOT NULL,
-  `menu_id` bigint(20) NOT NULL,
-  `permission_` varchar(50) DEFAULT NULL COMMENT '权限标识',
-  `enable_` tinyint(1) NOT NULL DEFAULT '1',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `remark_` varchar(5000) DEFAULT NULL,
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+DROP TABLE IF EXISTS `sys_role_resource`;
+CREATE TABLE `sys_role_resource` (
+  `id_` bigint(20) NOT NULL COMMENT '主键ID',
+  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  `resource_id` bigint(20) NOT NULL COMMENT '菜单ID',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_by` bigint(20) DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id_`),
-  UNIQUE KEY `sys_role_menu_key1` (`role_id`,`menu_id`,`permission_`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=947478195886272514 DEFAULT CHARSET=utf8 COMMENT='角色授权表';
+  UNIQUE KEY `role_id_resource_id` (`role_id`,`resource_id`) USING BTREE COMMENT '唯一索引'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色资源关系表';
 
 -- ----------------------------
--- Records of sys_role_menu
+-- Records of sys_role_dept
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES ('947478193923338241', '1', '1', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194036584450', '1', '2', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194099499010', '1', '946748446155739137', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194174996481', '1', '18', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194229522433', '1', '19', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194288242690', '1', '21', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194346962946', '1', '3', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194393100289', '1', '946758013140967425', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194451820546', '1', '945570894350995458', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194502152194', '1', '945570988546674689', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194569261058', '1', '945571061959577601', '', '1', '0', '', '1', '2017-12-31 22:42:58', '1', '2017-12-31 22:42:58');
-INSERT INTO `sys_role_menu` VALUES ('947478194657341441', '1', '4', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478194732838913', '1', '946758083039043585', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478194829307905', '1', '945571423827349506', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478194908999681', '1', '945571487333306370', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195026440193', '1', '945571554194706434', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195139686401', '1', '5', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195252932610', '1', '946758190165762049', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195374567425', '1', '945569164808769538', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195500396545', '1', '945569292122673153', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195584282625', '1', '945569401908580354', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195659780098', '1', '7', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195714306049', '1', '8', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195781414913', '1', '946758541132537857', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195827552258', '1', '9', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
-INSERT INTO `sys_role_menu` VALUES ('947478195886272513', '1', '22', '', '1', '0', '', '1', '2017-12-31 22:42:59', '1', '2017-12-31 22:42:59');
+INSERT INTO `sys_role_resource` VALUES ('1','1','1', NULL, '2018-08-16 22:21:12', '1', NULL, NULL);
+INSERT INTO `sys_role_resource` VALUES ('2','1','1035', NULL, '2018-08-16 22:21:12', '1', NULL, NULL);
+INSERT INTO `sys_role_resource` VALUES ('3','1','103', NULL, '2018-08-16 22:21:12', '1', NULL, NULL);
+INSERT INTO `sys_role_resource` VALUES ('4','1','6012', NULL, '2018-08-16 22:21:12', '1', NULL, NULL);
+INSERT INTO `sys_role_resource` VALUES ('5','1','6013', NULL, '2018-08-16 22:21:12', '1', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT,
-  `account_` varchar(20) DEFAULT NULL COMMENT '登陆帐户',
-  `password_` varchar(50) DEFAULT NULL COMMENT '密码',
-  `user_type` varchar(2) DEFAULT '1' COMMENT '用户类型(1普通用户2管理员3系统用户)',
-  `username` varchar(30) DEFAULT NULL COMMENT '姓名',
-  `name_pinyin` varchar(64) DEFAULT NULL COMMENT '姓名拼音',
-  `sex_` int(1) NOT NULL DEFAULT '0' COMMENT '性别(0:未知;1:男;2:女)',
-  `avatar_` varchar(500) DEFAULT NULL COMMENT '头像',
-  `phone_` varchar(50) DEFAULT NULL COMMENT '电话',
-  `email_` varchar(64) DEFAULT NULL COMMENT '邮箱',
-  `id_card` varchar(18) DEFAULT NULL COMMENT '身份证号码',
-  `wei_xin` varchar(32) DEFAULT NULL COMMENT '微信',
-  `wei_bo` varchar(32) DEFAULT NULL COMMENT '微博',
-  `qq_` varchar(32) DEFAULT NULL COMMENT 'QQ',
-  `birth_day` date DEFAULT NULL COMMENT '出生日期',
-  `dept_id` bigint(20) DEFAULT NULL COMMENT '部门编号',
-  `position_` varchar(64) DEFAULT NULL COMMENT '职位',
-  `address_` varchar(256) DEFAULT NULL COMMENT '详细地址',
-  `staff_no` varchar(32) DEFAULT NULL COMMENT '工号',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `enable_` tinyint(1) DEFAULT '1',
-  `remark_` varchar(1024) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `create_by` bigint(20) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `update_by` bigint(20) DEFAULT NULL,
+  `id_` bigint(20) NOT NULL COMMENT '主键',
+  `username_` varchar(16) NOT NULL COMMENT '用户名',
+  `password_` varchar(128) COLLATE utf8mb4_bin NOT NULL COMMENT '密码',
+  `salt_` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '随机盐',
+  `user_type` tinyint(1) NOT NULL COMMENT '用户类型(1:管理员/2:内部用户/3:外部用户)',
+  `full_name` varchar(30) DEFAULT NULL COMMENT '姓名',
+  `name_pinyin` varchar(32) DEFAULT NULL COMMENT '姓名拼音',
+  `nick_name` varchar(16) DEFAULT NULL COMMENT '昵称',
+  `sex_` tinyint(1) NOT NULL DEFAULT '0' COMMENT '性别(0:未知/1:男/2:女)',
+  `phone_` varchar(11) NOT NULL COMMENT '手机号码',
+  `tel_` varchar(15) DEFAULT NULL COMMENT '联系电话',
+  `avatar_` varchar(255) DEFAULT NULL COMMENT '头像',
+  `email_` varchar(32) NOT NULL COMMENT '邮箱',
+  `card_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '证件类型(1:身份证)',
+  `id_card` varchar(18) DEFAULT NULL COMMENT '证件号码',
+  `dept_id` bigint(20) DEFAULT NULL COMMENT '部门ID',
+  `position_` varchar(16) DEFAULT NULL COMMENT '职位',
+  `address_` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  `staff_no` varchar(16) DEFAULT NULL COMMENT '内部员工工号',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `update_by` bigint(20) DEFAULT NULL COMMENT '修改人',
+  `is_enable` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用(1:启用/0:禁用)',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除(1:是/0:否)',
   PRIMARY KEY (`id_`),
-  UNIQUE KEY `account` (`account_`)
-) ENGINE=InnoDB AUTO_INCREMENT=947023181112483842 DEFAULT CHARSET=utf8 COMMENT='用户管理';
+  UNIQUE KEY `unique_email` (`email_`),
+  UNIQUE KEY `unique_username` (`username_`) USING BTREE,
+  UNIQUE KEY `unique_phone` (`phone_`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', 'YzlhZGMyNGYwNTk3NjA1NWQ4ZjdlZWI2NzlkNzIxZDk=', '3', '管理员', 'GUANLIYUAN', '0', 'http://118.190.43.148/group1/M00/00/00/dr4rlFjNBguAfJl7AAcOE67NTFk744.png', '', '', '', '', null, null, '0000-00-00', '1', '', null, null, '0', '1', '', '2016-05-06 10:06:52', '1', '2017-12-31 22:28:48', '1');
-
--- ----------------------------
--- Table structure for sys_user_menu
--- ----------------------------
-DROP TABLE IF EXISTS `sys_user_menu`;
-CREATE TABLE `sys_user_menu` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL,
-  `menu_id` bigint(20) NOT NULL,
-  `permission_` varchar(50) NOT NULL COMMENT '权限标识',
-  `enable_` tinyint(1) NOT NULL DEFAULT '1',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `remark_` varchar(5000) DEFAULT NULL,
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_`),
-  UNIQUE KEY `sys_user_menu_key1` (`user_id`,`menu_id`,`permission_`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户授权表';
-
--- ----------------------------
--- Records of sys_user_menu
--- ----------------------------
-INSERT INTO `sys_user_menu` VALUES ('1', '1', '1', 'read', '1', '0', null, '0', '2017-08-28 16:24:01', '0', '2017-08-28 16:24:01');
+INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$vg5QNHhCknAqevx9vM2s5esllJEzF/pa8VZXtFYHhhOhUcCw/GWyS', null, '1', '管理员', null, null, '0', '17034642111', null, null, 'admin@juneyaoair.com', '1', null, null, null, null, null, null, '2018-04-20 07:15:18', '1', '2018-05-11 17:12:00', null, '1', '0');
 
 -- ----------------------------
 -- Table structure for sys_user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_role`;
 CREATE TABLE `sys_user_role` (
-  `id_` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL,
-  `enable_` tinyint(1) NOT NULL DEFAULT '1',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `remark_` varchar(5000) DEFAULT NULL,
-  `create_by` bigint(20) NOT NULL,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_by` bigint(20) NOT NULL,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_`),
-  UNIQUE KEY `user_id_role_id` (`user_id`,`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=947474481788772354 DEFAULT CHARSET=utf8 COMMENT='用户授权表';
+  `id_` bigint(20) NOT NULL COMMENT '主键ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除(1:是/0:否)',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_by` bigint(20) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`id_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关系表';
 
 -- ----------------------------
--- Records of sys_user_role
+-- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user_role` VALUES ('1', '1', '1', '1', '0', null, '1', '2017-12-30 15:38:21', '1', '2017-12-30 15:38:21');
+INSERT INTO `sys_user_role` VALUES ('1', '1', '1', null, '0', '2018-08-10 16:12:22', '1', null, null);
+
+-- ----------------------------
+-- Table structure for sys_role_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_dept`;
+CREATE TABLE `sys_role_dept` (
+  `id_` bigint(20) NOT NULL COMMENT '主键ID',
+  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  `dept_id` bigint(20) NOT NULL COMMENT '部门ID',
+  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_by` bigint(20) NOT NULL COMMENT '创建人',
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_by` bigint(20) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`id_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色与部门对应关系';
+
+-- ----------------------------
+-- Records of sys_role_dept
+-- ----------------------------
+INSERT INTO `sys_role_dept` VALUES ('1', '1', '1', null, '2018-07-01 00:00:00', '1', null, null);

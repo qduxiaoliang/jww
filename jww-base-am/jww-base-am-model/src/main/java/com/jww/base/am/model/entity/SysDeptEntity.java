@@ -1,66 +1,53 @@
 package com.jww.base.am.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jww.common.core.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * <p>
- * 部门
- * </p>
+ * 部门表Entity
  *
  * @author wanyong
- * @date 2017-11-25
+ * @date 2018-01-22
  */
 @Data
 @TableName("sys_dept")
 public class SysDeptEntity extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+
     /**
-     * 隶属单位
+     * 父ID
      */
-    @TableField("unit_id")
-    private Long unitId;
+    @TableField("parent_id")
+    private Long parentId;
+
     /**
      * 部门名称
      */
     @TableField("dept_name")
     private String deptName;
+
     /**
-     * 上级部门编号
-     */
-    @TableField("parent_id")
-    private Long parentId;
-    /**
-     * 上级部门名称
-     */
-    @TableField(exist = false)
-    private String parentName;
-    /**
-     * 排序号
+     * 排序
      */
     @TableField("sort_no")
     private Integer sortNo;
+
     /**
-     * 叶子节点(0:树枝节点;1:叶子节点)
+     * 启用标识（0-启用,1-禁用）
      */
-    @TableField("leaf_")
-    private Integer leaf;
+    @ApiModelProperty(value = "启用标记（0-启用,1-禁用）", name = "isEnable")
+    private Integer isEnable;
+
     /**
-     * 是否启用
+     * 删除标记
      */
-    @TableField("enable_")
-    private Integer enable;
-    /**
-     * 是否删除(0:未删除;1:已删除)
-     */
+    @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
     @TableField("is_del")
+    @TableLogic
     private Integer isDel;
-    /**
-     * 备注
-     */
-    @TableField("remark_")
-    private String remark;
 }

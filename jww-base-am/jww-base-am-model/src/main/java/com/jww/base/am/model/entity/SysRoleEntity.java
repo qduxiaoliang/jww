@@ -1,19 +1,21 @@
 package com.jww.base.am.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.jww.common.core.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
- * <p>
- * 角色信息表
- * </p>
+ * 角色表实体
  *
- * @author waner
- * @date 2017-11-29
+ * @author wanyong
+ * @date 2017-10-29
  */
 @Data
 @TableName("sys_role")
@@ -24,41 +26,42 @@ public class SysRoleEntity extends BaseEntity {
     /**
      * 角色名称
      */
+    @NotBlank(message = "角色名称不能为空")
+    @Size(max = 16, min = 1, message = "角色名称长度16位内")
+    @Pattern(regexp = "^[A-Za-z0-9\\u4e00-\\u9fa5]+$", message = "输入值限制：中文、字母、数字")
     @TableField("role_name")
     private String roleName;
+
     /**
-     * 所属部门编号
+     * 角色编码
      */
-    @TableField("dept_id")
-    private Long deptId;
+    @TableField("role_code")
+    private String roleCode;
+
     /**
-     * 所属部门名称
+     * 角色描述
      */
-    @TableField(exist = false)
-    private String deptName;
-    /**
-     * 角色类型(1:业务角色;2:管理角色 ;3:系统内置角色)
-     */
-    @TableField("role_type")
-    private Integer roleType;
-    /**
-     * 是否启用
-     */
-    @TableField("enable_")
-    private Integer enable;
-    /**
-     * 是否删除(0:未删除;1:已删除)
-     */
-    @TableField("is_del")
-    private Integer isDel;
+    @TableField("role_desc")
+    private String roleDesc;
+
     /**
      * 备注
      */
     @TableField("remark_")
     private String remark;
+
     /**
-     * 角色对应的功能
+     * 启用标识（0-启用,1-禁用）
      */
-    @TableField(exist = false)
-    private List<Long> menuIdList;
+    @ApiModelProperty(value = "启用标记（0-启用,1-禁用）", name = "isEnable")
+    private Integer isEnable;
+
+    /**
+     * 删除标记
+     */
+    @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
+    @TableField("is_del")
+    @TableLogic
+    private Integer isDel;
+
 }
