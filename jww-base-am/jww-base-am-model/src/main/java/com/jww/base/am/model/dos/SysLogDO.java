@@ -1,8 +1,8 @@
-package com.jww.base.am.model.entity;
+package com.jww.base.am.model.dos;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.jww.common.core.base.BaseEntity;
+import com.jww.common.core.base.BaseDO;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -15,7 +15,7 @@ import java.sql.Timestamp;
  */
 @Data
 @TableName("sys_log")
-public class SysLogEntity extends BaseEntity {
+public class SysLogDO extends BaseDO {
 
     private static final long serialVersionUID = 1L;
 

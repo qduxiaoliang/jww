@@ -39,7 +39,7 @@ CREATE TABLE `sys_dept` (
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-INSERT INTO `sys_dept` VALUES ('1', '-1', null, '吉祥物流', '1', null, '2018-07-01 00:00:00', '1', '2018-07-01 00:00:00', null, '1', '0');
+INSERT INTO `sys_dept` VALUES ('1', '-1', null, 'JWW', '1', null, '2018-07-01 00:00:00', '1', '2018-07-01 00:00:00', null, '1', '0');
 
 -- ----------------------------
 -- Table structure for sys_dic
@@ -231,6 +231,7 @@ CREATE TABLE `sys_param` (
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
   `id_` bigint(20) NOT NULL COMMENT '主键',
+  `dept_id` bigint(20) NOT NULL COMMENT '部门ID',
   `role_name` varchar(16) NOT NULL COMMENT '角色名称',
   `role_code` varchar(32) NOT NULL COMMENT '角色编码',
   `role_desc` varchar(64) DEFAULT NULL COMMENT '角色描述',
@@ -247,7 +248,7 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '管理员', 'ROLE_ADMIN', '管理员', null, '2017-10-29 15:45:51', '1', '2018-04-22 11:40:29', null, '1', '0');
+INSERT INTO `sys_role` VALUES ('1', '1', '管理员', 'ROLE_ADMIN', '管理员', null, '2017-10-29 15:45:51', '1', '2018-04-22 11:40:29', null, '1', '0');
 
 -- ----------------------------
 -- Table structure for sys_role_resource
@@ -338,24 +339,3 @@ CREATE TABLE `sys_user_role` (
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user_role` VALUES ('1', '1', '1', null, '0', '2018-08-10 16:12:22', '1', null, null);
-
--- ----------------------------
--- Table structure for sys_role_dept
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_dept`;
-CREATE TABLE `sys_role_dept` (
-  `id_` bigint(20) NOT NULL COMMENT '主键ID',
-  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
-  `dept_id` bigint(20) NOT NULL COMMENT '部门ID',
-  `remark_` varchar(1024) DEFAULT NULL COMMENT '备注',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `create_by` bigint(20) NOT NULL COMMENT '创建人',
-  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `update_by` bigint(20) DEFAULT NULL COMMENT '更新人',
-  PRIMARY KEY (`id_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色与部门对应关系';
-
--- ----------------------------
--- Records of sys_role_dept
--- ----------------------------
-INSERT INTO `sys_role_dept` VALUES ('1', '1', '1', null, '2018-07-01 00:00:00', '1', null, null);

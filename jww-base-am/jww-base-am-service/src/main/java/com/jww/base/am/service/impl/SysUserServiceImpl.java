@@ -7,10 +7,10 @@ import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysRoleMapper;
 import com.jww.base.am.dao.mapper.SysUserMapper;
 import com.jww.base.am.dao.mapper.SysUserRoleMapper;
+import com.jww.base.am.model.dos.SysRoleDO;
+import com.jww.base.am.model.dos.SysUserDO;
+import com.jww.base.am.model.dos.SysUserRoleDO;
 import com.jww.base.am.model.dto.SysUserDTO;
-import com.jww.base.am.model.entity.SysRoleEntity;
-import com.jww.base.am.model.entity.SysUserEntity;
-import com.jww.base.am.model.entity.SysUserRoleEntity;
 import com.jww.base.am.service.SysUserService;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
@@ -35,7 +35,7 @@ import java.util.List;
 @Slf4j
 @Service("sysUserService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.USER)
-public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDTO> implements SysUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -45,18 +45,18 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
-    public SysUserEntity queryByUsername(String username) {
-        SysUserEntity sysUserEntity = new SysUserEntity();
-        sysUserEntity.setUserName(username);
-        sysUserEntity.setIsEnable(1);
-        QueryWrapper<SysUserEntity> entityWrapper = new QueryWrapper<>(sysUserEntity);
+    public SysUserDO queryByUsername(String username) {
+        SysUserDO sysUserDO = new SysUserDO();
+        sysUserDO.setUserName(username);
+        sysUserDO.setIsEnable(1);
+        QueryWrapper<SysUserDO> entityWrapper = new QueryWrapper<>(sysUserDO);
         return super.getOne(entityWrapper);
     }
 
     @Override
-    public IPage<SysUserEntity> queryListPage(IPage<SysUserEntity> page) {
+    public IPage<SysUserDO> queryListPage(IPage<SysUserDO> page) {
         String searchKey = page.condition() == null ? null : page.condition().get("searchKey").toString();
-        List<SysUserEntity> list = sysUserMapper.selectPage(page, searchKey);
+        List<SysUserDO> list = sysUserMapper.selectPage(page, searchKey);
         page.setRecords(list);
         return page;
     }
@@ -65,29 +65,29 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = AmConstants.AmCacheName.USER, allEntries = true)
     public boolean delBatchByIds(List<Long> ids) {
-        List<SysUserEntity> sysUserEntityList = new ArrayList<>(5);
+        List<SysUserDO> sysUserDOList = new ArrayList<>(5);
         for (Long id : ids) {
-            SysUserEntity sysUserEntity = new SysUserEntity();
-            sysUserEntity.setId(id);
-            sysUserEntity.setIsDel(1);
+            SysUserDO sysUserDO = new SysUserDO();
+            sysUserDO.setId(id);
+            sysUserDO.setIsDel(1);
 
-            sysUserEntityList.add(sysUserEntity);
+            sysUserDOList.add(sysUserDO);
 
-            SysUserRoleEntity sysUserRoleEntity = new SysUserRoleEntity();
-            sysUserRoleEntity.setIsDel(1);
-            sysUserRoleEntity.setUpdateTime(new Date());
-            sysUserRoleEntity.setUpdateBy(sysUserEntity.getCreateBy());
-            QueryWrapper<SysUserRoleEntity> wrapper = new QueryWrapper<>();
-            wrapper.eq("user_id", sysUserEntity.getId());
-            sysUserRoleMapper.update(sysUserRoleEntity, wrapper);
+            SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+            sysUserRoleDO.setIsDel(1);
+            sysUserRoleDO.setUpdateTime(new Date());
+            sysUserRoleDO.setUpdateBy(sysUserDO.getCreateBy());
+            QueryWrapper<SysUserRoleDO> wrapper = new QueryWrapper<>();
+            wrapper.eq("user_id", sysUserDO.getId());
+            sysUserRoleMapper.update(sysUserRoleDO, wrapper);
         }
-        return super.updateBatchById(sysUserEntityList);
+        return super.updateBatchById(sysUserDOList);
     }
 
     @Override
-    public List<SysRoleEntity> queryRoles(Long deptId) {
+    public List<SysRoleDO> queryRoles(Long deptId) {
         Assert.notNull(deptId);
-        QueryWrapper<SysRoleEntity> entityWrapper = new QueryWrapper<>();
+        QueryWrapper<SysRoleDO> entityWrapper = new QueryWrapper<>();
         entityWrapper.eq("dept_id", deptId);
         return sysRoleMapper.selectList(entityWrapper);
     }
@@ -95,7 +95,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
     @DistributedLock
     @CacheEvict(value = AmConstants.AmCacheName.USER, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public SysUserEntity add(SysUserDTO sysUserDTO) {
+    public SysUserDO add(SysUserDTO sysUserDTO) {
         sysUserDTO.setCreateTime(new Date());
         if (super.save(sysUserDTO)) {
             addUserRole(sysUserDTO);
@@ -104,12 +104,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
         return null;
     }
 
+    @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = AmConstants.AmCacheName.USER, allEntries = true)
-    public boolean modify(SysUserDTO sysUserDTO) {
-        SysUserRoleEntity sysUserRoleEntity = new SysUserRoleEntity();
-        sysUserRoleEntity.setUserId(sysUserDTO.getId());
-        QueryWrapper<SysUserRoleEntity> queryWrapper = new QueryWrapper<>();
+    public SysUserDTO modifyById(SysUserDTO sysUserDTO) {
+        SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+        sysUserRoleDO.setUserId(sysUserDTO.getId());
+        QueryWrapper<SysUserRoleDO> queryWrapper = new QueryWrapper<>();
         sysUserRoleMapper.delete(queryWrapper);
         addUserRole(sysUserDTO);
         return super.updateById(sysUserDTO);
@@ -117,44 +118,44 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
 
     @Override
     @Cacheable
-    public List<SysUserEntity> queryRunasList() {
-        SysUserEntity userModel = new SysUserEntity();
+    public List<SysUserDO> queryRunasList() {
+        SysUserDO userModel = new SysUserDO();
         userModel.setIsDel(0);
         userModel.setIsEnable(1);
-        QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
+        QueryWrapper<SysUserDO> wrapper = new QueryWrapper<>();
         // wrapper.setSqlSelect("id_", "user_name", "account_");
         return sysUserMapper.selectList(wrapper);
     }
 
     @Override
-    public List<SysUserRoleEntity> queryUserRoles(Long userId) {
+    public List<SysUserRoleDO> queryUserRoles(Long userId) {
         Assert.notNull(userId);
-        QueryWrapper<SysUserRoleEntity> wrapper = new QueryWrapper<>();
+        QueryWrapper<SysUserRoleDO> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
         return sysUserRoleMapper.selectList(wrapper);
     }
 
     private void addUserRole(SysUserDTO sysUserDTO) {
-        if (sysUserDTO.getRoles() != null && sysUserDTO.getRoles().length != 0) {
-            for (Long roleId : sysUserDTO.getRoles()) {
-                SysUserRoleEntity sysUserRoleEntity = new SysUserRoleEntity();
-                sysUserRoleEntity.setUserId(sysUserDTO.getId());
-                sysUserRoleEntity.setCreateTime(new Date());
-                sysUserRoleEntity.setUpdateTime(new Date());
-                sysUserRoleEntity.setCreateBy(sysUserDTO.getCreateBy());
-                sysUserRoleEntity.setUpdateBy(sysUserDTO.getCreateBy());
-                sysUserRoleEntity.setRoleId(roleId);
-                sysUserRoleMapper.insert(sysUserRoleEntity);
+        if (sysUserDTO.getRoleIds() != null && sysUserDTO.getRoleIds().length != 0) {
+            for (Long roleId : sysUserDTO.getRoleIds()) {
+                SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+                sysUserRoleDO.setUserId(sysUserDTO.getId());
+                sysUserRoleDO.setCreateTime(new Date());
+                sysUserRoleDO.setUpdateTime(new Date());
+                sysUserRoleDO.setCreateBy(sysUserDTO.getCreateBy());
+                sysUserRoleDO.setUpdateBy(sysUserDTO.getCreateBy());
+                sysUserRoleDO.setRoleId(roleId);
+                sysUserRoleMapper.insert(sysUserRoleDO);
             }
         }
     }
 
     @Override
-    public List<SysUserEntity> queryList() {
-        SysUserEntity sysUserEntity = new SysUserEntity();
-        sysUserEntity.setIsDel(0);
-        sysUserEntity.setIsEnable(1);
-        QueryWrapper<SysUserEntity> entityWrapper = new QueryWrapper<>(sysUserEntity);
+    public List<SysUserDO> queryList() {
+        SysUserDO sysUserDO = new SysUserDO();
+        sysUserDO.setIsDel(0);
+        sysUserDO.setIsEnable(1);
+        QueryWrapper<SysUserDO> entityWrapper = new QueryWrapper<>(sysUserDO);
         return super.list(entityWrapper);
     }
 }

@@ -1,6 +1,6 @@
 package com.jww.base.am.model.dto;
 
-import com.jww.base.am.model.entity.SysUserEntity;
+import com.jww.base.am.model.dos.SysUserDO;
 import lombok.Data;
 
 /**
@@ -10,7 +10,7 @@ import lombok.Data;
  * @date 2018-11-7 11:21
  */
 @Data
-public class SysUserDTO extends SysUserEntity {
+public class SysUserDTO extends SysUserDO {
 
     /**
      * 角色

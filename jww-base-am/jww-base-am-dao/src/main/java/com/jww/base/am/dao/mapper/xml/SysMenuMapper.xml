@@ -3,7 +3,7 @@
 <mapper namespace="com.jww.base.am.dao.mapper.SysMenuMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.jww.base.am.model.entity.SysMenuEntity">
+    <resultMap id="BaseResultMap" type="com.jww.base.am.model.dos.SysMenuEntity">
         <result column="id_" property="id"/>
         <result column="remark_" property="remark"/>
         <result column="enable_" property="enable"/>

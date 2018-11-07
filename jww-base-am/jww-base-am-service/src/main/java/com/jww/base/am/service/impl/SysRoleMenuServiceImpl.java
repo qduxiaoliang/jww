@@ -2,7 +2,7 @@ package com.jww.base.am.service.impl;
 
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.base.am.dao.mapper.SysRoleMenuMapper;
-import com.jww.base.am.model.entity.SysRoleMenuEntity;
+import com.jww.base.am.model.dos.SysRoleMenuEntity;
 import com.jww.base.am.service.SysRoleMenuService;
 import org.springframework.stereotype.Service;
 

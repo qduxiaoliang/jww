@@ -1,9 +1,9 @@
-package com.jww.base.am.model.entity;
+package com.jww.base.am.model.dos;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.jww.common.core.base.BaseEntity;
+import com.jww.common.core.base.BaseDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_dept")
-public class SysDeptEntity extends BaseEntity {
+public class SysDeptDO extends BaseDO {
 
     private static final long serialVersionUID = 1L;
 

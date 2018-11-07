@@ -8,8 +8,8 @@ import com.jww.base.am.service.SysDeptService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDeptMapper;
 import com.jww.base.am.dao.mapper.SysTreeMapper;
-import com.jww.base.am.model.entity.SysDeptEntity;
-import com.jww.base.am.model.entity.SysTreeEntity;
+import com.jww.base.am.model.dos.SysDeptDO;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
@@ -31,7 +31,7 @@ import java.util.List;
 @Slf4j
 @Service("sysDeptService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.DEPT)
-public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEntity> implements SysDeptService {
+public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptDO> implements SysDeptService {
 
     @Autowired
     private SysDeptMapper sysDeptMapper;
@@ -41,42 +41,42 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     @Override
     @CachePut
     @DistributedLock(value = "#sysDeptModel.getParentId()")
-    public SysDeptEntity addDept(SysDeptEntity sysDeptEntity) {
-        QueryWrapper<SysDeptEntity> wrapper = new QueryWrapper<>();
-        wrapper.eq("parent_id", sysDeptEntity.getParentId());
-        wrapper.eq("dept_name", sysDeptEntity.getDeptName());
+    public SysDeptDO addDept(SysDeptDO sysDeptDO) {
+        QueryWrapper<SysDeptDO> wrapper = new QueryWrapper<>();
+        wrapper.eq("parent_id", sysDeptDO.getParentId());
+        wrapper.eq("dept_name", sysDeptDO.getDeptName());
         wrapper.eq("is_del", 0);
-        List<SysDeptEntity> deptModelList = sysDeptMapper.selectList(wrapper);
+        List<SysDeptDO> deptModelList = sysDeptMapper.selectList(wrapper);
         if (ObjectUtil.isNotNull(super.getOne(wrapper))) {
             throw new BusinessException("同级部门名称不能重复");
         }
-        sysDeptEntity.setUnitId(Long.valueOf(1));
+        sysDeptDO.setUnitId(Long.valueOf(1));
         Date now = new Date();
-        sysDeptEntity.setCreateTime(now);
-        sysDeptEntity.setUpdateTime(now);
-        if (sysDeptEntity.getParentId() == null) {
-            sysDeptEntity.setParentId(0L);
+        sysDeptDO.setCreateTime(now);
+        sysDeptDO.setUpdateTime(now);
+        if (sysDeptDO.getParentId() == null) {
+            sysDeptDO.setParentId(0L);
         }
-        return super.add(sysDeptEntity);
+        return super.add(sysDeptDO);
     }
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.DEPT, allEntries = true)
-    public SysDeptEntity modifyById(SysDeptEntity sysDeptEntity) {
-        return super.modifyById(sysDeptEntity);
+    public SysDeptDO modifyById(SysDeptDO sysDeptDO) {
+        return super.modifyById(sysDeptDO);
     }
 
     @Override
-    public IPage<SysDeptEntity> queryListPage(IPage<SysDeptEntity> page) {
+    public IPage<SysDeptDO> queryListPage(IPage<SysDeptDO> page) {
         String deptName = page.condition() == null ? null : page.condition().get("dept_name").toString();
-        List<SysDeptEntity> list = sysDeptMapper.selectPage(page, deptName);
+        List<SysDeptDO> list = sysDeptMapper.selectPage(page, deptName);
         page.setRecords(list);
         return page;
     }
 
     @Override
     @Cacheable
-    public SysDeptEntity queryOne(Long id) {
+    public SysDeptDO queryOne(Long id) {
         return sysDeptMapper.selectOne(id);
     }
 
@@ -101,7 +101,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     }
 
     @Override
-    public List<SysTreeEntity> queryTree() {
+    public List<TreeDTO> queryTree() {
         return this.queryTree(null);
     }
 
@@ -109,9 +109,9 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
 
     @Override
     @Cacheable
-    public List<SysTreeEntity> queryTree(Long id) {
-        List<SysTreeEntity> sysTreeEntityList = sysTreeMapper.selectDeptTree(id);
-        return SysTreeEntity.getTree(sysTreeEntityList);
+    public List<TreeDTO> queryTree(Long id) {
+        List<TreeDTO> treeDTOList = sysTreeMapper.selectDeptTree(id);
+        return TreeDTO.getTree(treeDTOList);
     }
 
     @Override
@@ -123,11 +123,11 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
             throw new BusinessException("必须先删除子部门");
         }
         boolean result = false;
-        SysDeptEntity sysDeptEntity = new SysDeptEntity();
-        sysDeptEntity.setId(id);
-        sysDeptEntity.setIsDel(1);
-        sysDeptEntity = super.modifyById(sysDeptEntity);
-        if (sysDeptEntity != null) {
+        SysDeptDO sysDeptDO = new SysDeptDO();
+        sysDeptDO.setId(id);
+        sysDeptDO.setIsDel(1);
+        sysDeptDO = super.modifyById(sysDeptDO);
+        if (sysDeptDO != null) {
             result = true;
         }
         return result;
@@ -135,9 +135,9 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
 
     @Override
     @Cacheable
-    public List<SysDeptEntity> querySubDept(Long id) {
+    public List<SysDeptDO> querySubDept(Long id) {
         Assert.notNull(id);
-        QueryWrapper<SysDeptEntity> wrapper = new QueryWrapper<>();
+        QueryWrapper<SysDeptDO> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", id);
         wrapper.eq("is_del", 0);
         return sysDeptMapper.selectList(wrapper);
@@ -146,7 +146,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     @Override
     public int querySubDeptCount(Long id) {
         Assert.notNull(id);
-        QueryWrapper<SysDeptEntity> wrapper = new QueryWrapper<>();
+        QueryWrapper<SysDeptDO> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", id);
         wrapper.eq("is_del", 0);
         return sysDeptMapper.selectCount(wrapper);
@@ -155,7 +155,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptEn
     @Override
     public int querySubDeptCount(Long[] ids) {
         Assert.notNull(ids);
-        QueryWrapper<SysDeptEntity> wrapper = new QueryWrapper<>();
+        QueryWrapper<SysDeptDO> wrapper = new QueryWrapper<>();
         wrapper.in("parent_id", ids);
         wrapper.eq("is_del", 0);
         return sysDeptMapper.selectCount(wrapper);

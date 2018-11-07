@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jww.base.am.dao.mapper.SysDeptMapper">
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.jww.base.am.model.entity.SysDeptEntity">
+    <resultMap id="BaseResultMap" type="com.jww.base.am.model.dos.SysDeptDO">
         <result column="id_" property="id"/>
         <result column="is_del" property="isDel"/>
         <result column="enable_" property="enable"/>

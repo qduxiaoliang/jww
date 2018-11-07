@@ -1,7 +1,7 @@
 package com.jww.base.am.dao.mapper;
 
 import com.jww.common.core.base.BaseMapper;
-import com.jww.base.am.model.entity.SysRoleMenuEntity;
+import com.jww.base.am.model.dos.SysRoleMenuEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -5,8 +5,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.common.AmConstants;
-import com.jww.base.am.model.entity.SysUserEntity;
-import com.jww.base.am.model.entity.SysUserRoleEntity;
+import com.jww.base.am.model.dos.SysUserDO;
+import com.jww.base.am.model.dos.SysUserRoleDO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysUserService;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -56,9 +56,9 @@ public class SysUserController extends BaseController {
     // @RequiresPermissions("sys:user:read")
     public ResultDTO query(@PathVariable(value = "id") Long id) {
         Assert.notNull(id);
-        SysUserEntity sysUserEntity = sysUserService.queryOne(id);
-        sysUserEntity.setPassword(null);
-        return ResultUtil.ok(sysUserEntity);
+        SysUserDO sysUserDO = sysUserService.queryOne(id);
+        sysUserDO.setPassword(null);
+        return ResultUtil.ok(sysUserDO);
     }
 
     /**
@@ -80,8 +80,8 @@ public class SysUserController extends BaseController {
     public ResultDTO querySelectUsers() {
         Long currentUserId = super.getCurrentUserId();
         if (!AmConstants.USERID_ADMIN.equals(currentUserId)) {
-            List<SysUserEntity> list = new ArrayList<>();
-            list.add((SysUserEntity) super.getCurrentUser());
+            List<SysUserDO> list = new ArrayList<>();
+            list.add((SysUserDO) super.getCurrentUser());
             return ResultUtil.ok(list);
         }
         return ResultUtil.ok(sysUserService.queryList());
@@ -105,7 +105,7 @@ public class SysUserController extends BaseController {
     /**
      * 新增用户
      *
-     * @param sysUserEntity 用户实体
+     * @param sysUserDO 用户实体
      * @return ResultDTO
      * @author wanyong
      * @date 2017-12-03 10:18
@@ -114,19 +114,19 @@ public class SysUserController extends BaseController {
     @PostMapping("/add")
     // @RequiresPermissions("sys:user:add")
     @SysLogOpt(module = "用户管理", value = "用户新增", operationType = LogOptEnum.ADD)
-    public ResultDTO add(@Valid @RequestBody SysUserEntity sysUserEntity) {
-        SysUserEntity existSysUserEntity = sysUserService.queryByAccount(sysUserEntity.getAccount());
-        if (ObjectUtil.isNotNull(existSysUserEntity)) {
+    public ResultDTO add(@Valid @RequestBody SysUserDO sysUserDO) {
+        SysUserDO existSysUserDO = sysUserService.queryByAccount(sysUserDO.getAccount());
+        if (ObjectUtil.isNotNull(existSysUserDO)) {
             throw new BusinessException("已存在相同账号的用户");
         }
-        if (StrUtil.isBlank(sysUserEntity.getPassword()) || !AmConstants.USERID_ADMIN.equals(super.getCurrentUserId())) {
+        if (StrUtil.isBlank(sysUserDO.getPassword()) || !AmConstants.USERID_ADMIN.equals(super.getCurrentUserId())) {
             // 设置初始密码: 123456
-            sysUserEntity.setPassword(SecurityUtil.encryptPassword("123456"));
+            sysUserDO.setPassword(SecurityUtil.encryptPassword("123456"));
         } else {
-            sysUserEntity.setPassword(SecurityUtil.encryptPassword(sysUserEntity.getPassword()));
+            sysUserDO.setPassword(SecurityUtil.encryptPassword(sysUserDO.getPassword()));
         }
-        sysUserEntity.setCreateBy(super.getCurrentUserId());
-        sysUserService.add(sysUserEntity);
+        sysUserDO.setCreateBy(super.getCurrentUserId());
+        sysUserService.add(sysUserDO);
         return ResultUtil.ok();
     }
 
@@ -152,7 +152,7 @@ public class SysUserController extends BaseController {
     /**
      * 修改用户
      *
-     * @param sysUserEntity 用户实体
+     * @param sysUserDO 用户实体
      * @return ResultDTO
      * @author wanyong
      * @date 2018-01-04 11:33
@@ -161,22 +161,22 @@ public class SysUserController extends BaseController {
     @PostMapping("/modify")
     // @RequiresPermissions("sys:user:update")
     @SysLogOpt(module = "用户管理", value = "用户修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modify(@RequestBody SysUserEntity sysUserEntity) {
-        sysUserEntity.setCreateBy(super.getCurrentUserId());
-        sysUserEntity.setUpdateTime(new Date());
-        sysUserEntity.setAccount(null);
-        if (StrUtil.isNotBlank(sysUserEntity.getPassword()) && AmConstants.USERID_ADMIN.equals(super.getCurrentUserId())) {
-            sysUserEntity.setPassword(SecurityUtil.encryptPassword(sysUserEntity.getPassword()));
+    public ResultDTO modify(@RequestBody SysUserDO sysUserDO) {
+        sysUserDO.setCreateBy(super.getCurrentUserId());
+        sysUserDO.setUpdateTime(new Date());
+        sysUserDO.setAccount(null);
+        if (StrUtil.isNotBlank(sysUserDO.getPassword()) && AmConstants.USERID_ADMIN.equals(super.getCurrentUserId())) {
+            sysUserDO.setPassword(SecurityUtil.encryptPassword(sysUserDO.getPassword()));
         } else {
-            sysUserEntity.setPassword(null);
+            sysUserDO.setPassword(null);
         }
-        return ResultUtil.ok(sysUserService.modify(sysUserEntity));
+        return ResultUtil.ok(sysUserService.modify(sysUserDO));
     }
 
     /**
      * 个人资料修改
      *
-     * @param sysUserEntity 用户实体
+     * @param sysUserDO 用户实体
      * @return ResultDTO
      * @author wanyong
      * @date 2018-01-04 11:33
@@ -184,15 +184,15 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "修改个人资料", notes = "根据用户ID修改用户个人资料")
     @PostMapping("/modifyMySelf")
     @SysLogOpt(module = "用户管理", value = "个人资料修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modifyMySelf(@RequestBody SysUserEntity sysUserEntity) {
+    public ResultDTO modifyMySelf(@RequestBody SysUserDO sysUserDO) {
         // if (!sysUserEntity.getId().equals(WebUtil.getCurrentUserId())) {
-        if (!sysUserEntity.getId().equals(null)) {
+        if (!sysUserDO.getId().equals(null)) {
             throw new BusinessException("不能修改其他用户信息");
         }
-        sysUserEntity.setCreateBy(super.getCurrentUserId());
-        sysUserEntity.setUpdateTime(new Date());
-        sysUserEntity.setAccount(null);
-        return ResultUtil.ok(sysUserService.modifyById(sysUserEntity));
+        sysUserDO.setCreateBy(super.getCurrentUserId());
+        sysUserDO.setUpdateTime(new Date());
+        sysUserDO.setAccount(null);
+        return ResultUtil.ok(sysUserService.modifyById(sysUserDO));
     }
 
     /**
@@ -208,14 +208,14 @@ public class SysUserController extends BaseController {
     // @RequiresPermissions("sys:user:read")
     public ResultDTO queryUserRoles(@PathVariable(value = "userId") Long userId) {
         Assert.notNull(userId);
-        List<SysUserRoleEntity> list = sysUserService.queryUserRoles(userId);
+        List<SysUserRoleDO> list = sysUserService.queryUserRoles(userId);
         return ResultUtil.ok(list);
     }
 
     /**
      * 修改密码
      *
-     * @param sysUserEntity 用户实体
+     * @param sysUserDO 用户实体
      * @return ResultDTO
      * @author wanyong
      * @date 2017/12/30 22:18
@@ -224,19 +224,19 @@ public class SysUserController extends BaseController {
     @PostMapping("/modifyPassword")
     // @RequiresPermissions("sys:user:update")
     @SysLogOpt(module = "用户管理", value = "修改密码", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modifyPassword(@RequestBody SysUserEntity sysUserEntity) {
-        Assert.notEmpty(sysUserEntity.getOldPassword());
-        Assert.notEmpty(sysUserEntity.getPassword());
-        String encryptOldPassword = SecurityUtil.encryptPassword(sysUserEntity.getOldPassword());
-        SysUserEntity currentSysUserEntity = sysUserService.getById(super.getCurrentUserId());
-        if (!encryptOldPassword.equals(currentSysUserEntity.getPassword())) {
+    public ResultDTO modifyPassword(@RequestBody SysUserDO sysUserDO) {
+        Assert.notEmpty(sysUserDO.getOldPassword());
+        Assert.notEmpty(sysUserDO.getPassword());
+        String encryptOldPassword = SecurityUtil.encryptPassword(sysUserDO.getOldPassword());
+        SysUserDO currentSysUserDO = sysUserService.getById(super.getCurrentUserId());
+        if (!encryptOldPassword.equals(currentSysUserDO.getPassword())) {
             throw new BusinessException("旧密码不正确");
         }
-        String encryptPassword = SecurityUtil.encryptPassword(sysUserEntity.getPassword());
-        sysUserEntity.setPassword(encryptPassword);
-        sysUserEntity.setId(super.getCurrentUserId());
-        sysUserEntity.setAccount(null);
-        return ResultUtil.ok(sysUserService.modifyById(sysUserEntity));
+        String encryptPassword = SecurityUtil.encryptPassword(sysUserDO.getPassword());
+        sysUserDO.setPassword(encryptPassword);
+        sysUserDO.setId(super.getCurrentUserId());
+        sysUserDO.setAccount(null);
+        return ResultUtil.ok(sysUserService.modifyById(sysUserDO));
     }
 
 }

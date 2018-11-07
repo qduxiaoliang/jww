@@ -1,8 +1,8 @@
 package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.entity.SysMenuEntity;
-import com.jww.base.am.model.entity.SysTreeEntity;
+import com.jww.base.am.model.dos.SysMenuEntity;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.common.core.base.BaseService;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
      * @author wanyong
      * @date 2017-12-03 00:56
      */
-    List<SysTreeEntity> queryMenuTreeByUserId(Long userId);
+    List<TreeDTO> queryMenuTreeByUserId(Long userId);
 
     /**
      * 查找功能菜单树（包含目录、菜单和按钮）
@@ -53,7 +53,7 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
      * @author wanyong
      * @date 2017-12-19 11:14
      */
-    List<SysTreeEntity> queryFuncMenuTree();
+    List<TreeDTO> queryFuncMenuTree();
 
     /**
      * 根据角色ID查找功能菜单树（包含目录、菜单和按钮）
@@ -63,7 +63,7 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
      * @author wanyong
      * @date 2017-12-19 11:14
      */
-    List<SysTreeEntity> queryFuncMenuTree(Long roleId);
+    List<TreeDTO> queryFuncMenuTree(Long roleId);
 
     /**
      * 查询菜单树，供页面选择父菜单使用，过滤自己及子菜单
@@ -74,7 +74,7 @@ public interface SysMenuService extends BaseService<SysMenuEntity> {
      * @author shadj
      * @date 2017/12/22 22:59
      */
-    List<SysTreeEntity> queryTree(Long id, Integer menuType);
+    List<TreeDTO> queryTree(Long id, Integer menuType);
 
     /**
      * 删除单个菜单（设置删除状态为是）

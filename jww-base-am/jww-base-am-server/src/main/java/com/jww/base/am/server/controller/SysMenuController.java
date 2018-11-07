@@ -3,8 +3,8 @@ package com.jww.base.am.server.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.entity.SysMenuEntity;
-import com.jww.base.am.model.entity.SysTreeEntity;
+import com.jww.base.am.model.dos.SysMenuEntity;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysMenuService;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -192,7 +192,7 @@ public class SysMenuController extends BaseController {
     @PostMapping("/roleFuncTree")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryFuncMenuTree(@RequestBody Long roleId) {
-        List<SysTreeEntity> treeModelList = sysMenuService.queryFuncMenuTree(roleId);
+        List<TreeDTO> treeModelList = sysMenuService.queryFuncMenuTree(roleId);
         return ResultUtil.ok(treeModelList);
     }
 
@@ -207,7 +207,7 @@ public class SysMenuController extends BaseController {
     @PostMapping("/funcTree")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryFuncMenuTree() {
-        List<SysTreeEntity> treeModelList = sysMenuService.queryFuncMenuTree(null);
+        List<TreeDTO> treeModelList = sysMenuService.queryFuncMenuTree(null);
         return ResultUtil.ok(treeModelList);
     }
 
@@ -224,7 +224,7 @@ public class SysMenuController extends BaseController {
     @GetMapping("/queryTree/{menuType}/{menuId}")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryTree(@PathVariable(required = false, value = "menuType") Integer menuType, @PathVariable(value = "menuId") Long menuId) {
-        List<SysTreeEntity> list = sysMenuService.queryTree(menuId, menuType);
+        List<TreeDTO> list = sysMenuService.queryTree(menuId, menuType);
         return ResultUtil.ok(list);
     }
 
@@ -240,7 +240,7 @@ public class SysMenuController extends BaseController {
     @GetMapping("/queryTree/{menuType}")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryTree(@PathVariable(required = false, value = "menuType") Integer menuType) {
-        List<SysTreeEntity> list = sysMenuService.queryTree(null, menuType);
+        List<TreeDTO> list = sysMenuService.queryTree(null, menuType);
         return ResultUtil.ok(list);
     }
 }

@@ -1,9 +1,9 @@
-package com.jww.base.am.model.entity;
+package com.jww.base.am.model.dos;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.jww.common.core.base.BaseEntity;
+import com.jww.common.core.base.BaseDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @TableName("sys_user_role")
-public class SysUserRoleEntity extends BaseEntity {
+public class SysUserRoleDO extends BaseDO {
 
     private static final long serialVersionUID = 1L;
 

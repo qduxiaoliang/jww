@@ -1,8 +1,8 @@
 package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.entity.SysDeptEntity;
-import com.jww.base.am.model.entity.SysTreeEntity;
+import com.jww.base.am.model.dos.SysDeptDO;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.common.core.base.BaseService;
 
 import java.util.List;
@@ -13,27 +13,27 @@ import java.util.List;
  * @author Ricky Wang
  * @date 2017-12-27 12:02
  */
-public interface SysDeptService extends BaseService<SysDeptEntity> {
+public interface SysDeptService extends BaseService<SysDeptDO> {
 
     /**
      * 新增部门
      *
-     * @param sysDeptEntity
+     * @param sysDeptDO
      * @return com.jww.ump.SysDeptModel
      * @author RickyWang
      * @date 18/1/1 15:04:47
      */
-    SysDeptEntity addDept(SysDeptEntity sysDeptEntity);
+    SysDeptDO addDept(SysDeptDO sysDeptDO);
 
     /**
      * 修改部门
      *
-     * @param sysDeptEntity
+     * @param sysDeptDO
      * @return boolean
      * @author RickyWang
      * @date 18/1/1 15:05:10
      */
-    SysDeptEntity modifyById(SysDeptEntity sysDeptEntity);
+    SysDeptDO modifyById(SysDeptDO sysDeptDO);
 
     /**
      * 分页查询部门
@@ -43,7 +43,7 @@ public interface SysDeptService extends BaseService<SysDeptEntity> {
      * @author RickyWang
      * @date 18/1/1 15:05:30
      */
-    IPage<SysDeptEntity> queryListPage(IPage<SysDeptEntity> page);
+    IPage<SysDeptDO> queryListPage(IPage<SysDeptDO> page);
 
     /**
      * 查询单个部门
@@ -53,7 +53,7 @@ public interface SysDeptService extends BaseService<SysDeptEntity> {
      * @author RickyWang
      * @date 18/1/1 15:05:53
      */
-    public SysDeptEntity queryOne(Long id);
+    public SysDeptDO queryOne(Long id);
 
     /**
      * 批量删除部门
@@ -72,7 +72,7 @@ public interface SysDeptService extends BaseService<SysDeptEntity> {
      * @author RickyWang
      * @date 18/1/1 15:06:33
      */
-    public List<SysTreeEntity> queryTree();
+    public List<TreeDTO> queryTree();
 
     /**
      * 查询部门数，过滤该id下所有部门
@@ -82,7 +82,7 @@ public interface SysDeptService extends BaseService<SysDeptEntity> {
      * @author RickyWang
      * @date 18/1/1 15:06:33
      */
-    public List<SysTreeEntity> queryTree(Long id);
+    public List<TreeDTO> queryTree(Long id);
 
     /**
      * 删除部门
@@ -102,7 +102,7 @@ public interface SysDeptService extends BaseService<SysDeptEntity> {
      * @author RickyWang
      * @date 18/1/1 15:08:09
      */
-    public List<SysDeptEntity> querySubDept(Long id);
+    public List<SysDeptDO> querySubDept(Long id);
 
     /**
      * 查询子部门数量

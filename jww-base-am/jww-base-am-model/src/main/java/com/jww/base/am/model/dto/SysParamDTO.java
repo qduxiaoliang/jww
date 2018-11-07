@@ -1,6 +1,6 @@
 package com.jww.base.am.model.dto;
 
-import com.jww.base.am.model.entity.SysParamEntity;
+import com.jww.base.am.model.dos.SysParamDO;
 
 /**
  * 参数传输实体
@@ -8,5 +8,5 @@ import com.jww.base.am.model.entity.SysParamEntity;
  * @author wanyong
  * @date 2018-11-7 11:21
  */
-public class SysParamDTO extends SysParamEntity {
+public class SysParamDTO extends SysParamDO {
 }

@@ -1,6 +1,6 @@
 package com.jww.base.am.dao.mapper;
 
-import com.jww.base.am.model.entity.SysTreeEntity;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.common.core.base.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @author wangyuxin
  * @since 2017-12-14
  */
-public interface SysTreeMapper extends BaseMapper<SysTreeEntity> {
+public interface SysTreeMapper extends BaseMapper<TreeDTO> {
 
     /**
      * 查询部门树
@@ -24,7 +24,7 @@ public interface SysTreeMapper extends BaseMapper<SysTreeEntity> {
      * @author RickyWang
      * @date 18/1/1 15:10:01
      */
-    List<SysTreeEntity> selectDeptTree(@Param("id") Long id);
+    List<TreeDTO> selectDeptTree(@Param("id") Long id);
 
     /**
      * 查询菜单树
@@ -35,5 +35,5 @@ public interface SysTreeMapper extends BaseMapper<SysTreeEntity> {
      * @author RickyWang
      * @date 18/1/1 15:10:21
      */
-    List<SysTreeEntity> selectMenuTree(@Param("id") Long id, @Param("menuType") Integer menuType);
+    List<TreeDTO> selectMenuTree(@Param("id") Long id, @Param("menuType") Integer menuType);
 }

@@ -1,6 +1,6 @@
 package com.jww.base.am.model.dto;
 
-import com.jww.base.am.model.entity.SysLogEntity;
+import com.jww.base.am.model.dos.SysLogDO;
 
 /**
  * 日志传输实体
@@ -8,5 +8,5 @@ import com.jww.base.am.model.entity.SysLogEntity;
  * @author wanyong
  * @date 2018-11-7 11:21
  */
-public class SysLogDTO extends SysLogEntity {
+public class SysLogDTO extends SysLogDO {
 }

@@ -2,8 +2,8 @@ package com.jww.base.am.server.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.entity.SysDeptEntity;
-import com.jww.base.am.model.entity.SysTreeEntity;
+import com.jww.base.am.model.dos.SysDeptDO;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysDeptService;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -48,8 +48,8 @@ public class SysDeptController extends BaseController {
     // @RequiresPermissions("sys:dept:read")
     public ResultDTO query(@PathVariable Long id) {
         Assert.notNull(id);
-        SysDeptEntity sysDeptEntity = sysDeptService.queryOne(id);
-        return ResultUtil.ok(sysDeptEntity);
+        SysDeptDO sysDeptDO = sysDeptService.queryOne(id);
+        return ResultUtil.ok(sysDeptDO);
     }
 
     /**
@@ -63,7 +63,7 @@ public class SysDeptController extends BaseController {
     @ApiOperation(value = "分页查询部门列表", notes = "根据分页参数查询部门列表")
     @PostMapping("/queryListPage")
     // @RequiresPermissions("sys:dept:read")
-    public ResultDTO queryListPage(@RequestBody IPage<SysDeptEntity> pageModel) {
+    public ResultDTO queryListPage(@RequestBody IPage<SysDeptDO> pageModel) {
         pageModel = sysDeptService.queryListPage(pageModel);
         return ResultUtil.ok(pageModel);
     }
@@ -71,7 +71,7 @@ public class SysDeptController extends BaseController {
     /**
      * 新增部门方法
      *
-     * @param sysDeptEntity 部门实体
+     * @param sysDeptDO 部门实体
      * @return com.jww.common.web.model.dto.ResultDTO
      * @author RickyWang
      * @date 17/12/25 21:28:41
@@ -80,18 +80,18 @@ public class SysDeptController extends BaseController {
     @PostMapping("/add")
     // @RequiresPermissions("sys:dept:add")
     @SysLogOpt(module = "部门管理", value = "部门新增", operationType = LogOptEnum.ADD)
-    public ResultDTO add(@Valid @RequestBody SysDeptEntity sysDeptEntity) {
-        if (sysDeptEntity != null) {
-            sysDeptEntity.setCreateBy(super.getCurrentUserId());
-            sysDeptEntity.setUpdateBy(super.getCurrentUserId());
+    public ResultDTO add(@Valid @RequestBody SysDeptDO sysDeptDO) {
+        if (sysDeptDO != null) {
+            sysDeptDO.setCreateBy(super.getCurrentUserId());
+            sysDeptDO.setUpdateBy(super.getCurrentUserId());
         }
-        return ResultUtil.ok(sysDeptService.addDept(sysDeptEntity));
+        return ResultUtil.ok(sysDeptService.addDept(sysDeptDO));
     }
 
     /**
      * 修改部门方法
      *
-     * @param sysDeptEntity 部门实体
+     * @param sysDeptDO 部门实体
      * @return com.jww.common.web.model.dto.ResultDTO
      * @author RickyWang
      * @date 17/12/25 21:29:09
@@ -100,10 +100,10 @@ public class SysDeptController extends BaseController {
     @PutMapping("/modify")
     // @RequiresPermissions("sys:dept:update")
     @SysLogOpt(module = "部门管理", value = "部门修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modify(@RequestBody SysDeptEntity sysDeptEntity) {
-        sysDeptEntity.setUpdateBy(super.getCurrentUserId());
-        sysDeptEntity.setUpdateTime(new Date());
-        sysDeptService.modifyById(sysDeptEntity);
+    public ResultDTO modify(@RequestBody SysDeptDO sysDeptDO) {
+        sysDeptDO.setUpdateBy(super.getCurrentUserId());
+        sysDeptDO.setUpdateTime(new Date());
+        sysDeptService.modifyById(sysDeptDO);
         return ResultUtil.ok();
     }
 
@@ -136,7 +136,7 @@ public class SysDeptController extends BaseController {
     @GetMapping("/queryTree/{id}")
     // @RequiresPermissions("sys:dept:read")
     public ResultDTO queryTree(@PathVariable(value = "id", required = false) Long id) {
-        List<SysTreeEntity> list = sysDeptService.queryTree(id);
+        List<TreeDTO> list = sysDeptService.queryTree(id);
         return ResultUtil.ok(list);
     }
 
@@ -151,7 +151,7 @@ public class SysDeptController extends BaseController {
     @GetMapping("/queryTree")
     // @RequiresPermissions("sys:dept:read")
     public ResultDTO queryTree() {
-        List<SysTreeEntity> list = sysDeptService.queryTree();
+        List<TreeDTO> list = sysDeptService.queryTree();
         return ResultUtil.ok(list);
     }
 

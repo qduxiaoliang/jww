@@ -1,65 +1,48 @@
-package com.jww.base.am.model.entity;
+package com.jww.base.am.model.dos;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.jww.common.core.base.BaseEntity;
+import com.jww.common.core.base.BaseDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 /**
- * 字典表Entity
+ * 角色表实体
  *
  * @author wanyong
- * @date 2018-01-22
+ * @date 2017-10-29
  */
 @Data
-@TableName("sys_dic")
-public class SysDicEntity extends BaseEntity {
+@TableName("sys_role")
+public class SysRoleDO extends BaseDO {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 类型
+     * 角色名称
      */
-    @TableField("type_")
-    private String type;
+    @NotBlank(message = "角色名称不能为空")
+    @Size(max = 16, min = 1, message = "角色名称长度16位内")
+    @Pattern(regexp = "^[A-Za-z0-9\\u4e00-\\u9fa5]+$", message = "输入值限制：中文、字母、数字")
+    @TableField("role_name")
+    private String roleName;
 
     /**
-     * 字典类型名称
+     * 角色编码
      */
-    @TableField("type_name")
-    private String typeName;
+    @TableField("role_code")
+    private String roleCode;
 
     /**
-     * 数据值
+     * 角色描述
      */
-    @TableField("code_")
-    private Long code;
-
-    /**
-     * 数据值名称
-     */
-    @TableField("code_name")
-    private Long codeName;
-
-    /**
-     * 排序（升序）
-     */
-    @TableField("sort_no")
-    private Long sortNo;
-
-    /**
-     * 父id
-     */
-    @TableField("parent_id")
-    private Long parentId;
-
-    /**
-     * 是否可编辑（0:不可编辑/1:可编辑）
-     */
-    @TableField("is_editable")
-    private Long isEditable;
+    @TableField("role_desc")
+    private String roleDesc;
 
     /**
      * 备注
@@ -80,4 +63,5 @@ public class SysDicEntity extends BaseEntity {
     @TableField("is_del")
     @TableLogic
     private Integer isDel;
+
 }

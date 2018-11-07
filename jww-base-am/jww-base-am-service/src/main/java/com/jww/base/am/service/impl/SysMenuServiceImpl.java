@@ -14,8 +14,8 @@ import com.jww.base.am.common.AmConstants.AmCacheName;
 import com.jww.base.am.dao.mapper.SysMenuMapper;
 import com.jww.base.am.dao.mapper.SysRoleMenuMapper;
 import com.jww.base.am.dao.mapper.SysTreeMapper;
-import com.jww.base.am.model.entity.SysMenuEntity;
-import com.jww.base.am.model.entity.SysTreeEntity;
+import com.jww.base.am.model.dos.SysMenuEntity;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
 import com.jww.common.core.exception.BusinessException;
@@ -94,7 +94,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
 
     @Override
     @Cacheable
-    public List<SysTreeEntity> queryMenuTreeByUserId(Long userId) {
+    public List<TreeDTO> queryMenuTreeByUserId(Long userId) {
         List<SysMenuEntity> sysMenuEntityList = null;
         // 如果是超级管理员，则查询所有目录菜单
         if (AmConstants.USERID_ADMIN.equals(userId)) {
@@ -114,14 +114,14 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
 
     @Override
     @Cacheable
-    public List<SysTreeEntity> queryFuncMenuTree() {
+    public List<TreeDTO> queryFuncMenuTree() {
         List<SysMenuEntity> sysMenuEntityList = queryList();
         return convertTreeData(sysMenuEntityList, null);
     }
 
     @Override
     @Cacheable(value = AmCacheName.ROLE)
-    public List<SysTreeEntity> queryFuncMenuTree(Long roleId) {
+    public List<TreeDTO> queryFuncMenuTree(Long roleId) {
         List<SysMenuEntity> sysMenuEntityList = queryList();
         List<Long> menuIdList = sysRoleMenuMapper.selectMenuIdListByRoleId(roleId);
         System.out.println("menuIdList:" + JSON.toJSONString(menuIdList));
@@ -130,9 +130,9 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
 
     @Override
     @Cacheable
-    public List<SysTreeEntity> queryTree(Long id, Integer menuType) {
-        List<SysTreeEntity> sysTreeEntityList = sysTreeMapper.selectMenuTree(id, menuType);
-        List<SysTreeEntity> list = SysTreeEntity.getTree(sysTreeEntityList);
+    public List<TreeDTO> queryTree(Long id, Integer menuType) {
+        List<TreeDTO> treeDTOList = sysTreeMapper.selectMenuTree(id, menuType);
+        List<TreeDTO> list = TreeDTO.getTree(treeDTOList);
         return list;
     }
 
@@ -236,22 +236,22 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
      * @author wanyong
      * @date 2017-12-19 10:55
      */
-    private List<SysTreeEntity> convertTreeData(List<SysMenuEntity> sysMenuEntityList, Object[] checkedMenuIds) {
-        Map<Long, List<SysTreeEntity>> map = new HashMap<>(3);
+    private List<TreeDTO> convertTreeData(List<SysMenuEntity> sysMenuEntityList, Object[] checkedMenuIds) {
+        Map<Long, List<TreeDTO>> map = new HashMap<>(3);
         for (SysMenuEntity sysMenuEntity : sysMenuEntityList) {
             if (sysMenuEntity != null && map.get(sysMenuEntity.getParentId()) == null) {
-                List<SysTreeEntity> children = new ArrayList<>();
+                List<TreeDTO> children = new ArrayList<>();
                 map.put(sysMenuEntity.getParentId(), children);
             }
             map.get(sysMenuEntity.getParentId()).add(convertTreeModel(sysMenuEntity, checkedMenuIds));
         }
-        List<SysTreeEntity> result = new ArrayList<>();
+        List<TreeDTO> result = new ArrayList<>();
         for (SysMenuEntity sysMenuEntity : sysMenuEntityList) {
             boolean flag = sysMenuEntity != null && sysMenuEntity.getParentId() == null || sysMenuEntity.getParentId() == 0;
             if (flag) {
-                SysTreeEntity sysTreeEntity = convertTreeModel(sysMenuEntity, checkedMenuIds);
-                sysTreeEntity.setChildren(getChild(map, sysMenuEntity.getId()));
-                result.add(sysTreeEntity);
+                TreeDTO treeDTO = convertTreeModel(sysMenuEntity, checkedMenuIds);
+                treeDTO.setChildren(getChild(map, sysMenuEntity.getId()));
+                result.add(treeDTO);
             }
         }
         return result;
@@ -266,10 +266,10 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
      * @author wanyong
      * @date 2017-12-19 10:56
      */
-    private List<SysTreeEntity> getChild(Map<Long, List<SysTreeEntity>> map, Long id) {
-        List<SysTreeEntity> treeModelList = map.get(id);
+    private List<TreeDTO> getChild(Map<Long, List<TreeDTO>> map, Long id) {
+        List<TreeDTO> treeModelList = map.get(id);
         if (treeModelList != null) {
-            for (SysTreeEntity treeModel : treeModelList) {
+            for (TreeDTO treeModel : treeModelList) {
                 if (treeModel != null) {
                     treeModel.setChildren(getChild(map, treeModel.getId()));
                 }
@@ -287,16 +287,16 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuEn
      * @author wanyong
      * @date 2017-12-19 14:22
      */
-    private SysTreeEntity convertTreeModel(SysMenuEntity sysMenuEntity, Object[] checkedMenuIds) {
-        SysTreeEntity sysTreeEntity = new SysTreeEntity();
-        sysTreeEntity.setId(sysMenuEntity.getId());
-        sysTreeEntity.setName(sysMenuEntity.getMenuName());
-        sysTreeEntity.setIcon(sysMenuEntity.getIconcls());
-        sysTreeEntity.setSpread(sysMenuEntity.getExpand() == 1);
-        sysTreeEntity.setHref(sysMenuEntity.getRequest());
-        sysTreeEntity.setPermission(sysMenuEntity.getPermission());
-        sysTreeEntity.setChecked(checkedMenuIds != null && ArrayUtil.contains(checkedMenuIds, sysMenuEntity.getId()));
-        sysTreeEntity.setDisabled(false);
-        return sysTreeEntity;
+    private TreeDTO convertTreeModel(SysMenuEntity sysMenuEntity, Object[] checkedMenuIds) {
+        TreeDTO treeDTO = new TreeDTO();
+        treeDTO.setId(sysMenuEntity.getId());
+        treeDTO.setName(sysMenuEntity.getMenuName());
+        treeDTO.setIcon(sysMenuEntity.getIconcls());
+        treeDTO.setSpread(sysMenuEntity.getExpand() == 1);
+        treeDTO.setHref(sysMenuEntity.getRequest());
+        treeDTO.setPermission(sysMenuEntity.getPermission());
+        treeDTO.setChecked(checkedMenuIds != null && ArrayUtil.contains(checkedMenuIds, sysMenuEntity.getId()));
+        treeDTO.setDisabled(false);
+        return treeDTO;
     }
 }

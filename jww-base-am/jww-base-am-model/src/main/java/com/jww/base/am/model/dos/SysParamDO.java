@@ -1,48 +1,41 @@
-package com.jww.base.am.model.entity;
+package com.jww.base.am.model.dos;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.jww.common.core.base.BaseEntity;
+import com.jww.common.core.base.BaseDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
 /**
- * 角色表实体
+ * 参数表Entity
  *
  * @author wanyong
- * @date 2017-10-29
+ * @date 2018-01-22
  */
 @Data
-@TableName("sys_role")
-public class SysRoleEntity extends BaseEntity {
+@TableName("sys_param")
+public class SysParamDO extends BaseDO {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 角色名称
+     * 参数键名
      */
-    @NotBlank(message = "角色名称不能为空")
-    @Size(max = 16, min = 1, message = "角色名称长度16位内")
-    @Pattern(regexp = "^[A-Za-z0-9\\u4e00-\\u9fa5]+$", message = "输入值限制：中文、字母、数字")
-    @TableField("role_name")
-    private String roleName;
+    @TableField("param_key")
+    private String paramKey;
 
     /**
-     * 角色编码
+     * 参数键值
      */
-    @TableField("role_code")
-    private String roleCode;
+    @TableField("param_value")
+    private String paramValue;
 
     /**
-     * 角色描述
+     * 参数分类ID
      */
-    @TableField("role_desc")
-    private String roleDesc;
+    @TableField("catalog_id")
+    private Long catalogId;
 
     /**
      * 备注
@@ -63,5 +56,4 @@ public class SysRoleEntity extends BaseEntity {
     @TableField("is_del")
     @TableLogic
     private Integer isDel;
-
 }

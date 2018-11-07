@@ -1,6 +1,6 @@
 package com.jww.base.am.model.dto;
 
-import com.jww.base.am.model.entity.SysRoleEntity;
+import com.jww.base.am.model.dos.SysRoleDO;
 
 /**
  * 角色传输实体
@@ -8,5 +8,5 @@ import com.jww.base.am.model.entity.SysRoleEntity;
  * @author wanyong
  * @date 2018-11-7 11:21
  */
-public class SysRoleDTO extends SysRoleEntity {
+public class SysRoleDTO extends SysRoleDO {
 }

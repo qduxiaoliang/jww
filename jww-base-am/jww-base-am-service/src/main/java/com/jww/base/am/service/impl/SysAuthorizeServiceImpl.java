@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysAuthorizeMapper;
 import com.jww.base.am.dao.mapper.SysMenuMapper;
-import com.jww.base.am.model.entity.SysMenuEntity;
+import com.jww.base.am.model.dos.SysMenuEntity;
 import com.jww.base.am.service.SysAuthorizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

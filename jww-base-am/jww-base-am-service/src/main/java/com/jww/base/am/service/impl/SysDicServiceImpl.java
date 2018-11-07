@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.service.SysDicService;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDicMapper;
-import com.jww.base.am.model.entity.SysDicEntity;
+import com.jww.base.am.model.dos.SysDicDO;
 import com.jww.common.core.base.BaseServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -30,13 +30,13 @@ import java.util.Map;
  */
 @Service("sysDicService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.DIC)
-public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicEntity> implements SysDicService {
+public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicDO> implements SysDicService {
 
     @Override
-    public IPage<SysDicEntity> queryListPage(IPage<SysDicEntity> page) {
-        SysDicEntity sysDicEntity = new SysDicEntity();
-        sysDicEntity.setIsDel(0);
-        QueryWrapper<SysDicEntity> entityWrapper = new QueryWrapper<>(sysDicEntity);
+    public IPage<SysDicDO> queryListPage(IPage<SysDicDO> page) {
+        SysDicDO sysDicDO = new SysDicDO();
+        sysDicDO.setIsDel(0);
+        QueryWrapper<SysDicDO> entityWrapper = new QueryWrapper<>(sysDicDO);
         if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<Object, Object> paramMap = page.condition();
@@ -56,51 +56,51 @@ public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicEntit
 
     @Override
     @Cacheable
-    public List<SysDicEntity> queryTypeList() {
-        QueryWrapper<SysDicEntity> entityWrapper = new QueryWrapper<>(new SysDicEntity());
+    public List<SysDicDO> queryTypeList() {
+        QueryWrapper<SysDicDO> entityWrapper = new QueryWrapper<>(new SysDicDO());
         // entityWrapper.setSqlSelect("DISTINCT type_text,type_");
         return super.list(entityWrapper);
     }
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.DIC, allEntries = true)
-    public SysDicEntity add(SysDicEntity sysDicEntity) {
-        return super.add(sysDicEntity);
+    public SysDicDO add(SysDicDO sysDicDO) {
+        return super.add(sysDicDO);
     }
 
     @Override
     @Cacheable
-    public List<SysDicEntity> queryListByType(String type) {
-        SysDicEntity sysDicEntity = new SysDicEntity();
-        sysDicEntity.setType(type);
-        sysDicEntity.setIsDel(0);
-        sysDicEntity.setEnable(1);
-        QueryWrapper<SysDicEntity> entityWrapper = new QueryWrapper<>(sysDicEntity);
+    public List<SysDicDO> queryListByType(String type) {
+        SysDicDO sysDicDO = new SysDicDO();
+        sysDicDO.setType(type);
+        sysDicDO.setIsDel(0);
+        sysDicDO.setEnable(1);
+        QueryWrapper<SysDicDO> entityWrapper = new QueryWrapper<>(sysDicDO);
         return super.list(entityWrapper);
     }
 
     @CacheEvict(value = AmConstants.AmCacheName.DIC, allEntries = true)
     public boolean removeByIds(List<? extends Serializable> idList) {
-        List<SysDicEntity> sysDicEntityList = new ArrayList<SysDicEntity>();
+        List<SysDicDO> sysDicDOList = new ArrayList<SysDicDO>();
         idList.forEach(id -> {
-            SysDicEntity entity = new SysDicEntity();
+            SysDicDO entity = new SysDicDO();
             entity.setId((Long) id);
             entity.setIsDel(1);
             entity.setUpdateTime(new Date());
-            sysDicEntityList.add(entity);
+            sysDicDOList.add(entity);
         });
-        return super.updateBatchById(sysDicEntityList);
+        return super.updateBatchById(sysDicDOList);
     }
 
     @Override
     @Cacheable
-    public SysDicEntity queryByTypeAndCode(String type, String code) {
-        SysDicEntity sysDicEntity = new SysDicEntity();
-        sysDicEntity.setType(type);
-        sysDicEntity.setCode(code);
-        sysDicEntity.setIsDel(0);
-        sysDicEntity.setEnable(1);
-        QueryWrapper<SysDicEntity> entityWrapper = new QueryWrapper<>(sysDicEntity);
+    public SysDicDO queryByTypeAndCode(String type, String code) {
+        SysDicDO sysDicDO = new SysDicDO();
+        sysDicDO.setType(type);
+        sysDicDO.setCode(code);
+        sysDicDO.setIsDel(0);
+        sysDicDO.setEnable(1);
+        QueryWrapper<SysDicDO> entityWrapper = new QueryWrapper<>(sysDicDO);
         return super.getOne(entityWrapper);
     }
 }

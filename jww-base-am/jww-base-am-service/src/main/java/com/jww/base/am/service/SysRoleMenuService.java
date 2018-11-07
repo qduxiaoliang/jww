@@ -1,7 +1,7 @@
 package com.jww.base.am.service;
 
 import com.jww.common.core.base.BaseService;
-import com.jww.base.am.model.entity.SysRoleMenuEntity;
+import com.jww.base.am.model.dos.SysRoleMenuEntity;
 
 /**
  * <p>

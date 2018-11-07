@@ -3,7 +3,7 @@ package com.jww.base.am.server.controller;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.entity.SysParamEntity;
+import com.jww.base.am.model.dos.SysParamDO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysParamService;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -50,8 +50,8 @@ public class SysParamController extends BaseController {
     // @RequiresPermissions("sys:param:read")
     public ResultDTO query(@RequestBody Long paramId) {
         Assert.notNull(paramId);
-        SysParamEntity sysParamEntity = sysParamService.getById(paramId);
-        return ResultUtil.ok(sysParamEntity);
+        SysParamDO sysParamDO = sysParamService.getById(paramId);
+        return ResultUtil.ok(sysParamDO);
     }
 
     /**
@@ -72,7 +72,7 @@ public class SysParamController extends BaseController {
     /**
      * 新增参数
      *
-     * @param sysParamEntity 参数实体
+     * @param sysParamDO 参数实体
      * @return ResultDTO
      * @author shadj
      * @date 2017/12/18 21:54
@@ -81,16 +81,16 @@ public class SysParamController extends BaseController {
     @PostMapping("/add")
     // @RequiresPermissions("sys:param:add")
     @SysLogOpt(module = "参数管理", value = "参数新增", operationType = LogOptEnum.ADD)
-    public ResultDTO add(@Valid @RequestBody SysParamEntity sysParamEntity) {
-        sysParamEntity.setCreateBy(super.getCurrentUserId());
-        sysParamEntity.setUpdateBy(super.getCurrentUserId());
-        return ResultUtil.ok(sysParamService.add(sysParamEntity));
+    public ResultDTO add(@Valid @RequestBody SysParamDO sysParamDO) {
+        sysParamDO.setCreateBy(super.getCurrentUserId());
+        sysParamDO.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysParamService.add(sysParamDO));
     }
 
     /**
      * 修改参数
      *
-     * @param sysParamEntity 参数实体
+     * @param sysParamDO 参数实体
      * @return ResultDTO
      * @author wanyong
      * @date 2018-01-03 22:36
@@ -99,9 +99,9 @@ public class SysParamController extends BaseController {
     @PostMapping("/modify")
     // @RequiresPermissions("sys:param:update")
     @SysLogOpt(module = "参数管理", value = "参数修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modify(@RequestBody SysParamEntity sysParamEntity) {
-        sysParamEntity.setUpdateBy(super.getCurrentUserId());
-        sysParamService.modifyById(sysParamEntity);
+    public ResultDTO modify(@RequestBody SysParamDO sysParamDO) {
+        sysParamDO.setUpdateBy(super.getCurrentUserId());
+        sysParamService.modifyById(sysParamDO);
         return ResultUtil.ok();
     }
 

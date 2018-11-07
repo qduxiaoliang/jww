@@ -3,7 +3,7 @@
 <mapper namespace="com.jww.base.am.dao.mapper.SysRoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.jww.base.am.model.entity.SysRoleEntity">
+    <resultMap id="BaseResultMap" type="com.jww.base.am.model.dos.SysRoleDO">
         <result column="id_" property="id"/>
         <result column="enable_" property="enable"/>
         <result column="is_del" property="isDel"/>

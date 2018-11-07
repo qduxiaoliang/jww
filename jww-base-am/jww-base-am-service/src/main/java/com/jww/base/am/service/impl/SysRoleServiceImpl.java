@@ -10,8 +10,8 @@ import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysRoleMapper;
 import com.jww.base.am.dao.mapper.SysRoleMenuMapper;
 import com.jww.base.am.model.dto.SysRoleDTO;
-import com.jww.base.am.model.entity.SysRoleEntity;
-import com.jww.base.am.model.entity.SysRoleMenuEntity;
+import com.jww.base.am.model.dos.SysRoleDO;
+import com.jww.base.am.model.dos.SysRoleMenuEntity;
 import com.jww.base.am.service.SysRoleMenuService;
 import com.jww.base.am.service.SysRoleService;
 import com.jww.common.core.base.BaseServiceImpl;
@@ -39,7 +39,7 @@ import java.util.Map;
  */
 @Service("sysRoleService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.ROLE)
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEntity> implements SysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleDO> implements SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
@@ -51,10 +51,10 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
     private SysRoleMenuService sysRoleMenuService;
 
     @Override
-    public IPage<SysRoleEntity> listPage(IPage<SysRoleEntity> page) {
-        SysRoleEntity sysRoleEntity = new SysRoleEntity();
-        sysRoleEntity.setIsDel(0);
-        QueryWrapper<SysRoleEntity> entityWrapper = new QueryWrapper<>(sysRoleEntity);
+    public IPage<SysRoleDO> listPage(IPage<SysRoleDO> page) {
+        SysRoleDO sysRoleDO = new SysRoleDO();
+        sysRoleDO.setIsDel(0);
+        QueryWrapper<SysRoleDO> entityWrapper = new QueryWrapper<>(sysRoleDO);
         if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<Object, Object> paramMap = page.condition();
@@ -80,7 +80,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
         // 1、根据角色名称和部门检查是否存在相同的角色
         SysRoleDTO checkSysRoleDTO = new SysRoleDTO();
         checkSysRoleDTO.setRoleName(sysRoleDTO.getRoleName());
-        QueryWrapper<SysRoleEntity> queryWrapper = new QueryWrapper<>(checkSysRoleDTO);
+        QueryWrapper<SysRoleDO> queryWrapper = new QueryWrapper<>(checkSysRoleDTO);
         if (ObjectUtil.isNotNull(super.getOne(queryWrapper))) {
             throw new BusinessException("已存在相同名称的角色");
         }
@@ -91,7 +91,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = AmConstants.AmCacheName.ROLE, allEntries = true)
     public SysRoleDTO modifyById(SysRoleDTO sysRoleDTO) {
-        SysRoleEntity result = super.modifyById(sysRoleDTO);
+        SysRoleDO result = super.modifyById(sysRoleDTO);
         // 这里增加CollectionUtil.isNotEmpty(sysRoleModel.getMenuIdList())判断是由于删除角色时实际会调用modifyById方法去更新is_del字段，只有当修改角色时menuIdList才不会为空
         if (CollectionUtil.isNotEmpty(sysRoleEntity.getMenuIdList())) {
             SysRoleMenuEntity sysRoleMenuEntity = new SysRoleMenuEntity();
@@ -107,20 +107,20 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
     /**
      * 根据角色实体和角色对应的菜单ID集合获取角色菜单实体集合
      *
-     * @param sysRoleEntity
+     * @param sysRoleDO
      * @param menuIds
      * @return
      * @author wanyong
      * @date 2017-12-24 14:49
      */
-    private List<SysRoleMenuEntity> getRoleMenuListByMenuIds(SysRoleEntity sysRoleEntity, List<Long> menuIds) {
+    private List<SysRoleMenuEntity> getRoleMenuListByMenuIds(SysRoleDO sysRoleDO, List<Long> menuIds) {
         List<SysRoleMenuEntity> sysRoleMenuEntityList = new ArrayList<>(5);
         for (Long menuId : menuIds) {
             SysRoleMenuEntity sysRoleMenuEntity = new SysRoleMenuEntity();
-            sysRoleMenuEntity.setRoleId(sysRoleEntity.getId());
+            sysRoleMenuEntity.setRoleId(sysRoleDO.getId());
             sysRoleMenuEntity.setMenuId(menuId);
-            sysRoleMenuEntity.setCreateBy(sysRoleEntity.getUpdateBy());
-            sysRoleMenuEntity.setUpdateBy(sysRoleEntity.getUpdateBy());
+            sysRoleMenuEntity.setCreateBy(sysRoleDO.getUpdateBy());
+            sysRoleMenuEntity.setUpdateBy(sysRoleDO.getUpdateBy());
             sysRoleMenuEntityList.add(sysRoleMenuEntity);
         }
         return sysRoleMenuEntityList;
@@ -128,18 +128,18 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
 
     @Override
     @Cacheable
-    public List<SysRoleEntity> queryRoles(Long deptId) {
+    public List<SysRoleDO> queryRoles(Long deptId) {
         Assert.notNull(deptId);
-        QueryWrapper<SysRoleEntity> entityWrapper = new QueryWrapper<>();
+        QueryWrapper<SysRoleDO> entityWrapper = new QueryWrapper<>();
         entityWrapper.eq("dept_id", deptId);
         return sysRoleMapper.selectList(entityWrapper);
     }
 
     @CacheEvict(value = AmConstants.AmCacheName.ROLE, allEntries = true)
     public boolean removeByIds(List<? extends Serializable> idList) {
-        List<SysRoleEntity> roleModelList = new ArrayList<SysRoleEntity>();
+        List<SysRoleDO> roleModelList = new ArrayList<SysRoleDO>();
         idList.forEach(id -> {
-            SysRoleEntity entity = new SysRoleEntity();
+            SysRoleDO entity = new SysRoleDO();
             entity.setId((Long) id);
             entity.setIsDel(1);
             entity.setUpdateTime(new Date());

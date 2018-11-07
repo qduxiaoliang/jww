@@ -2,7 +2,7 @@ package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.dto.SysRoleDTO;
-import com.jww.base.am.model.entity.SysRoleEntity;
+import com.jww.base.am.model.dos.SysRoleDO;
 import com.jww.common.core.base.BaseService;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author wanyong
  * @since 2017-12-17
  */
-public interface SysRoleService extends BaseService<SysRoleEntity> {
+public interface SysRoleService extends BaseService<SysRoleDO> {
 
     /**
      * 分页查找所有角色
@@ -25,7 +25,7 @@ public interface SysRoleService extends BaseService<SysRoleEntity> {
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    IPage<SysRoleEntity> listPage(IPage<SysRoleEntity> page);
+    IPage<SysRoleDO> listPage(IPage<SysRoleDO> page);
 
     /**
      * 新增角色
@@ -55,5 +55,5 @@ public interface SysRoleService extends BaseService<SysRoleEntity> {
      * @author shadj
      * @date 2017/12/29 17:31
      */
-    List<SysRoleEntity> queryRoles(Long deptId);
+    List<SysRoleDO> queryRoles(Long deptId);
 }

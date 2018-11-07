@@ -1,41 +1,65 @@
-package com.jww.base.am.model.entity;
+package com.jww.base.am.model.dos;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.jww.common.core.base.BaseEntity;
+import com.jww.common.core.base.BaseDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 参数表Entity
+ * 字典表Entity
  *
  * @author wanyong
  * @date 2018-01-22
  */
 @Data
-@TableName("sys_param")
-public class SysParamEntity extends BaseEntity {
+@TableName("sys_dic")
+public class SysDicDO extends BaseDO {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 参数键名
+     * 类型
      */
-    @TableField("param_key")
-    private String paramKey;
+    @TableField("type_")
+    private String type;
 
     /**
-     * 参数键值
+     * 字典类型名称
      */
-    @TableField("param_value")
-    private String paramValue;
+    @TableField("type_name")
+    private String typeName;
 
     /**
-     * 参数分类ID
+     * 数据值
      */
-    @TableField("catalog_id")
-    private Long catalogId;
+    @TableField("code_")
+    private Long code;
+
+    /**
+     * 数据值名称
+     */
+    @TableField("code_name")
+    private Long codeName;
+
+    /**
+     * 排序（升序）
+     */
+    @TableField("sort_no")
+    private Long sortNo;
+
+    /**
+     * 父id
+     */
+    @TableField("parent_id")
+    private Long parentId;
+
+    /**
+     * 是否可编辑（0:不可编辑/1:可编辑）
+     */
+    @TableField("is_editable")
+    private Long isEditable;
 
     /**
      * 备注
