@@ -26,6 +26,12 @@ public class SysDeptDO extends BaseDO {
     private Long parentId;
 
     /**
+     * 隶属单位ID
+     */
+    @TableField("unit_id")
+    private Long unitId;
+
+    /**
      * 部门名称
      */
     @TableField("dept_name")

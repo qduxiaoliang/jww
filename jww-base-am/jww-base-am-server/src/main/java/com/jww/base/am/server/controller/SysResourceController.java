@@ -4,10 +4,10 @@ package com.jww.base.am.server.controller;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.dos.SysMenuEntity;
-import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
-import com.jww.base.am.service.SysMenuService;
+import com.jww.base.am.service.SysResourceService;
 import com.jww.common.core.constant.enums.LogOptEnum;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.dto.ResultDTO;
 import com.jww.common.web.util.ResultUtil;
@@ -29,12 +29,12 @@ import java.util.List;
  * @since 2017-11-29
  */
 @RestController
-@RequestMapping("/menu")
-@Api(value = "菜单管理", description = "菜单管理")
-public class SysMenuController extends BaseController {
+@RequestMapping("/resource")
+@Api(value = "资源管理", description = "资源管理")
+public class SysResourceController extends BaseController {
 
     @Autowired
-    private SysMenuService sysMenuService;
+    private SysResourceService sysResourceService;
 
     /**
      * 查询所有菜单
@@ -43,17 +43,17 @@ public class SysMenuController extends BaseController {
      * @author wanyong
      * @date 2017-12-02 00:24
      */
-    @ApiOperation(value = "查询菜单列表", notes = "查询全部菜单列表")
+    @ApiOperation(value = "查询资源列表", notes = "查询全部资源列表")
     @PostMapping("/queryList")
     // @RequiresAuthentication
     public ResultDTO queryList() {
-        return ResultUtil.ok(sysMenuService.queryList());
+        return ResultUtil.ok(sysResourceService.list());
     }
 
     /**
      * 分页查询菜单列表
      *
-     * @param pageModel 分页实体
+     * @param page 分页实体
      * @return ResultDTO
      * @author shadj
      * @date 2017/12/18 21:34
@@ -62,14 +62,14 @@ public class SysMenuController extends BaseController {
     @PostMapping("/queryListPage")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryListPage(@RequestBody IPage page) {
-        return ResultUtil.ok(sysMenuService.queryListPage(page));
+        return ResultUtil.ok(sysResourceService.listPage(page));
     }
 
     @ApiOperation(value = "查询所有父级菜单列表", notes = "查询存在子菜单的菜单列表")
     @PostMapping("/queryParentMenu")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryParentMenu() {
-        return ResultUtil.ok(sysMenuService.queryParentMenu());
+        return ResultUtil.ok(sysResourceService.listParentMenu());
     }
 
     /**
@@ -84,7 +84,7 @@ public class SysMenuController extends BaseController {
     @GetMapping("/tree/{userId}")
     // @RequiresAuthentication
     public ResultDTO queryMenuTreeByUserId(@PathVariable(value = "userId") Long userId) {
-        return ResultUtil.ok(sysMenuService.queryMenuTreeByUserId(userId));
+        return ResultUtil.ok(sysResourceService.listMenuTreeByUserId(userId));
     }
 
     /**
@@ -100,7 +100,7 @@ public class SysMenuController extends BaseController {
     // @RequiresPermissions("sys:menu:delete")
     @SysLogOpt(module = "菜单管理", value = "菜单删除", operationType = LogOptEnum.DELETE)
     public ResultDTO delete(@RequestBody Long id) {
-        return ResultUtil.ok(sysMenuService.delete(id));
+        return ResultUtil.ok(sysResourceService.delete(id));
     }
 
     /**
@@ -117,7 +117,7 @@ public class SysMenuController extends BaseController {
     @SysLogOpt(module = "菜单管理", value = "菜单批量删除", operationType = LogOptEnum.DELETE)
     public ResultDTO deleteBatchIds(@RequestBody Long[] ids) {
         Assert.notNull(ids);
-        return ResultUtil.ok(sysMenuService.deleteBatch(ids));
+        return ResultUtil.ok(sysResourceService.deleteBatch(ids));
     }
 
     /**
@@ -133,7 +133,7 @@ public class SysMenuController extends BaseController {
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO query(@PathVariable(value = "id") Long id) {
         Assert.notNull(id);
-        SysMenuEntity sysMenuEntity = sysMenuService.getById(id);
+        SysMenuEntity sysMenuEntity = sysResourceService.getById(id);
         return ResultUtil.ok(sysMenuEntity);
     }
 
@@ -152,7 +152,7 @@ public class SysMenuController extends BaseController {
     public ResultDTO modify(@RequestBody SysMenuEntity sysMenuEntity) {
         sysMenuEntity.setUpdateBy(super.getCurrentUserId());
         sysMenuEntity.setUpdateTime(new Date());
-        sysMenuService.modifyById(sysMenuEntity);
+        sysResourceService.modifyById(sysMenuEntity);
         return ResultUtil.ok();
     }
 
@@ -176,7 +176,7 @@ public class SysMenuController extends BaseController {
             sysMenuEntity.setUpdateBy(super.getCurrentUserId());
             sysMenuEntity.setUpdateTime(now);
         }
-        sysMenuService.add(sysMenuEntity);
+        sysResourceService.add(sysMenuEntity);
         return ResultUtil.ok();
     }
 
@@ -192,7 +192,7 @@ public class SysMenuController extends BaseController {
     @PostMapping("/roleFuncTree")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryFuncMenuTree(@RequestBody Long roleId) {
-        List<TreeDTO> treeModelList = sysMenuService.queryFuncMenuTree(roleId);
+        List<TreeDTO> treeModelList = sysResourceService.queryFuncMenuTree(roleId);
         return ResultUtil.ok(treeModelList);
     }
 
@@ -207,7 +207,7 @@ public class SysMenuController extends BaseController {
     @PostMapping("/funcTree")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryFuncMenuTree() {
-        List<TreeDTO> treeModelList = sysMenuService.queryFuncMenuTree(null);
+        List<TreeDTO> treeModelList = sysResourceService.queryFuncMenuTree(null);
         return ResultUtil.ok(treeModelList);
     }
 
@@ -224,7 +224,7 @@ public class SysMenuController extends BaseController {
     @GetMapping("/queryTree/{menuType}/{menuId}")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryTree(@PathVariable(required = false, value = "menuType") Integer menuType, @PathVariable(value = "menuId") Long menuId) {
-        List<TreeDTO> list = sysMenuService.queryTree(menuId, menuType);
+        List<TreeDTO> list = sysResourceService.queryTree(menuId, menuType);
         return ResultUtil.ok(list);
     }
 
@@ -240,7 +240,7 @@ public class SysMenuController extends BaseController {
     @GetMapping("/queryTree/{menuType}")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryTree(@PathVariable(required = false, value = "menuType") Integer menuType) {
-        List<TreeDTO> list = sysMenuService.queryTree(null, menuType);
+        List<TreeDTO> list = sysResourceService.queryTree(null, menuType);
         return ResultUtil.ok(list);
     }
 }

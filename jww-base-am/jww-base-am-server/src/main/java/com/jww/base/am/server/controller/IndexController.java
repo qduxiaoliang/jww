@@ -1,7 +1,7 @@
 package com.jww.base.am.server.controller;
 
 import com.jww.base.am.service.SysAuthorizeService;
-import com.jww.base.am.service.SysMenuService;
+import com.jww.base.am.service.SysResourceService;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.dto.ResultDTO;
 import com.jww.common.web.util.ResultUtil;
@@ -24,7 +24,7 @@ public class IndexController extends BaseController {
     private SysAuthorizeService sysAuthorizeService;
 
     @Autowired
-    private SysMenuService sysMenuService;
+    private SysResourceService sysResourceService;
 
     /**
      * 获取当前用户的权限集合
@@ -36,7 +36,7 @@ public class IndexController extends BaseController {
     @GetMapping("/permissions")
     // @RequiresAuthentication
     public ResultDTO queryMyPermissions() {
-        return ResultUtil.ok(sysAuthorizeService.queryPermissionsByUserId(super.getCurrentUserId()));
+        return ResultUtil.ok(sysAuthorizeService.listPermissionByUserId(super.getCurrentUserId()));
     }
 
     /**
@@ -49,6 +49,6 @@ public class IndexController extends BaseController {
     @GetMapping("/menuTree")
     // @RequiresAuthentication
     public ResultDTO queryMyMenuTree() {
-        return ResultUtil.ok(sysMenuService.queryMenuTreeByUserId(super.getCurrentUserId()));
+        return ResultUtil.ok(sysResourceService.queryMenuTreeByUserId(super.getCurrentUserId()));
     }
 }

@@ -1,7 +1,7 @@
 package com.jww.base.am.service;
 
+import com.jww.base.am.model.dto.SysRoleResourceDTO;
 import com.jww.common.core.base.BaseService;
-import com.jww.base.am.model.dos.SysRoleMenuEntity;
 
 /**
  * <p>
@@ -11,7 +11,7 @@ import com.jww.base.am.model.dos.SysRoleMenuEntity;
  * @author wanyong
  * @since 2017-12-17
  */
-public interface SysRoleMenuService extends BaseService<SysRoleMenuEntity> {
+public interface SysRoleResourceService extends BaseService<SysRoleResourceDTO> {
 
     /**
      * 根据角色ID批量删除角色和菜单的关系

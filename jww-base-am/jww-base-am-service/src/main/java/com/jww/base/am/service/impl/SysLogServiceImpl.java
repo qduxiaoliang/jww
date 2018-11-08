@@ -4,9 +4,9 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.service.SysLogService;
 import com.jww.base.am.dao.mapper.SysLogMapper;
-import com.jww.base.am.model.dos.SysLogDO;
+import com.jww.base.am.model.dto.SysLogDTO;
+import com.jww.base.am.service.SysLogService;
 import com.jww.common.core.base.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,14 @@ import java.util.Map;
  */
 @Slf4j
 @Service("sysLogService")
-public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogDO> implements SysLogService {
+public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogDTO> implements SysLogService {
 
     @Autowired
     private SysLogMapper sysLogMapper;
 
     @Override
-    public IPage<SysLogDO> queryListPage(IPage<SysLogDO> page) {
-        QueryWrapper<SysLogDO> entityWrapper = new QueryWrapper<>();
+    public IPage<SysLogDTO> listPage(IPage<SysLogDTO> page) {
+        QueryWrapper<SysLogDTO> queryWrapper = new QueryWrapper<>();
         if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<Object, Object> paramMap = page.condition();
@@ -47,21 +47,21 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogDO> i
                 // entityWrapper.where(StrUtil.removeSuffix(conditionSql.toString(), "OR "));
             }
         }
-        entityWrapper.orderByDesc("create_time");
+        queryWrapper.orderByDesc("create_time");
         // page.setCondition(null);
-        return super.page(page, entityWrapper);
+        return super.page(page, queryWrapper);
     }
 
     @Override
     public boolean clearLog(Integer keepDays) {
-        QueryWrapper<SysLogDO> entityWrapper = new QueryWrapper<>();
+        QueryWrapper<SysLogDTO> queryWrapper = new QueryWrapper<>();
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.DATE, -keepDays);
         Date d = c.getTime();
         String day = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
         // entityWrapper.where("create_time < '" + day + "'");
-        entityWrapper.le("create_time", day);
-        return super.remove(entityWrapper);
+        queryWrapper.le("create_time", day);
+        return super.remove(queryWrapper);
     }
 }

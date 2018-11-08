@@ -117,7 +117,6 @@ CREATE TABLE `sys_resource` (
   `parent_id` bigint(20) NOT NULL COMMENT '父资源ID',
   `icon_` varchar(32) DEFAULT NULL COMMENT '图标',
   `component_` varchar(64) DEFAULT NULL COMMENT 'VUE页面',
-  `sys_type` varchar(32) DEFAULT '' COMMENT '系统类型',
   `sort_no` tinyint(1) DEFAULT '1' COMMENT '排序值',
   `resource_level` tinyint(1) DEFAULT '1' COMMENT '资源等级',
   `is_show` tinyint(1) DEFAULT NULL COMMENT '是否显示(0:不显示/1:显示)',
@@ -135,72 +134,47 @@ TRUNCATE TABLE `sys_resource`;
 -- ----------------------------
 -- Records of sys_resource
 -- ----------------------------
-INSERT INTO `sys_resource` VALUES ('1', '系统管理', '1', NULL, '/system', NULL, NULL, '-1', 'icon_system', 'layout', '运营平台', '1', '1', NULL, NULL, '2017-11-07 20:56:00', '1', '2018-08-16 07:51:38', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('2', '基础管理', '1', NULL, '/basic', NULL, NULL, '-1', 'icon_basic', 'basic', '', '2', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:05:43', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('3', '企业管理', '1', NULL, '/enterprise', NULL, NULL, '-1', 'icon_enterprise', 'enterprise', NULL, '3', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:07:37', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('4', '资源管理', '1', NULL, '/resource', NULL, NULL, '-1', 'icon_resource', 'resource', NULL, '4', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:11:43', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('5', '行业知识', '1', NULL, '/industry', NULL, NULL, '-1', 'icon_industry', 'industry', NULL, '5', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:13:40', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('6', '信息管理', '1', NULL, '/information', NULL, NULL, '-1', 'icon_information', 'information', NULL, '6', '1', NULL, NULL, '2018-08-05 17:37:29', '1', '2018-08-16 08:14:17', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('8', '系统监控', '1', NULL, NULL, NULL, NULL, '-1', 'icon-iconbmgl', NULL, '运营平台', '2', '1', NULL, NULL, '2018-01-22 12:30:41', '1', '2018-08-05 20:09:06', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('101', '用户管理', '2', NULL, 'user_manage', '', NULL, '1', '', 'userManage', '运营平台', '2', '1', NULL, NULL, '2017-11-02 22:24:37', '1', '2018-08-16 08:05:04', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('102', '菜单管理', '2', NULL, 'menu_config', '', NULL, '1', '', 'menuConfig', '运营平台', '3', '1', NULL, NULL, '2017-11-08 09:57:27', '1', '2018-08-16 08:03:06', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('103', '角色管理', '2', NULL, 'role_manage', NULL, NULL, '1', '', 'roleManage', '运营平台', '4', '1', NULL, NULL, '2017-11-08 10:13:37', '1', '2018-08-16 08:04:26', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('104', '日志管理', '2', NULL, 'log', NULL, NULL, '1', 'icon-rizhiguanli', 'views/admin/log/index', '运营平台', '5', '1', NULL, NULL, '2017-11-20 14:06:22', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('105', '字典管理', '2', NULL, 'data_dictionary', NULL, NULL, '1', '', 'dataDictionary', '运营平台', '6', '1', NULL, NULL, '2017-11-29 11:30:52', '1', '2018-08-16 08:04:01', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('106', '部门管理', '2', NULL, 'dept', NULL, NULL, '1', 'icon-iconbmgl', 'views/admin/dept/index', '运营平台', '7', '1', NULL, NULL, '2018-01-20 13:17:19', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('107', '客户端管理', '2', '', 'client', '', '', '1', 'icon-bangzhushouji', 'views/admin/client/index', '运营平台', '9', '1', NULL, NULL, '2018-01-20 13:17:19', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('108', '路由管理', '2', NULL, 'route', NULL, NULL, '1', 'icon-luyou', 'views/admin/route/index', '运营平台', '8', '1', NULL, NULL, '2018-05-15 21:44:51', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('201', '机场管理', '2', NULL, 'airport_info', NULL, NULL, '2', NULL, 'airportInfo', '', '1', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:06:18', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('202', '航空公司管理', '2', '', 'air_company', '', '', '2', '', 'airCompany', '', '2', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:06:56', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('203', '航班时刻管理', '2', '', 'flight_time', '', '', '2', '', 'flightTime', '', '3', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:07:13', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('301', '企业认证', '2', '', 'enterprise_Certification', '', '', '3', '', 'enterpriseCertification', '', '1', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:08:04', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('302', '企业角色管理', '2', '', 'enterprise_role_manage', '', '', '3', '', 'enterpriseRole', '', '2', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:08:18', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('303', '企业用户管理', '2', '', 'enterprise_user_manage', '', '', '3', '', 'enterpriseUser', '', '3', '1', NULL, NULL, '2018-08-05 20:24:53', '1', '2018-08-16 08:08:35', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('401', '上门揽货', '2', '', 'store_pickup', '', '', '4', '', 'storePickup', '', '1', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:12:23', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('402', '航班运输', '2', '', 'flight_transport', '', '', '4', '', 'flightTransport', '', '2', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:12:55', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('403', '机场提货', '2', '', 'airport_delivery', '', '', '4', '', 'airportDelivery', '', '3', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:13:08', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('404', '送货上门', '2', '', 'home_delivery', '', '', '4', '', 'homeDelivery', '', '4', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:13:21', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('501', '知识发布', '2', '', 'knowledge_release', '', '', '5', '', 'knowledgeRelease', '', '1', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:13:53', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('502', '知识管理', '2', '', 'knowledge_manage', '', '', '5', '', 'knowledgeManage', '', '2', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:14:03', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('601', '新闻管理', '2', '', 'news_manage', '', '', '6', '', 'newsManage', '', '1', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:14:30', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('602', '招聘管理', '2', '', 'recruit_manage', '', '', '6', '', 'recruitManage', '', '2', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:14:45', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('603', '广告管理', '2', '', 'ad_manage', '', '', '6', '', 'adManage', '', '3', '1', NULL, '', '2018-08-05 20:24:53', '1', '2018-08-16 08:15:14', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('801', '服务监控', '2', NULL, 'http://127.0.0.1:8751', NULL, NULL, '8', 'icon-jiankong', NULL, '运营平台', '9', '1', NULL, NULL, '2018-01-23 10:53:33', '1', '2018-08-05 23:39:31', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('802', 'zipkin监控', '2', NULL, 'http://139.224.200.249:5002', NULL, NULL, '8', 'icon-jiankong', NULL, '运营平台', '11', '1', NULL, NULL, '2018-01-23 10:55:18', '1', '2018-08-05 23:39:33', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('803', 'pinpoint监控', '2', NULL, 'https://pinpoint.pig4cloud.com', NULL, NULL, '8', 'icon-xiazaihuancun', NULL, '运营平台', '10', '1', NULL, NULL, '2018-01-25 11:08:52', '1', '2018-08-05 23:39:41', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('804', '缓存状态', '2', NULL, 'http://139.224.200.249:8585', NULL, NULL, '8', 'icon-ecs-status', NULL, '运营平台', '12', '1', NULL, NULL, '2018-01-23 10:56:11', '1', '2018-08-05 23:39:43', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('805', 'ELK状态', '2', NULL, 'http://139.224.200.249:5601', NULL, NULL, '8', 'icon-ecs-status', NULL, '运营平台', '13', '1', NULL, NULL, '2018-01-23 10:55:47', '1', '2018-08-05 23:39:45', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('806', '接口文档', '2', NULL, 'http://127.0.0.1:9999/swagger-ui.html', NULL, NULL, '8', 'icon-wendangdocument72', NULL, '运营平台', '14', '1', NULL, NULL, '2018-01-23 10:56:43', '1', '2018-08-05 23:39:47', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('807', '任务监控', '2', NULL, 'http://139.224.200.249:8899', NULL, NULL, '8', 'icon-jiankong', NULL, '运营平台', '15', '1', NULL, NULL, '2018-01-23 10:55:18', '1', '2018-08-05 23:39:49', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1011', '用户查看', '0', NULL, NULL, '/admin/user/**', 'GET', '101', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-07 20:58:05', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1012', '用户新增', '0', 'sys_user_add', NULL, '/admin/user/*', 'POST', '101', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2017-11-08 09:52:09', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1013', '用户修改', '0', 'sys_user_mod', NULL, '/admin/user/**', 'PUT', '101', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2017-11-08 09:52:48', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1014', '用户删除', '0', 'sys_user_del', NULL, '/admin/user/*', 'DELETE', '101', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2017-11-08 09:54:01', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1015', '用户导出', '0', 'sys_user_export', NULL, '/admin/user/*', 'GET', '101', NULL, NULL, '运营平台', '5', '1', NULL, NULL, '2017-11-08 09:54:01', '1', NULL, NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1016', '重置密码', '0', 'sys_user_reset', NULL, '/admin/user/*', 'PUT', '101', NULL, NULL, '运营平台', '6', '1', NULL, NULL, '2017-11-08 09:54:01', '1', '2018-08-05 20:13:21', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1021', '菜单查看', '0', NULL, NULL, '/admin/menu/**', 'GET', '102', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-08 09:57:56', '1', '2018-08-05 23:40:16', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1022', '菜单新增', '0', 'sys_menu_add', NULL, '/admin/menu/*', 'POST', '102', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2017-11-08 10:15:53', '1', '2018-08-05 23:40:20', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1023', '菜单修改', '0', 'sys_menu_mod', NULL, '/admin/menu/*', 'PUT', '102', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2017-11-08 10:16:23', '1', '2018-08-05 23:40:23', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1024', '菜单删除', '0', 'sys_menu_del', NULL, '/admin/menu/*', 'DELETE', '102', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2017-11-08 10:16:43', '1', '2018-08-05 23:40:25', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1031', '角色查看', '0', NULL, NULL, '/admin/role/**', 'GET', '103', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-08 10:14:01', '1', '2018-08-05 20:15:39', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1032', '角色新增', '0', 'sys_role_add', NULL, '/admin/role/*', 'POST', '103', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2017-11-08 10:14:18', '1', '2018-08-05 20:15:44', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1033', '角色修改', '0', 'sys_role_mod', NULL, '/admin/role/*', 'PUT', '103', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2017-11-08 10:14:41', '1', '2018-08-05 20:15:46', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1034', '角色删除', '0', 'sys_role_del', NULL, '/admin/role/*', 'DELETE', '103', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2017-11-08 10:14:59', '1', '2018-08-05 20:15:49', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1035', '分配权限', '0', 'sys_role_perm', 'sys_authorization', '/admin/role/*', 'PUT', '1', NULL, 'sysAuthorization', '运营平台', '5', '1', '1', NULL, '2018-04-20 07:22:55', '1', '2018-08-16 22:59:19', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1041', '日志查看', '0', NULL, NULL, '/admin/log/**', 'GET', '104', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-20 14:07:25', '1', '2018-08-05 20:15:14', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1042', '日志删除', '0', 'sys_log_del', NULL, '/admin/log/*', 'DELETE', '104', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2017-11-20 20:37:37', '1', '2018-08-05 20:15:15', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1051', '字典查看', '0', NULL, NULL, '/admin/dict/**', 'GET', '105', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2017-11-19 22:04:24', '1', '2018-08-05 20:16:53', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1052', '字典新增', '0', 'sys_dict_add', NULL, '/admin/dict/**', 'POST', '105', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2018-05-11 22:34:55', '1', '2018-08-05 20:17:23', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1053', '字典修改', '0', 'sys_dict_mod', NULL, '/admin/dict/**', 'PUT', '105', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2018-05-11 22:36:03', '1', '2018-08-05 20:17:30', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1054', '字典删除', '0', 'sys_dict_del', NULL, '/admin/dict/**', 'DELETE', '105', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2017-11-29 11:30:11', '1', '2018-08-05 20:17:34', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1061', '部门查看', '0', '', NULL, '/admin/dept/**', 'GET', '106', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2018-01-20 13:17:19', '1', '2018-08-05 20:18:51', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1062', '部门新增', '0', 'sys_dept_add', NULL, '/admin/dept/**', 'POST', '106', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2018-01-20 14:56:16', '1', '2018-08-05 20:18:52', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1063', '部门修改', '0', 'sys_dept_mod', NULL, '/admin/dept/**', 'PUT', '106', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2018-01-20 14:56:59', '1', '2018-08-05 20:18:52', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1064', '部门删除', '0', 'sys_dept_del', NULL, '/admin/dept/**', 'DELETE', '106', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2018-01-20 14:57:28', '1', '2018-08-05 20:18:54', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1071', '客户端查看', '0', NULL, NULL, '/admin/client/**', 'GET', '107', NULL, NULL, '运营平台', '1', '1', NULL, NULL, '2018-05-15 21:39:57', '1', '2018-08-05 20:21:45', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1072', '客户端新增', '0', 'sys_client_add', NULL, '/admin/client/**', 'POST', '107', NULL, NULL, '运营平台', '2', '1', NULL, NULL, '2018-05-15 21:35:18', '1', '2018-08-05 20:21:46', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1073', '客户端修改', '0', 'sys_client_mod', NULL, '/admin/client/**', 'PUT', '107', NULL, NULL, '运营平台', '3', '1', NULL, NULL, '2018-05-15 21:37:06', '1', '2018-08-05 20:21:46', NULL, '1', '0');
-INSERT INTO `sys_resource` VALUES ('1074', '客户端删除', '0', 'sys_client_del', NULL, '/admin/client/**', 'DELETE', '107', NULL, NULL, '运营平台', '4', '1', NULL, NULL, '2018-05-15 21:39:16', '1', '2018-08-05 20:21:47', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1', '系统管理', '1', NULL, '/system', NULL, NULL, '-1', 'icon_system', 'layout', '1', '1', NULL, NULL, '2017-11-07 20:56:00', '1', '2018-08-16 07:51:38', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('101', '用户管理', '2', NULL, 'user_manage', '', NULL, '1', '', 'userManage', '2', '1', NULL, NULL, '2017-11-02 22:24:37', '1', '2018-08-16 08:05:04', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('102', '菜单管理', '2', NULL, 'menu_config', '', NULL, '1', '', 'menuConfig', '3', '1', NULL, NULL, '2017-11-08 09:57:27', '1', '2018-08-16 08:03:06', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('103', '角色管理', '2', NULL, 'role_manage', NULL, NULL, '1', '', 'roleManage', '4', '1', NULL, NULL, '2017-11-08 10:13:37', '1', '2018-08-16 08:04:26', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('104', '日志管理', '2', NULL, 'log', NULL, NULL, '1', 'icon-rizhiguanli', 'views/admin/log/index', '5', '1', NULL, NULL, '2017-11-20 14:06:22', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('105', '字典管理', '2', NULL, 'data_dictionary', NULL, NULL, '1', '', 'dataDictionary', '6', '1', NULL, NULL, '2017-11-29 11:30:52', '1', '2018-08-16 08:04:01', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('106', '部门管理', '2', NULL, 'dept', NULL, NULL, '1', 'icon-iconbmgl', 'views/admin/dept/index', '7', '1', NULL, NULL, '2018-01-20 13:17:19', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('107', '客户端管理', '2', '', 'client', '', '', '1', 'icon-bangzhushouji', 'views/admin/client/index', '9', '1', NULL, NULL, '2018-01-20 13:17:19', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('804', '缓存状态', '2', NULL, 'http://139.224.200.249:8585', NULL, NULL, '8', 'icon-ecs-status', NULL, '12', '1', NULL, NULL, '2018-01-23 10:56:11', '1', '2018-08-05 23:39:43', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('805', 'ELK状态', '2', NULL, 'http://139.224.200.249:5601', NULL, NULL, '8', 'icon-ecs-status', NULL, '13', '1', NULL, NULL, '2018-01-23 10:55:47', '1', '2018-08-05 23:39:45', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('806', '接口文档', '2', NULL, 'http://127.0.0.1:9999/swagger-ui.html', NULL, NULL, '8', 'icon-wendangdocument72', NULL, '14', '1', NULL, NULL, '2018-01-23 10:56:43', '1', '2018-08-05 23:39:47', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('807', '任务监控', '2', NULL, 'http://139.224.200.249:8899', NULL, NULL, '8', 'icon-jiankong', NULL, '15', '1', NULL, NULL, '2018-01-23 10:55:18', '1', '2018-08-05 23:39:49', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1011', '用户查看', '0', NULL, NULL, '/admin/user/**', 'GET', '101', NULL, NULL, '1', '1', NULL, NULL, '2017-11-07 20:58:05', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1012', '用户新增', '0', 'sys_user_add', NULL, '/admin/user/*', 'POST', '101', NULL, NULL, '2', '1', NULL, NULL, '2017-11-08 09:52:09', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1013', '用户修改', '0', 'sys_user_mod', NULL, '/admin/user/**', 'PUT', '101', NULL, NULL, '3', '1', NULL, NULL, '2017-11-08 09:52:48', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1014', '用户删除', '0', 'sys_user_del', NULL, '/admin/user/*', 'DELETE', '101', NULL, NULL, '4', '1', NULL, NULL, '2017-11-08 09:54:01', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1015', '用户导出', '0', 'sys_user_export', NULL, '/admin/user/*', 'GET', '101', NULL, NULL, '5', '1', NULL, NULL, '2017-11-08 09:54:01', '1', NULL, NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1016', '重置密码', '0', 'sys_user_reset', NULL, '/admin/user/*', 'PUT', '101', NULL, NULL, '6', '1', NULL, NULL, '2017-11-08 09:54:01', '1', '2018-08-05 20:13:21', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1021', '菜单查看', '0', NULL, NULL, '/admin/menu/**', 'GET', '102', NULL, NULL, '1', '1', NULL, NULL, '2017-11-08 09:57:56', '1', '2018-08-05 23:40:16', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1022', '菜单新增', '0', 'sys_menu_add', NULL, '/admin/menu/*', 'POST', '102', NULL, NULL, '2', '1', NULL, NULL, '2017-11-08 10:15:53', '1', '2018-08-05 23:40:20', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1023', '菜单修改', '0', 'sys_menu_mod', NULL, '/admin/menu/*', 'PUT', '102', NULL, NULL, '3', '1', NULL, NULL, '2017-11-08 10:16:23', '1', '2018-08-05 23:40:23', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1024', '菜单删除', '0', 'sys_menu_del', NULL, '/admin/menu/*', 'DELETE', '102', NULL, NULL, '4', '1', NULL, NULL, '2017-11-08 10:16:43', '1', '2018-08-05 23:40:25', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1031', '角色查看', '0', NULL, NULL, '/admin/role/**', 'GET', '103', NULL, NULL, '1', '1', NULL, NULL, '2017-11-08 10:14:01', '1', '2018-08-05 20:15:39', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1032', '角色新增', '0', 'sys_role_add', NULL, '/admin/role/*', 'POST', '103', NULL, NULL, '2', '1', NULL, NULL, '2017-11-08 10:14:18', '1', '2018-08-05 20:15:44', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1033', '角色修改', '0', 'sys_role_mod', NULL, '/admin/role/*', 'PUT', '103', NULL, NULL, '3', '1', NULL, NULL, '2017-11-08 10:14:41', '1', '2018-08-05 20:15:46', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1034', '角色删除', '0', 'sys_role_del', NULL, '/admin/role/*', 'DELETE', '103', NULL, NULL, '4', '1', NULL, NULL, '2017-11-08 10:14:59', '1', '2018-08-05 20:15:49', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1035', '分配权限', '0', 'sys_role_perm', 'sys_authorization', '/admin/role/*', 'PUT', '1', NULL, 'sysAuthorization', '5', '1', '1', NULL, '2018-04-20 07:22:55', '1', '2018-08-16 22:59:19', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1041', '日志查看', '0', NULL, NULL, '/admin/log/**', 'GET', '104', NULL, NULL, '1', '1', NULL, NULL, '2017-11-20 14:07:25', '1', '2018-08-05 20:15:14', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1042', '日志删除', '0', 'sys_log_del', NULL, '/admin/log/*', 'DELETE', '104', NULL, NULL, '2', '1', NULL, NULL, '2017-11-20 20:37:37', '1', '2018-08-05 20:15:15', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1051', '字典查看', '0', NULL, NULL, '/admin/dict/**', 'GET', '105', NULL, NULL, '1', '1', NULL, NULL, '2017-11-19 22:04:24', '1', '2018-08-05 20:16:53', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1052', '字典新增', '0', 'sys_dict_add', NULL, '/admin/dict/**', 'POST', '105', NULL, NULL, '2', '1', NULL, NULL, '2018-05-11 22:34:55', '1', '2018-08-05 20:17:23', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1053', '字典修改', '0', 'sys_dict_mod', NULL, '/admin/dict/**', 'PUT', '105', NULL, NULL, '3', '1', NULL, NULL, '2018-05-11 22:36:03', '1', '2018-08-05 20:17:30', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1054', '字典删除', '0', 'sys_dict_del', NULL, '/admin/dict/**', 'DELETE', '105', NULL, NULL, '4', '1', NULL, NULL, '2017-11-29 11:30:11', '1', '2018-08-05 20:17:34', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1061', '部门查看', '0', '', NULL, '/admin/dept/**', 'GET', '106', NULL, NULL, '1', '1', NULL, NULL, '2018-01-20 13:17:19', '1', '2018-08-05 20:18:51', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1062', '部门新增', '0', 'sys_dept_add', NULL, '/admin/dept/**', 'POST', '106', NULL, NULL, '2', '1', NULL, NULL, '2018-01-20 14:56:16', '1', '2018-08-05 20:18:52', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1063', '部门修改', '0', 'sys_dept_mod', NULL, '/admin/dept/**', 'PUT', '106', NULL, NULL, '3', '1', NULL, NULL, '2018-01-20 14:56:59', '1', '2018-08-05 20:18:52', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1064', '部门删除', '0', 'sys_dept_del', NULL, '/admin/dept/**', 'DELETE', '106', NULL, NULL, '4', '1', NULL, NULL, '2018-01-20 14:57:28', '1', '2018-08-05 20:18:54', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1071', '客户端查看', '0', NULL, NULL, '/admin/client/**', 'GET', '107', NULL, NULL, '1', '1', NULL, NULL, '2018-05-15 21:39:57', '1', '2018-08-05 20:21:45', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1072', '客户端新增', '0', 'sys_client_add', NULL, '/admin/client/**', 'POST', '107', NULL, NULL, '2', '1', NULL, NULL, '2018-05-15 21:35:18', '1', '2018-08-05 20:21:46', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1073', '客户端修改', '0', 'sys_client_mod', NULL, '/admin/client/**', 'PUT', '107', NULL, NULL, '3', '1', NULL, NULL, '2018-05-15 21:37:06', '1', '2018-08-05 20:21:46', NULL, '1', '0');
+INSERT INTO `sys_resource` VALUES ('1074', '客户端删除', '0', 'sys_client_del', NULL, '/admin/client/**', 'DELETE', '107', NULL, NULL, '4', '1', NULL, NULL, '2018-05-15 21:39:16', '1', '2018-08-05 20:21:47', NULL, '1', '0');
 
 -- ----------------------------
 -- Table structure for sys_param

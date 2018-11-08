@@ -2,12 +2,11 @@ package com.jww.base.am.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysAuthorizeMapper;
-import com.jww.base.am.dao.mapper.SysMenuMapper;
-import com.jww.base.am.model.dos.SysMenuEntity;
+import com.jww.base.am.model.dto.SysResourceDTO;
 import com.jww.base.am.service.SysAuthorizeService;
+import com.jww.base.am.service.SysResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,26 +27,24 @@ public class SysAuthorizeServiceImpl implements SysAuthorizeService {
     @Autowired
     private SysAuthorizeMapper sysAuthorizeMapper;
     @Autowired
-    private SysMenuMapper sysMenuMapper;
+    private SysResourceService sysResourceService;
 
     @Override
-    public List<String> queryPermissionsByUserId(Long userId) {
-        List<String> permissions = new ArrayList<String>();
+    public List<String> listPermissionByUserId(Long userId) {
+        List<String> permissionList = new ArrayList<>();
         //如果是超级管理员，则查询所有权限code
         if (AmConstants.USERID_ADMIN.equals(userId)) {
-            QueryWrapper<SysMenuEntity> wrapper = new QueryWrapper<SysMenuEntity>();
-            wrapper.eq("is_del", 0);
-            List<SysMenuEntity> list = sysMenuMapper.selectList(wrapper);
+            List<SysResourceDTO> list = sysResourceService.list(null);
             if (CollUtil.isNotEmpty(list)) {
-                for (SysMenuEntity sysMenuEntity : list) {
-                    permissions.add(sysMenuEntity.getPermission());
+                for (SysResourceDTO sysResourceDTO : list) {
+                    permissionList.add(sysResourceDTO.getPermission());
                 }
             }
-            permissions.add(AmConstants.PERMISSION_ADMIN);
+            permissionList.add(AmConstants.PERMISSION_ADMIN);
         } else {
-            permissions = sysAuthorizeMapper.selectPermissionsByUserId(userId);
+            permissionList = sysAuthorizeMapper.selectPermissionsByUserId(userId);
         }
-        return formatPermissions(permissions);
+        return formatPermissions(permissionList);
     }
 
     /**

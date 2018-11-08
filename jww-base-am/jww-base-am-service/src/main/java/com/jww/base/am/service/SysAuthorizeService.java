@@ -18,5 +18,5 @@ public interface SysAuthorizeService {
      * @author wanyong
      * @date 2017-12-02 22:49
      */
-    List<String> queryPermissionsByUserId(Long userId);
+    List<String> listPermissionByUserId(Long userId);
 }

@@ -26,9 +26,9 @@ public final class AmConstants {
          */
         public static final String USER = "sys_user";
         /**
-         * 菜单服务
+         * 资源服务
          */
-        public static final String MENU = "sys_menu";
+        public static final String RESOURCE = "sys_resource";
         /**
          * 部门服务
          */
@@ -50,12 +50,12 @@ public final class AmConstants {
          */
         public static final String USER_ROLE = "sys_user_role";
         /**
-         * 角色菜单服务
+         * 角色资源服务
          */
-        public static final String ROLE_MENU = "sys_role_menu";
+        public static final String ROLE_RESOURCE = "sys_role_resource";
         /**
          * 权限服务
          */
-        public static final String AUTHOR = "sys_author";
+        public static final String AUTHORIZATION = "sys_authorization";
     }
 }

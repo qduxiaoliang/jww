@@ -24,6 +24,12 @@ public class SysRoleDO extends BaseDO {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 部门ID
+     */
+    @TableField("dept_id")
+    private Long deptId;
+
+    /**
      * 角色名称
      */
     @NotBlank(message = "角色名称不能为空")

@@ -13,8 +13,8 @@ import java.util.Date;
  * @author wanyong
  * @date 2017/11/19 20:36
  */
-public class BaseServiceImpl<M extends BaseMapper<T>, N extends BaseDO>
-        extends ServiceImpl<BaseMapper<T>, T> implements BaseService<N> {
+public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseDO>
+        extends ServiceImpl<BaseMapper<T>, T> implements BaseService<T> {
 
     public T add(T entity) {
         entity.setCreateTime(new Date());

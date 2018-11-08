@@ -80,10 +80,10 @@ public class SysResourceDO extends BaseDO {
     private Integer resourceLevel;
 
     /**
-     * 资源类型 （0菜单 1按钮）
+     * 资源类型(0:按钮/1:目录/2:菜单)
      */
     @TableField("resource_type")
-    private String resourceType;
+    private Integer resourceType;
 
     /**
      * 前端URL

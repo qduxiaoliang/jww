@@ -35,19 +35,19 @@ public class SysDicDO extends BaseDO {
      * 数据值
      */
     @TableField("code_")
-    private Long code;
+    private String code;
 
     /**
      * 数据值名称
      */
     @TableField("code_name")
-    private Long codeName;
+    private String codeName;
 
     /**
      * 排序（升序）
      */
     @TableField("sort_no")
-    private Long sortNo;
+    private Integer sortNo;
 
     /**
      * 父id
@@ -59,7 +59,7 @@ public class SysDicDO extends BaseDO {
      * 是否可编辑（0:不可编辑/1:可编辑）
      */
     @TableField("is_editable")
-    private Long isEditable;
+    private Integer isEditable;
 
     /**
      * 备注
