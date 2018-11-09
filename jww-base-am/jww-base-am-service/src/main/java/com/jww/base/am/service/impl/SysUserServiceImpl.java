@@ -45,7 +45,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDT
     @Override
     public SysUserDTO getByUsername(String username) {
         SysUserDTO sysUserDTO = new SysUserDTO();
-        sysUserDTO.setUserName(username);
+        sysUserDTO.setUsername(username);
         sysUserDTO.setIsEnable(1);
         QueryWrapper<SysUserDTO> entityWrapper = new QueryWrapper<>(sysUserDTO);
         return super.getOne(entityWrapper);

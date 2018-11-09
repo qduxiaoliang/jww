@@ -19,8 +19,8 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>com.jww</groupId>-->
-            <!--<artifactId>jww-common-dsession</artifactId>-->
+        <!--<groupId>com.jww</groupId>-->
+        <!--<artifactId>jww-common-dsession</artifactId>-->
         <!--</dependency>-->
 
         <dependency>
@@ -39,6 +39,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
+        <!-- 热部署 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
@@ -51,6 +58,15 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin.version}</version>
+                <configuration>
+                    <fork>true</fork>
                 </configuration>
             </plugin>
         </plugins>

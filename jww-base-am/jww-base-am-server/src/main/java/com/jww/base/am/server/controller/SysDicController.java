@@ -2,7 +2,7 @@ package com.jww.base.am.server.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.dos.SysDicDO;
+import com.jww.base.am.model.dto.SysDicDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysDicService;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -52,8 +52,8 @@ public class SysDicController extends BaseController {
     // @RequiresPermissions("sys:dic:read")
     public ResultDTO query(@RequestBody Long dicId) {
         Assert.notNull(dicId);
-        SysDicDO sysDicDO = sysDicService.getById(dicId);
-        return ResultUtil.ok(sysDicDO);
+        SysDicDTO sysDicDTO = sysDicService.getById(dicId);
+        return ResultUtil.ok(sysDicDTO);
     }
 
     /**
@@ -68,13 +68,13 @@ public class SysDicController extends BaseController {
     @PostMapping("/listPage")
     // @RequiresPermissions("sys:dic:read")
     public ResultDTO queryListPage(@RequestBody IPage page) {
-        return ResultUtil.ok(sysDicService.queryListPage(page));
+        return ResultUtil.ok(sysDicService.listPage(page));
     }
 
     /**
      * 新增字典
      *
-     * @param sysDicDO 字典实体
+     * @param sysDicDTO 字典实体
      * @return ResultDTO
      * @author wanyong
      * @date 2018-01-03 13:28
@@ -83,16 +83,16 @@ public class SysDicController extends BaseController {
     @PostMapping("/add")
     // @RequiresPermissions("sys:dic:add")
     @SysLogOpt(module = "字典管理", value = "字典新增", operationType = LogOptEnum.ADD)
-    public ResultDTO add(@Valid @RequestBody SysDicDO sysDicDO) {
-        sysDicDO.setCreateBy(super.getCurrentUserId());
-        sysDicDO.setUpdateBy(super.getCurrentUserId());
-        return ResultUtil.ok(sysDicService.add(sysDicDO));
+    public ResultDTO add(@Valid @RequestBody SysDicDTO sysDicDTO) {
+        sysDicDTO.setCreateBy(super.getCurrentUserId());
+        sysDicDTO.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysDicService.save(sysDicDTO));
     }
 
     /**
      * 修改字典
      *
-     * @param sysDicDO 字典实体
+     * @param sysDicDTO 字典实体
      * @return com.jww.common.web.model.dto.ResultDTO
      * @author RickyWang
      * @date 17/12/25 21:29:09
@@ -101,9 +101,9 @@ public class SysDicController extends BaseController {
     @PostMapping("/modify")
     // @RequiresPermissions("sys:dic:update")
     @SysLogOpt(module = "字典管理", value = "字典修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modify(@Valid @RequestBody SysDicDO sysDicDO) {
-        sysDicDO.setUpdateBy(super.getCurrentUserId());
-        sysDicService.modifyById(sysDicDO);
+    public ResultDTO modify(@Valid @RequestBody SysDicDTO sysDicDTO) {
+        sysDicDTO.setUpdateBy(super.getCurrentUserId());
+        sysDicService.updateById(sysDicDTO);
         return ResultUtil.ok();
     }
 
@@ -137,7 +137,7 @@ public class SysDicController extends BaseController {
     @PostMapping("/typeList")
     // @RequiresPermissions("sys:dic:read")
     public ResultDTO queryTypeList() {
-        return ResultUtil.ok(sysDicService.queryTypeList());
+        return ResultUtil.ok(sysDicService.listType());
     }
 
     /**
@@ -153,7 +153,7 @@ public class SysDicController extends BaseController {
     // @RequiresPermissions("sys:dic:read")
     public ResultDTO queryListByType(@RequestBody String type) {
         Assert.notBlank(type);
-        return ResultUtil.ok(sysDicService.queryListByType(type));
+        return ResultUtil.ok(sysDicService.listByType(type));
     }
 }
 

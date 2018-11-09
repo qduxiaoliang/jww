@@ -24,6 +24,7 @@
         <!-- 当前版本 -->
         <jww-common.version>2.0.0</jww-common.version>
         <swagger-spring-boot-starter.version>2.0.6.RELEASE</swagger-spring-boot-starter.version>
+        <spring-boot-maven-plugin.version>2.0.6.RELEASE</spring-boot-maven-plugin.version>
     </properties>
 
     <dependencyManagement>

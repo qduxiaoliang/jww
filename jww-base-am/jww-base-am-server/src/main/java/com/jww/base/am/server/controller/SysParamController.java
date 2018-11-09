@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.dos.SysParamDO;
+import com.jww.base.am.model.dto.SysParamDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysParamService;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -65,14 +66,14 @@ public class SysParamController extends BaseController {
     @ApiOperation(value = "分页查询参数", notes = "根据分页参数查询参数列表")
     @PostMapping("/listPage")
     // @RequiresPermissions("sys:param:read")
-    public ResultDTO queryListPage(@RequestBody IPage page) {
-        return ResultUtil.ok(sysParamService.queryListPage(page));
+    public ResultDTO queryListPage(@RequestBody IPage<SysParamDTO> page) {
+        return ResultUtil.ok(sysParamService.listPage(page));
     }
 
     /**
      * 新增参数
      *
-     * @param sysParamDO 参数实体
+     * @param sysParamDTO 参数实体
      * @return ResultDTO
      * @author shadj
      * @date 2017/12/18 21:54
@@ -81,10 +82,10 @@ public class SysParamController extends BaseController {
     @PostMapping("/add")
     // @RequiresPermissions("sys:param:add")
     @SysLogOpt(module = "参数管理", value = "参数新增", operationType = LogOptEnum.ADD)
-    public ResultDTO add(@Valid @RequestBody SysParamDO sysParamDO) {
-        sysParamDO.setCreateBy(super.getCurrentUserId());
-        sysParamDO.setUpdateBy(super.getCurrentUserId());
-        return ResultUtil.ok(sysParamService.add(sysParamDO));
+    public ResultDTO add(@Valid @RequestBody SysParamDTO sysParamDTO) {
+        sysParamDTO.setCreateBy(super.getCurrentUserId());
+        sysParamDTO.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysParamService.save(sysParamDTO));
     }
 
     /**
@@ -99,10 +100,9 @@ public class SysParamController extends BaseController {
     @PostMapping("/modify")
     // @RequiresPermissions("sys:param:update")
     @SysLogOpt(module = "参数管理", value = "参数修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modify(@RequestBody SysParamDO sysParamDO) {
-        sysParamDO.setUpdateBy(super.getCurrentUserId());
-        sysParamService.modifyById(sysParamDO);
-        return ResultUtil.ok();
+    public ResultDTO modify(@RequestBody SysParamDTO sysParamDTO) {
+        sysParamDTO.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysParamService.updateById(sysParamDTO));
     }
 
     /**

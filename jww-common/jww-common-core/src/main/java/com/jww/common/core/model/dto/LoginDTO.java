@@ -25,7 +25,7 @@ public class LoginDTO implements Serializable {
     @Setter
     @NotBlank(message = "账号不能为空")
     @Size(min = 4, max = 20, message = "账号长度必须在4至20之间")
-    private String account;
+    private String username;
 
     /**
      * 密码

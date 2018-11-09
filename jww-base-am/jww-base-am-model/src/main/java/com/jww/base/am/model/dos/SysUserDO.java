@@ -26,7 +26,7 @@ public class SysUserDO extends BaseDO {
      * 用户名
      */
     @TableField("username_")
-    private String userName;
+    private String username;
 
     /**
      * 姓名

@@ -16,4 +16,9 @@ public class SysUserDTO extends SysUserDO {
      * 角色
      */
     private Long[] roleIds;
+
+    /**
+     * 旧密码
+     */
+    private String oldPassword;
 }

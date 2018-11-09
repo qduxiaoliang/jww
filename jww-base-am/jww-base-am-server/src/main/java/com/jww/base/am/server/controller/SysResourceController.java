@@ -3,7 +3,7 @@ package com.jww.base.am.server.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.dos.SysMenuEntity;
+import com.jww.base.am.model.dto.SysResourceDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysResourceService;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -100,7 +100,7 @@ public class SysResourceController extends BaseController {
     // @RequiresPermissions("sys:menu:delete")
     @SysLogOpt(module = "菜单管理", value = "菜单删除", operationType = LogOptEnum.DELETE)
     public ResultDTO delete(@RequestBody Long id) {
-        return ResultUtil.ok(sysResourceService.delete(id));
+        return ResultUtil.ok(sysResourceService.removeById(id));
     }
 
     /**
@@ -117,7 +117,7 @@ public class SysResourceController extends BaseController {
     @SysLogOpt(module = "菜单管理", value = "菜单批量删除", operationType = LogOptEnum.DELETE)
     public ResultDTO deleteBatchIds(@RequestBody Long[] ids) {
         Assert.notNull(ids);
-        return ResultUtil.ok(sysResourceService.deleteBatch(ids));
+        return ResultUtil.ok(sysResourceService.removeByIds(ids));
     }
 
     /**
@@ -133,14 +133,13 @@ public class SysResourceController extends BaseController {
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO query(@PathVariable(value = "id") Long id) {
         Assert.notNull(id);
-        SysMenuEntity sysMenuEntity = sysResourceService.getById(id);
-        return ResultUtil.ok(sysMenuEntity);
+        return ResultUtil.ok(sysResourceService.getById(id));
     }
 
     /**
      * 根据ID修改菜单
      *
-     * @param sysMenuEntity 菜单实体
+     * @param sysResourceDTO 菜单实体
      * @return ResultDTO
      * @author shadj
      * @date 2017/12/18 21:54
@@ -149,17 +148,17 @@ public class SysResourceController extends BaseController {
     @PostMapping("/modify")
     // @RequiresPermissions("sys:menu:update")
     @SysLogOpt(module = "菜单管理", value = "菜单修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modify(@RequestBody SysMenuEntity sysMenuEntity) {
-        sysMenuEntity.setUpdateBy(super.getCurrentUserId());
-        sysMenuEntity.setUpdateTime(new Date());
-        sysResourceService.modifyById(sysMenuEntity);
+    public ResultDTO modify(@RequestBody SysResourceDTO sysResourceDTO) {
+        sysResourceDTO.setUpdateBy(super.getCurrentUserId());
+        sysResourceDTO.setUpdateTime(new Date());
+        sysResourceService.updateById(sysResourceDTO);
         return ResultUtil.ok();
     }
 
     /**
      * 新增菜单
      *
-     * @param sysMenuEntity 菜单实体
+     * @param sysResourceDTO 菜单实体
      * @return ResultDTO
      * @author shadj
      * @date 2017/12/18 21:54
@@ -168,15 +167,13 @@ public class SysResourceController extends BaseController {
     @PostMapping("/add")
     // @RequiresPermissions("sys:menu:add")
     @SysLogOpt(module = "菜单管理", value = "菜单新增", operationType = LogOptEnum.ADD)
-    public ResultDTO add(@Valid @RequestBody SysMenuEntity sysMenuEntity) {
-        if (sysMenuEntity != null) {
-            Date now = new Date();
-            sysMenuEntity.setCreateTime(now);
-            sysMenuEntity.setCreateBy(super.getCurrentUserId());
-            sysMenuEntity.setUpdateBy(super.getCurrentUserId());
-            sysMenuEntity.setUpdateTime(now);
+    public ResultDTO add(@Valid @RequestBody SysResourceDTO sysResourceDTO) {
+        if (sysResourceDTO != null) {
+            sysResourceDTO.setCreateBy(super.getCurrentUserId());
+            sysResourceDTO.setUpdateBy(super.getCurrentUserId());
+            sysResourceDTO.setUpdateTime(new Date());
         }
-        sysResourceService.add(sysMenuEntity);
+        sysResourceService.save(sysResourceDTO);
         return ResultUtil.ok();
     }
 
@@ -192,7 +189,7 @@ public class SysResourceController extends BaseController {
     @PostMapping("/roleFuncTree")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryFuncMenuTree(@RequestBody Long roleId) {
-        List<TreeDTO> treeModelList = sysResourceService.queryFuncMenuTree(roleId);
+        List<TreeDTO> treeModelList = sysResourceService.listFuncMenuTree(roleId);
         return ResultUtil.ok(treeModelList);
     }
 
@@ -207,7 +204,7 @@ public class SysResourceController extends BaseController {
     @PostMapping("/funcTree")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryFuncMenuTree() {
-        List<TreeDTO> treeModelList = sysResourceService.queryFuncMenuTree(null);
+        List<TreeDTO> treeModelList = sysResourceService.listFuncMenuTree(null);
         return ResultUtil.ok(treeModelList);
     }
 
@@ -224,7 +221,7 @@ public class SysResourceController extends BaseController {
     @GetMapping("/queryTree/{menuType}/{menuId}")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryTree(@PathVariable(required = false, value = "menuType") Integer menuType, @PathVariable(value = "menuId") Long menuId) {
-        List<TreeDTO> list = sysResourceService.queryTree(menuId, menuType);
+        List<TreeDTO> list = sysResourceService.listTree(menuId, menuType);
         return ResultUtil.ok(list);
     }
 
@@ -240,7 +237,7 @@ public class SysResourceController extends BaseController {
     @GetMapping("/queryTree/{menuType}")
     // @RequiresPermissions("sys:menu:read")
     public ResultDTO queryTree(@PathVariable(required = false, value = "menuType") Integer menuType) {
-        List<TreeDTO> list = sysResourceService.queryTree(null, menuType);
+        List<TreeDTO> list = sysResourceService.listTree(null, menuType);
         return ResultUtil.ok(list);
     }
 }

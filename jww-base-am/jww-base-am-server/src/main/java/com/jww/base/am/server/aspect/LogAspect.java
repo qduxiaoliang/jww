@@ -4,8 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.jww.base.am.common.util.IpUtil;
-import com.jww.base.am.model.dos.SysLogDO;
 import com.jww.base.am.model.dos.SysUserDO;
+import com.jww.base.am.model.dto.SysLogDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.server.async.AsyncTask;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -54,18 +54,18 @@ public class LogAspect {
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         startTime = System.currentTimeMillis();
         Object result = null;
-        SysLogDO sysLogDO = logPre(pjp);
+        SysLogDTO sysLogDTO = logPre(pjp);
         try {
             result = pjp.proceed();
         } finally {
             try {
                 //查询类型不新增日志
-                if (sysLogDO.getOperationType() != LogOptEnum.QUERY.value()) {
-                    logAfter(result, sysLogDO);
-                    if (!StrUtil.isBlank(sysLogDO.getUserName())) {
-                        sysLogDO.setCreateTime(new Date());
-                        sysLogDO.setUpdateTime(new Date());
-                        async.logInsert(sysLogDO);
+                if (sysLogDTO.getType() != LogOptEnum.QUERY.value()) {
+                    logAfter(result, sysLogDTO);
+                    if (!StrUtil.isBlank(sysLogDTO.getUsername())) {
+                        sysLogDTO.setCreateTime(new Date());
+                        sysLogDTO.setUpdateTime(new Date());
+                        async.logInsert(sysLogDTO);
                     }
                 }
             } catch (Exception e) {
@@ -76,21 +76,21 @@ public class LogAspect {
     }
 
 
-    private SysLogDO logPre(ProceedingJoinPoint pjp) throws Exception {
-        SysLogDO sysLogDO = new SysLogDO();
+    private SysLogDTO logPre(ProceedingJoinPoint pjp) throws Exception {
+        SysLogDTO sysLogDTO = new SysLogDTO();
         for (Method method : Class.forName(pjp.getTarget().getClass().getName()).getMethods()) {
             if (method.getName().equals(pjp.getSignature().getName())) {
                 Class[] clazzs = method.getParameterTypes();
                 if (clazzs.length == pjp.getArgs().length) {
-                    //方法名称
-                    sysLogDO.setOperation(method.getAnnotation(SysLogOpt.class).value());
-                    //操作类型
-                    sysLogDO.setOperationType(method.getAnnotation(SysLogOpt.class).operationType().value());
+                    // 方法名称
+                    sysLogDTO.setRequestUri(method.getAnnotation(SysLogOpt.class).value());
+                    // 操作类型
+                    sysLogDTO.setType(method.getAnnotation(SysLogOpt.class).operationType().value());
                     break;
                 }
             }
         }
-        //获取请求对象
+        // 获取请求对象
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         startTime = System.currentTimeMillis();
         String ip = HttpUtil.getClientIP(request);
@@ -100,30 +100,30 @@ public class LogAspect {
         //请求参数
         String args = JSON.toJSONString(pjp.getArgs()).replaceAll(RegexUtil.getJSonValueRegex("password"), "****").replaceAll(RegexUtil.getJSonValueRegex("oldPassword"), "****");
 
-        sysLogDO.setIp(ip);
-        sysLogDO.setIpDetail(ipDetail);
-        sysLogDO.setMethod(classMethod);
-        sysLogDO.setParams(args);
-        sysLogDO.setCreateTime(new Date());
-        sysLogDO.setCreateBy(0L);
-        sysLogDO.setUpdateBy(0L);
+        sysLogDTO.setIp(ip);
+        sysLogDTO.setIpDetail(ipDetail);
+        sysLogDTO.setRequestUri(classMethod);
+        sysLogDTO.setParams(args);
+        sysLogDTO.setCreateTime(new Date());
+        sysLogDTO.setCreateBy(0L);
+        sysLogDTO.setUpdateBy(0L);
         // SysUserEntity currentUser = (SysUserEntity) WebUtil.getCurrentUser();
         SysUserDO currentUser = null;
         if (currentUser != null) {
-            sysLogDO.setUserName(currentUser.getUserName());
-            sysLogDO.setAccount(currentUser.getAccount());
+            sysLogDTO.setUsername(currentUser.getUsername());
+            sysLogDTO.setFullName(currentUser.getFullName());
         }
-        return sysLogDO;
+        return sysLogDTO;
     }
 
 
-    private boolean logAfter(Object result, SysLogDO sysLogDO) {
-        if (sysLogDO.getUserName() == null) {
+    private boolean logAfter(Object result, SysLogDTO sysLogDTO) {
+        if (sysLogDTO.getFullName() == null) {
             // SysUserEntity currentUser = (SysUserEntity) WebUtil.getCurrentUser();
             SysUserDO currentUser = null;
             if (currentUser != null) {
-                sysLogDO.setUserName(currentUser.getUserName());
-                sysLogDO.setAccount(currentUser.getAccount());
+                sysLogDTO.setUsername(currentUser.getUsername());
+                sysLogDTO.setFullName(currentUser.getFullName());
             }
         }
         ResultDTO response = null;
@@ -132,13 +132,13 @@ public class LogAspect {
         }
         //返回结果
         if (response == null || response.code == ResultCodeEnum.SUCCESS.value()) {
-            sysLogDO.setResult(1);
+            sysLogDTO.setResult(1);
         } else {
-            sysLogDO.setResult(0);
+            sysLogDTO.setResult(0);
         }
         //执行时长(毫秒)
         Long spendTime = System.currentTimeMillis() - startTime;
-        sysLogDO.setTime(spendTime);
+        sysLogDTO.setTime(spendTime);
         return true;
     }
 }

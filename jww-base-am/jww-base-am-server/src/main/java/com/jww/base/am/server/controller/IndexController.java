@@ -49,6 +49,6 @@ public class IndexController extends BaseController {
     @GetMapping("/menuTree")
     // @RequiresAuthentication
     public ResultDTO queryMyMenuTree() {
-        return ResultUtil.ok(sysResourceService.queryMenuTreeByUserId(super.getCurrentUserId()));
+        return ResultUtil.ok(sysResourceService.listMenuTreeByUserId(super.getCurrentUserId()));
     }
 }

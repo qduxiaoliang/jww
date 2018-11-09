@@ -11,14 +11,32 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @author wanyong
  * @date 2018/11/6 20:47
  */
-@Configuration
-@EnableWebSecurity
+// @Configuration
+// @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/user/list").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/reg").permitAll()
+                .antMatchers("/captcha/*").permitAll()
+                .antMatchers("/logout").permitAll()
+                // 静态资源不鉴权
+                .antMatchers("/index.html").permitAll()
+                .antMatchers("/css/**").permitAll()
+                .antMatchers("/images/**").permitAll()
+                .antMatchers("/js/**").permitAll()
+                .antMatchers("/layui/**").permitAll()
+                .antMatchers("/page/**").permitAll()
+                .antMatchers("/favicon.ico").permitAll()
+                // swagger2不鉴权
+                .antMatchers("/*/api-docs*").permitAll()
+                .antMatchers("/callback*").permitAll()
+                .antMatchers("/swagger*").permitAll()
+                .antMatchers("/configuration/*").permitAll()
+                .antMatchers("/*/configuration/*").permitAll()
+                .antMatchers("/webjars/**").permitAll()
                 .anyRequest().authenticated();
     }
 }

@@ -2,7 +2,7 @@ package com.jww.base.am.server.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.dos.SysLogDO;
+import com.jww.base.am.model.dto.SysLogDTO;
 import com.jww.base.am.service.SysLogService;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.dto.ResultDTO;
@@ -43,8 +43,8 @@ public class SysLogController extends BaseController {
     @ApiOperation(value = "分页查询日志列表", notes = "根据分页参数查询日志列表")
     @PostMapping("/queryListPage")
     // @RequiresPermissions("sys:log:read")
-    public ResultDTO queryListPage(@RequestBody IPage<SysLogDO> page) {
-        return ResultUtil.ok(sysLogService.queryListPage(page));
+    public ResultDTO queryListPage(@RequestBody IPage<SysLogDTO> page) {
+        return ResultUtil.ok(sysLogService.listPage(page));
     }
 }
 

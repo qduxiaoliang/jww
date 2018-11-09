@@ -1,6 +1,12 @@
 package com.jww.base.am.server.controller;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.CircleCaptcha;
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysUserService;
 import com.jww.common.core.constant.enums.LogOptEnum;
@@ -16,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 登陆控制器
@@ -42,20 +51,20 @@ public class LoginController extends BaseController {
      */
     @ApiOperation(value = "获取验证码")
     @GetMapping("/captcha/{captchaId}")
-    public ResultDTO queryCaptcha(@PathVariable(value = "captchaId", required = false) String captchaId) throws Exception {
-//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(116, 37, 4, 5);
-//        captcha.createCode();
-//        if (StrUtil.isBlank(captchaId) || !CacheUtil.getCache().exists(CacheNamespaceEnum.CAPTCHA.value() + captchaId)) {
-//            captchaId = RandomUtil.simpleUUID();
-//        }
-//        CacheUtil.getCache().set(CacheNamespaceEnum.CAPTCHA.value() + captchaId, captcha.getCode(), 120);
-//        captcha.write(outputStream);
-//        Map<String, String> map = new HashMap<String, String>(2);
-//        map.put("captchaId", captchaId);
-//        map.put("captcha", Base64.encode(outputStream.toByteArray()));
-//        return ResultUtil.ok(map);
-        return null;
+    public ResultDTO queryCaptcha(@PathVariable(value = "captchaId", required = false) String captchaId) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(116, 37, 4, 5);
+        captcha.createCode();
+        // if (StrUtil.isBlank(captchaId) || !CacheUtil.getCache().exists(CacheNamespaceEnum.CAPTCHA.value() + captchaId)) {
+        if (StrUtil.isBlank(captchaId)) {
+            captchaId = IdUtil.randomUUID();
+        }
+        // CacheUtil.getCache().set(CacheNamespaceEnum.CAPTCHA.value() + captchaId, captcha.getCode(), 120);
+        captcha.write(outputStream);
+        Map<String, String> map = new HashMap<String, String>(2);
+        map.put("captchaId", captchaId);
+        map.put("captcha", Base64.encode(outputStream.toByteArray()));
+        return ResultUtil.ok(map);
     }
 
     /**
@@ -70,6 +79,7 @@ public class LoginController extends BaseController {
     @PostMapping("/login")
     @SysLogOpt(module = "登录接口", value = "用户登录", operationType = LogOptEnum.LOGIN)
     public ResultDTO login(@Valid @RequestBody LoginDTO loginDTO) {
+        log.info(JSON.toJSONString(loginDTO));
 //        // 校验验证码
 //        String redisCaptchaValue = (String) CacheUtil.getCache().get(CacheNamespaceEnum.CAPTCHA.value() + loginDTO.getCaptchaId());
 //        if (StrUtil.isBlank(redisCaptchaValue)) {
@@ -105,7 +115,7 @@ public class LoginController extends BaseController {
 //        sysUserEntity.setUserName(currentUser.getUserName());
 //        sysUserEntity.setAvatar(currentUser.getAvatar());
 //        return ResultUtil.ok(sysUserEntity);
-        return null;
+        return ResultUtil.ok();
     }
 
     /**
@@ -166,7 +176,7 @@ public class LoginController extends BaseController {
 //                throw new BusinessException("对不起，您不能进行身份切换！");
 //            }
 //        }
-        return ResultUtil.ok(sysUserService.queryRunasList());
+        return ResultUtil.ok(sysUserService.listRunas());
     }
 
     /**

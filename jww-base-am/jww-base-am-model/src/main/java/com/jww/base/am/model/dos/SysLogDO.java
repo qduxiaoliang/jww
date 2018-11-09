@@ -89,7 +89,7 @@ public class SysLogDO extends BaseDO {
      * 执行时间
      */
     @TableField("time_")
-    private Integer time;
+    private Long time;
 
     /**
      * 操作IP地址

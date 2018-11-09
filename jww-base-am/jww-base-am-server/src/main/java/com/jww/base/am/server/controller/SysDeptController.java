@@ -3,10 +3,11 @@ package com.jww.base.am.server.controller;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.dos.SysDeptDO;
-import com.jww.common.core.model.dto.TreeDTO;
+import com.jww.base.am.model.dto.SysDeptDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysDeptService;
 import com.jww.common.core.constant.enums.LogOptEnum;
+import com.jww.common.core.model.dto.TreeDTO;
 import com.jww.common.web.BaseController;
 import com.jww.common.web.model.dto.ResultDTO;
 import com.jww.common.web.util.ResultUtil;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +50,7 @@ public class SysDeptController extends BaseController {
     // @RequiresPermissions("sys:dept:read")
     public ResultDTO query(@PathVariable Long id) {
         Assert.notNull(id);
-        SysDeptDO sysDeptDO = sysDeptService.queryOne(id);
+        SysDeptDO sysDeptDO = sysDeptService.getOne(id);
         return ResultUtil.ok(sysDeptDO);
     }
 
@@ -63,15 +65,15 @@ public class SysDeptController extends BaseController {
     @ApiOperation(value = "分页查询部门列表", notes = "根据分页参数查询部门列表")
     @PostMapping("/queryListPage")
     // @RequiresPermissions("sys:dept:read")
-    public ResultDTO queryListPage(@RequestBody IPage<SysDeptDO> pageModel) {
-        pageModel = sysDeptService.queryListPage(pageModel);
+    public ResultDTO queryListPage(@RequestBody IPage<SysDeptDTO> pageModel) {
+        pageModel = sysDeptService.listPage(pageModel);
         return ResultUtil.ok(pageModel);
     }
 
     /**
      * 新增部门方法
      *
-     * @param sysDeptDO 部门实体
+     * @param sysDeptDTO 部门实体
      * @return com.jww.common.web.model.dto.ResultDTO
      * @author RickyWang
      * @date 17/12/25 21:28:41
@@ -80,18 +82,18 @@ public class SysDeptController extends BaseController {
     @PostMapping("/add")
     // @RequiresPermissions("sys:dept:add")
     @SysLogOpt(module = "部门管理", value = "部门新增", operationType = LogOptEnum.ADD)
-    public ResultDTO add(@Valid @RequestBody SysDeptDO sysDeptDO) {
-        if (sysDeptDO != null) {
-            sysDeptDO.setCreateBy(super.getCurrentUserId());
-            sysDeptDO.setUpdateBy(super.getCurrentUserId());
+    public ResultDTO add(@Valid @RequestBody SysDeptDTO sysDeptDTO) {
+        if (sysDeptDTO != null) {
+            sysDeptDTO.setCreateBy(super.getCurrentUserId());
+            sysDeptDTO.setUpdateBy(super.getCurrentUserId());
         }
-        return ResultUtil.ok(sysDeptService.addDept(sysDeptDO));
+        return ResultUtil.ok(sysDeptService.save(sysDeptDTO));
     }
 
     /**
      * 修改部门方法
      *
-     * @param sysDeptDO 部门实体
+     * @param sysDeptDTO 部门实体
      * @return com.jww.common.web.model.dto.ResultDTO
      * @author RickyWang
      * @date 17/12/25 21:29:09
@@ -100,10 +102,10 @@ public class SysDeptController extends BaseController {
     @PutMapping("/modify")
     // @RequiresPermissions("sys:dept:update")
     @SysLogOpt(module = "部门管理", value = "部门修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modify(@RequestBody SysDeptDO sysDeptDO) {
-        sysDeptDO.setUpdateBy(super.getCurrentUserId());
-        sysDeptDO.setUpdateTime(new Date());
-        sysDeptService.modifyById(sysDeptDO);
+    public ResultDTO modify(@RequestBody SysDeptDTO sysDeptDTO) {
+        sysDeptDTO.setUpdateBy(super.getCurrentUserId());
+        sysDeptDTO.setUpdateTime(new Date());
+        sysDeptService.updateById(sysDeptDTO);
         return ResultUtil.ok();
     }
 
@@ -121,7 +123,7 @@ public class SysDeptController extends BaseController {
     @SysLogOpt(module = "部门管理", value = "部门批量删除", operationType = LogOptEnum.DELETE)
     public ResultDTO delBatchByIds(@RequestBody Long[] ids) {
         Assert.notNull(ids);
-        return ResultUtil.ok(sysDeptService.deleteBatch(ids));
+        return ResultUtil.ok(sysDeptService.removeByIds(Arrays.asList(ids)));
     }
 
     /**
@@ -136,7 +138,7 @@ public class SysDeptController extends BaseController {
     @GetMapping("/queryTree/{id}")
     // @RequiresPermissions("sys:dept:read")
     public ResultDTO queryTree(@PathVariable(value = "id", required = false) Long id) {
-        List<TreeDTO> list = sysDeptService.queryTree(id);
+        List<TreeDTO> list = sysDeptService.listTree();
         return ResultUtil.ok(list);
     }
 
@@ -151,7 +153,7 @@ public class SysDeptController extends BaseController {
     @GetMapping("/queryTree")
     // @RequiresPermissions("sys:dept:read")
     public ResultDTO queryTree() {
-        List<TreeDTO> list = sysDeptService.queryTree();
+        List<TreeDTO> list = sysDeptService.listTree();
         return ResultUtil.ok(list);
     }
 
@@ -169,7 +171,7 @@ public class SysDeptController extends BaseController {
     @SysLogOpt(module = "部门管理", value = "部门删除", operationType = LogOptEnum.DELETE)
     public ResultDTO delDept(@RequestBody Long id) {
         Assert.notNull(id);
-        return ResultUtil.ok(sysDeptService.delDept(id));
+        return ResultUtil.ok(sysDeptService.removeById(id));
     }
 
 }
