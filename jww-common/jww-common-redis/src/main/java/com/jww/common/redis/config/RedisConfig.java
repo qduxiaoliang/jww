@@ -3,7 +3,7 @@ package com.jww.common.redis.config;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.jww.common.core.base.BaseDO;
 import com.jww.common.core.constant.enums.CacheNamespaceEnum;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -15,8 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import javax.annotation.Resource;
@@ -100,43 +99,13 @@ public class RedisConfig extends CachingConfigurerSupport {
     public RedisCacheManager cacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .disableCachingNullValues()
-                .disableKeyPrefix();
+                .disableKeyPrefix()
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericFastJsonRedisSerializer()))
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()));
         return RedisCacheManager.builder(lettuceConnectionFactory)
                 .cacheDefaults(redisCacheConfiguration)
                 .transactionAware()
                 .build();
-    }
-
-    /**
-     * 序列化规则配置
-     *
-     * @param lettuceConnectionFactory 连接工厂
-     * @return RedisTemplate<Object       ,               Object>
-     * @author wanyong
-     * @date 2018-11-15 15:26
-     */
-    @Bean
-    public RedisTemplate<Object, Object> redisTemplate(
-            LettuceConnectionFactory lettuceConnectionFactory) {
-        RedisTemplate<Object, Object> template = new RedisTemplate<>();
-        //使用fastjson序列化
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
-        // value值的序列化采用fastJsonRedisSerializer
-        template.setValueSerializer(fastJsonRedisSerializer);
-        template.setHashValueSerializer(fastJsonRedisSerializer);
-        // key的序列化采用StringRedisSerializer
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setConnectionFactory(lettuceConnectionFactory);
-        return template;
-    }
-
-    @Bean
-    public StringRedisTemplate stringRedisTemplate(
-            LettuceConnectionFactory lettuceConnectionFactory) {
-        StringRedisTemplate template = new StringRedisTemplate();
-        template.setConnectionFactory(lettuceConnectionFactory);
-        return template;
     }
 
     /**
