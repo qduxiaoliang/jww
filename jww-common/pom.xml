@@ -29,7 +29,6 @@
     <properties>
         <!-- 当前版本 -->
         <jww-common.version>${project.version}</jww-common.version>
-
         <spring-boot.version>2.0.6.RELEASE</spring-boot.version>
         <spring-cloud.version>Finchley.SR2</spring-cloud.version>
         <fastjson.version>1.2.51</fastjson.version>
@@ -40,14 +39,14 @@
         <velocity-engine-core.version>2.0</velocity-engine-core.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <sharding-jdbc-spring-boot-starter.version>3.0.0</sharding-jdbc-spring-boot-starter.version>
-
         <!-- 阿里云OSS -->
         <aliyun-sdk-oss.version>3.0.0</aliyun-sdk-oss.version>
         <!-- 腾讯云COS -->
         <cos_api.version>5.2.4</cos_api.version>
-
         <!-- 支付 -->
         <com.egzosn.pay.version>2.11.3</com.egzosn.pay.version>
+        <!-- Redis客户端Lettuce依赖 -->
+        <commons-pool2.version>2.6.0</commons-pool2.version>
     </properties>
 
     <dependencyManagement>

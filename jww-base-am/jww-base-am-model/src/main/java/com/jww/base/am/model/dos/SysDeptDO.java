@@ -46,14 +46,16 @@ public class SysDeptDO extends BaseDO {
     /**
      * 启用标识（0-启用,1-禁用）
      */
+    @TableField("is_enable")
     @ApiModelProperty(value = "启用标记（0-启用,1-禁用）", name = "isEnable")
     private Integer isEnable;
 
     /**
      * 删除标记
      */
-    @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
-    @TableField("is_del")
+
     @TableLogic
+    @TableField("is_del")
+    @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
     private Integer isDel;
 }

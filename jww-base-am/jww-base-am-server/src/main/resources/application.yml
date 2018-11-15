@@ -25,19 +25,19 @@ sharding:
         driver-class-name: com.mysql.jdbc.Driver
         username: root
         password: Jww~0731520
-        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww-2.0.0?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       ds-slave-0:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.jdbc.Driver
         username: root
         password: Jww~0731520
-        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww-2.0.0?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       ds-slave-1:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.jdbc.Driver
         username: root
         password: Jww~0731520
-        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+        jdbc-url: jdbc:mysql://119.29.114.28:3306/jww-2.0.0?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
     config:
       masterslave:
         name: ds
