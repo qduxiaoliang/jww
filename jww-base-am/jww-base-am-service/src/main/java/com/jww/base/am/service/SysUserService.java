@@ -1,6 +1,7 @@
 package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.jww.base.am.model.dos.SysUserDO;
 import com.jww.base.am.model.dto.SysRoleDTO;
 import com.jww.base.am.model.dto.SysUserDTO;
 import com.jww.base.am.model.dto.SysUserRoleDTO;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author wanyong
  * @date 2017/11/17 16:43
  */
-public interface SysUserService extends BaseService<SysUserDTO> {
+public interface SysUserService extends BaseService<SysUserDO> {
 
     /**
      * 根据用户名查找用户
@@ -24,7 +25,7 @@ public interface SysUserService extends BaseService<SysUserDTO> {
      * @author wanyong
      * @date 2017-12-05 12:48
      */
-    SysUserDTO getByUsername(String username);
+    SysUserDO getByUsername(String username);
 
     /**
      * 分页查找所有用户
@@ -34,7 +35,7 @@ public interface SysUserService extends BaseService<SysUserDTO> {
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    IPage<SysUserDTO> listPage(IPage<SysUserDTO> page);
+    IPage<SysUserDO> listPage(IPage<SysUserDTO> page);
 
     /**
      * 根据ID集合批量删除
@@ -74,7 +75,6 @@ public interface SysUserService extends BaseService<SysUserDTO> {
      * @author wanyong
      * @date 2017-12-27 12:09
      */
-    @Override
     boolean updateById(SysUserDTO sysUserDTO);
 
     /**

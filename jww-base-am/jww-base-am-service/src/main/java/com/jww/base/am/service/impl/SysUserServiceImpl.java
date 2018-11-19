@@ -1,12 +1,15 @@
 package com.jww.base.am.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysRoleMapper;
 import com.jww.base.am.dao.mapper.SysUserMapper;
 import com.jww.base.am.dao.mapper.SysUserRoleMapper;
+import com.jww.base.am.model.dos.SysUserDO;
 import com.jww.base.am.model.dto.SysRoleDTO;
 import com.jww.base.am.model.dto.SysUserDTO;
 import com.jww.base.am.model.dto.SysUserRoleDTO;
@@ -33,7 +36,7 @@ import java.util.List;
 @Slf4j
 @Service("sysUserService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.USER)
-public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDTO> implements SysUserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDO> implements SysUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -44,18 +47,19 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDT
 
     @Override
     public SysUserDTO getByUsername(String username) {
-        SysUserDTO sysUserDTO = new SysUserDTO();
-        sysUserDTO.setUsername(username);
-        sysUserDTO.setIsEnable(1);
-        QueryWrapper<SysUserDTO> entityWrapper = new QueryWrapper<>(sysUserDTO);
-        return super.getOne(entityWrapper);
+        SysUserDO sysUserDO = new SysUserDO();
+        sysUserDO.setUsername(username);
+        sysUserDO.setIsEnable(1);
+        QueryWrapper<SysUserDO> entityWrapper = new QueryWrapper<>(sysUserDO);
+        // return super.getOne(entityWrapper);
+        return null;
     }
 
     @Override
     public IPage<SysUserDTO> listPage(IPage<SysUserDTO> page) {
         String searchKey = page.condition() == null ? null : page.condition().get("searchKey").toString();
-        List<SysUserDTO> list = sysUserMapper.selectPage(page, searchKey);
-        page.setRecords(list);
+        // List<SysUserDTO> list = sysUserMapper.selectPage(page, searchKey);
+        // page.setRecords(list);
         return page;
     }
 
@@ -109,7 +113,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDT
         sysUserDTO.setIsEnable(1);
         QueryWrapper<SysUserDTO> queryWrapper = new QueryWrapper<>(sysUserDTO);
         // wrapper.setSqlSelect("id_", "user_name", "account_");
-        return sysUserMapper.selectList(queryWrapper);
+        // return sysUserMapper.selectList(queryWrapper);
+        return null;
     }
 
     @Override

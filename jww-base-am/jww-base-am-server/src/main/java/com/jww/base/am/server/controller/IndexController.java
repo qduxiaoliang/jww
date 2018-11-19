@@ -1,5 +1,9 @@
 package com.jww.base.am.server.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
+import com.jww.base.am.model.dos.SysUserDO;
+import com.jww.base.am.model.dto.SysUserDTO;
 import com.jww.base.am.service.SysAuthorizeService;
 import com.jww.base.am.service.SysResourceService;
 import com.jww.common.web.BaseController;
@@ -50,5 +54,14 @@ public class IndexController extends BaseController {
     // @RequiresAuthentication
     public ResultDTO queryMyMenuTree() {
         return ResultUtil.ok(sysResourceService.listMenuTreeByUserId(super.getCurrentUserId()));
+    }
+
+    public static void main(String[] args) {
+        SysUserDO sysUserDO = new SysUserDO();
+        sysUserDO.setUsername("wanyong");
+        sysUserDO.setIsEnable(1);
+        SysUserDTO sysUserDTO = new SysUserDTO();
+        BeanUtil.copyProperties(sysUserDO, sysUserDTO);
+        System.out.println(JSON.toJSONString(sysUserDTO));
     }
 }

@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.common.AmConstants;
+import com.jww.base.am.model.dos.SysUserDO;
 import com.jww.base.am.model.dto.SysUserDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysUserService;
@@ -55,7 +56,7 @@ public class SysUserController extends BaseController {
     // @RequiresPermissions("sys:user:read")
     public ResultDTO query(@PathVariable(value = "id") Long id) {
         Assert.notNull(id);
-        SysUserDTO sysUserDTO = sysUserService.getById(id);
+        SysUserDTO sysUserDTO = (SysUserDTO)sysUserService.getById(id);
         sysUserDTO.setPassword(null);
         return ResultUtil.ok(sysUserDTO);
     }
