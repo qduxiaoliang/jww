@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDicMapper;
 import com.jww.base.am.model.dos.SysDicDO;
-import com.jww.base.am.model.dto.SysDicDTO;
 import com.jww.base.am.service.SysDicService;
 import com.jww.common.core.base.BaseServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -28,11 +27,11 @@ import java.util.Map;
  */
 @Service("sysDicService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.DIC)
-public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicDTO> implements SysDicService {
+public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicDO> implements SysDicService {
 
     @Override
-    public IPage<SysDicDTO> listPage(IPage<SysDicDTO> page) {
-        QueryWrapper<SysDicDTO> queryWrapper = new QueryWrapper<>();
+    public IPage<SysDicDO> listPage(IPage<SysDicDO> page) {
+        QueryWrapper<SysDicDO> queryWrapper = new QueryWrapper<>();
         if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<Object, Object> paramMap = page.condition();
@@ -52,24 +51,24 @@ public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicDTO> 
 
     @Override
     @Cacheable
-    public List<SysDicDTO> listType() {
-        QueryWrapper<SysDicDO> queryWrapper = new QueryWrapper<>(new SysDicDTO());
+    public List<SysDicDO> listType() {
+        QueryWrapper<SysDicDO> queryWrapper = new QueryWrapper<>(new SysDicDO());
         // entityWrapper.setSqlSelect("DISTINCT type_text,type_");
         return super.list(null);
     }
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.DIC, allEntries = true)
-    public boolean save(SysDicDTO sysDicDTO) {
-        return super.save(sysDicDTO);
+    public boolean save(SysDicDO sysDicDO) {
+        return super.save(sysDicDO);
     }
 
     @Override
     @Cacheable
-    public List<SysDicDTO> listByType(String type) {
-        SysDicDTO sysDicDTO = new SysDicDTO();
-        sysDicDTO.setType(type);
-        QueryWrapper<SysDicDTO> queryWrapper = new QueryWrapper<>(sysDicDTO);
+    public List<SysDicDO> listByType(String type) {
+        SysDicDO sysDicDO = new SysDicDO();
+        sysDicDO.setType(type);
+        QueryWrapper<SysDicDO> queryWrapper = new QueryWrapper<>(sysDicDO);
         return super.list(queryWrapper);
     }
 
@@ -81,11 +80,11 @@ public class SysDicServiceImpl extends BaseServiceImpl<SysDicMapper, SysDicDTO> 
 
     @Override
     @Cacheable
-    public SysDicDTO getByTypeAndCode(String type, String code) {
-        SysDicDTO sysDicDTO = new SysDicDTO();
-        sysDicDTO.setType(type);
-        sysDicDTO.setCode(code);
-        QueryWrapper<SysDicDTO> queryWrapper = new QueryWrapper<>(sysDicDTO);
+    public SysDicDO getByTypeAndCode(String type, String code) {
+        SysDicDO sysDicDO = new SysDicDO();
+        sysDicDO.setType(type);
+        sysDicDO.setCode(code);
+        QueryWrapper<SysDicDO> queryWrapper = new QueryWrapper<>(sysDicDO);
         return super.getOne(queryWrapper);
     }
 }

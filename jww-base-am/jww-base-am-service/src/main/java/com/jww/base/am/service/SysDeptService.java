@@ -1,7 +1,7 @@
 package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.dto.SysDeptDTO;
+import com.jww.base.am.model.dos.SysDeptDO;
 import com.jww.common.core.base.BaseService;
 import com.jww.common.core.model.dto.TreeDTO;
 
@@ -13,49 +13,49 @@ import java.util.List;
  * @author Ricky Wang
  * @date 2017-12-27 12:02
  */
-public interface SysDeptService extends BaseService<SysDeptDTO> {
+public interface SysDeptService extends BaseService<SysDeptDO> {
 
     /**
      * 新增
      *
-     * @param sysDeptDTO 部门传输实体
+     * @param sysDeptDO 部门传输实体
      * @return boolean
      * @author wanyong
      * @date 2018-11-8 15:44
      */
     @Override
-    boolean save(SysDeptDTO sysDeptDTO);
+    boolean save(SysDeptDO sysDeptDO);
 
     /**
      * 根据部门ID修改
      *
-     * @param sysDeptDTO 部门传输实体
+     * @param sysDeptDO 部门传输实体
      * @return boolean
      * @author wanyong
      * @date 2018-11-8 15:44
      */
     @Override
-    boolean updateById(SysDeptDTO sysDeptDTO);
+    boolean updateById(SysDeptDO sysDeptDO);
 
     /**
      * 分页查询部门
      *
      * @param page 分页实体
-     * @return IPage<SysDeptDTO>
+     * @return IPage<SysDeptDO>
      * @author wanyong
      * @date 2018-11-8 15:44
      */
-    IPage<SysDeptDTO> listPage(IPage<SysDeptDTO> page);
+    IPage<SysDeptDO> listPage(IPage<SysDeptDO> page);
 
     /**
      * 查询单个部门
      *
      * @param deptId 部门ID
-     * @return SysDeptDTO
+     * @return SysDeptDO
      * @author RickyWang
      * @date 18/1/1 15:05:53
      */
-    SysDeptDTO getOne(Long deptId);
+    SysDeptDO getOne(Long deptId);
 
     /**
      * 批量删除部门
@@ -88,12 +88,12 @@ public interface SysDeptService extends BaseService<SysDeptDTO> {
     /**
      * 查询部门树，过滤该id下所有部门
      *
-     * @param id
+     * @param deptId 部门ID
      * @return List<TreeDTO>
      * @author wanyong
      * @date 2018-11-8 16:15
      */
-    List<TreeDTO> ListTreeExcludeId(Long id);
+    List<TreeDTO> ListTreeExcludeId(Long deptId);
 
     /**
      * 删除部门
@@ -109,11 +109,11 @@ public interface SysDeptService extends BaseService<SysDeptDTO> {
      * 按id查询子部门
      *
      * @param id
-     * @return List<SysDeptDTO>
+     * @return List<SysDeptDO>
      * @author wanyong
      * @date 2018-11-8 16:15
      */
-    List<SysDeptDTO> listChild(Long id);
+    List<SysDeptDO> listChild(Long id);
 
     /**
      * 查询子部门数量

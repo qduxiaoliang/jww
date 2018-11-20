@@ -1,6 +1,6 @@
 package com.jww.base.am.dao.mapper;
 
-import com.jww.base.am.model.dto.SysRoleDTO;
+import com.jww.base.am.model.dos.SysRoleDO;
 import com.jww.common.core.base.BaseMapper;
 
 /**
@@ -9,6 +9,6 @@ import com.jww.common.core.base.BaseMapper;
  * @author wanyong
  * @date 2017-12-17
  */
-public interface SysRoleMapper extends BaseMapper<SysRoleDTO> {
+public interface SysRoleMapper extends BaseMapper<SysRoleDO> {
 
 }

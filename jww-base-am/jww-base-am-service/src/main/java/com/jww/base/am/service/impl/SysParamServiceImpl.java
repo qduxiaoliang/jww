@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysParamMapper;
-import com.jww.base.am.model.dto.SysParamDTO;
+import com.jww.base.am.model.dos.SysParamDO;
 import com.jww.base.am.service.SysParamService;
 import com.jww.common.core.base.BaseServiceImpl;
 import org.springframework.cache.annotation.CacheConfig;
@@ -28,11 +28,11 @@ import java.util.Map;
  */
 @Service("sysParamService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.PARAM)
-public class SysParamServiceImpl extends BaseServiceImpl<SysParamMapper, SysParamDTO> implements SysParamService {
+public class SysParamServiceImpl extends BaseServiceImpl<SysParamMapper, SysParamDO> implements SysParamService {
 
     @Override
-    public IPage<SysParamDTO> listPage(IPage<SysParamDTO> page) {
-        QueryWrapper<SysParamDTO> queryWrapper = new QueryWrapper<>();
+    public IPage<SysParamDO> listPage(IPage<SysParamDO> page) {
+        QueryWrapper<SysParamDO> queryWrapper = new QueryWrapper<>();
         if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<Object, Object> paramMap = page.condition();
@@ -55,16 +55,16 @@ public class SysParamServiceImpl extends BaseServiceImpl<SysParamMapper, SysPara
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.PARAM, allEntries = true)
-    public boolean save(SysParamDTO sysParamDTO) {
-        return super.save(sysParamDTO);
+    public boolean save(SysParamDO sysParamDO) {
+        return super.save(sysParamDO);
     }
 
     @Override
     @Cacheable
-    public SysParamDTO getByParamKey(String paramKey) {
-        SysParamDTO sysParamDTO = new SysParamDTO();
-        sysParamDTO.setParamKey(paramKey);
-        QueryWrapper<SysParamDTO> queryWrapper = new QueryWrapper<>(sysParamDTO);
+    public SysParamDO getByParamKey(String paramKey) {
+        SysParamDO sysParamDO = new SysParamDO();
+        sysParamDO.setParamKey(paramKey);
+        QueryWrapper<SysParamDO> queryWrapper = new QueryWrapper<>(sysParamDO);
         return super.getOne(queryWrapper);
     }
 }

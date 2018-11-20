@@ -100,4 +100,13 @@ public class SysUserDO extends BaseDO {
     @ApiModelProperty(value = "删除标记（0-正常,1-删除）", name = "isDel")
     private Integer isDel;
 
+    /**
+     * 角色
+     */
+    private Long[] roleIds;
+
+    /**
+     * 旧密码
+     */
+    private String oldPassword;
 }

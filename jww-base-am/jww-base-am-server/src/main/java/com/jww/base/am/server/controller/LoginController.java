@@ -13,7 +13,7 @@ import com.jww.common.core.constant.enums.LogOptEnum;
 import com.jww.common.core.constant.enums.ResultCodeEnum;
 import com.jww.common.core.model.dto.LoginDTO;
 import com.jww.common.web.BaseController;
-import com.jww.common.web.model.dto.ResultDTO;
+import com.jww.common.web.model.dto.Result;
 import com.jww.common.web.util.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,13 +45,13 @@ public class LoginController extends BaseController {
      * 获取验证码
      *
      * @param captchaId 验证码ID
-     * @return ResultDTO
+     * @return Result
      * @author wanyong
      * @date 2017-12-27 21:10
      */
     @ApiOperation(value = "获取验证码")
     @GetMapping("/captcha/{captchaId}")
-    public ResultDTO queryCaptcha(@PathVariable(value = "captchaId", required = false) String captchaId) {
+    public Result queryCaptcha(@PathVariable(value = "captchaId", required = false) String captchaId) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(116, 37, 4, 5);
         captcha.createCode();
@@ -71,14 +71,14 @@ public class LoginController extends BaseController {
      * 登陆
      *
      * @param loginDTO 登录对象
-     * @return ResultDTO
+     * @return Result
      * @author wanyong
      * @date 2017-11-30 16:14
      */
     @ApiOperation(value = "用户登录")
     @PostMapping("/login")
     @SysLogOpt(module = "登录接口", value = "用户登录", operationType = LogOptEnum.LOGIN)
-    public ResultDTO login(@Valid @RequestBody LoginDTO loginDTO) {
+    public Result login(@Valid @RequestBody LoginDTO loginDTO) {
         log.info(JSON.toJSONString(loginDTO));
 //        // 校验验证码
 //        String redisCaptchaValue = (String) CacheUtil.getCache().get(CacheNamespaceEnum.CAPTCHA.value() + loginDTO.getCaptchaId());
@@ -121,14 +121,14 @@ public class LoginController extends BaseController {
     /**
      * 登出
      *
-     * @return ResultDTO
+     * @return Result
      * @author wanyong
      * @date 2018-01-04 11:36
      */
     @ApiOperation(value = "用户登出")
     @PostMapping("/logout")
     @SysLogOpt(module = "登录接口", value = "用户登出", operationType = LogOptEnum.LOGIN)
-    public ResultDTO logout() {
+    public Result logout() {
 //        SecurityUtils.getSubject().logout();
         return ResultUtil.ok();
     }
@@ -136,24 +136,24 @@ public class LoginController extends BaseController {
     /**
      * 未登陆
      *
-     * @return ResultDTO
+     * @return Result
      * @author wanyong
      * @date 2017-11-30 16:03
      */
     @RequestMapping(value = "/unlogin", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
-    public ResultDTO unlogin() {
+    public Result unlogin() {
         return ResultUtil.fail(ResultCodeEnum.UNLOGIN);
     }
 
     /**
      * 未授权
      *
-     * @return ResultDTO
+     * @return Result
      * @author wanyong
      * @date 2017-11-30 16:03
      */
     @RequestMapping(value = "/unauthorized", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
-    public ResultDTO unauthorized() {
+    public Result unauthorized() {
         return ResultUtil.fail(ResultCodeEnum.UNAUTHORIZED);
     }
 
@@ -167,7 +167,7 @@ public class LoginController extends BaseController {
      */
     @PostMapping("/queryRunasList")
     // @RequiresAuthentication
-    public ResultDTO queryRunasList() {
+    public Result queryRunasList() {
 //        //当前用户不是admin，也不是代理身份，就不能进行切换
 //        Long currentUserId = super.getCurrentUserId();
 //        if (!AmConstants.USERID_ADMIN.equals(currentUserId)) {
@@ -183,13 +183,13 @@ public class LoginController extends BaseController {
      * 切换身份
      *
      * @param userId 切换后的身份编号
-     * @return ResultDTO
+     * @return Result
      * @author shadj
      * @date 2018/1/21 14:29
      */
     @PostMapping("/changeUser")
     // @RequiresAuthentication
-    public ResultDTO changeUser(@RequestBody Long userId) {
+    public Result changeUser(@RequestBody Long userId) {
         Assert.notNull(userId);
         //当前用户不是admin，也不是代理身份，就不能进行切换
 //        Long currentUserId = super.getCurrentUserId();

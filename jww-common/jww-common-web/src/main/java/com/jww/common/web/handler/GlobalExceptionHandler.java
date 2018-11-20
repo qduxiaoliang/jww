@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.jww.common.core.base.BaseException;
 import com.jww.common.core.constant.enums.ResultCodeEnum;
 import com.jww.common.core.exception.BusinessException;
-import com.jww.common.web.model.dto.ResultDTO;
+import com.jww.common.web.model.dto.Result;
 import com.jww.common.web.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
      */
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public ResultDTO exception(Exception e) {
+    public Result exception(Exception e) {
         log.info("保存全局异常信息，message={}", e.getMessage(), e);
         // 媒体类型
         if (e instanceof HttpMediaTypeNotSupportedException) {

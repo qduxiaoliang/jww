@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultDTO<T> {
+public class Result<T> {
 
-    public ResultDTO(int code, String message, T data) {
+    public Result(int code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;

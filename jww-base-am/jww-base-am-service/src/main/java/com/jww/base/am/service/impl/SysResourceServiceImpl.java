@@ -9,10 +9,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.common.AmConstants.AmCacheName;
-import com.jww.base.am.dao.mapper.SysMenuMapper;
+import com.jww.base.am.dao.mapper.SysResourceMapper;
 import com.jww.base.am.dao.mapper.SysRoleResourceMapper;
 import com.jww.base.am.dao.mapper.SysTreeMapper;
-import com.jww.base.am.model.dto.SysResourceDTO;
+import com.jww.base.am.model.dos.SysResourceDO;
 import com.jww.base.am.service.SysResourceService;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
@@ -41,10 +41,10 @@ import java.util.Map;
 @Slf4j
 @Service("sysResourceService")
 @CacheConfig(cacheNames = AmCacheName.RESOURCE)
-public class SysResourceServiceImpl extends BaseServiceImpl<SysMenuMapper, SysResourceDTO> implements SysResourceService {
+public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceMapper, SysResourceDO> implements SysResourceService {
 
     @Autowired
-    private SysMenuMapper sysMenuMapper;
+    private SysResourceMapper sysResourceMapper;
 
     @Autowired
     private SysTreeMapper sysTreeMapper;
@@ -54,16 +54,16 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysMenuMapper, SysRe
 
     @Override
     @Cacheable
-    public List<SysResourceDTO> list() {
-        SysResourceDTO sysResourceDTO = new SysResourceDTO();
-        QueryWrapper<SysResourceDTO> queryWrapper = new QueryWrapper<>(sysResourceDTO);
+    public List<SysResourceDO> list() {
+        SysResourceDO sysResourceDO = new SysResourceDO();
+        QueryWrapper<SysResourceDO> queryWrapper = new QueryWrapper<>(sysResourceDO);
         queryWrapper.orderByAsc("parent_id,sort_no");
         return super.list(queryWrapper);
     }
 
     @Override
-    public IPage<SysResourceDTO> listPage(IPage<SysResourceDTO> page) {
-        QueryWrapper<SysResourceDTO> queryWrapper = new QueryWrapper<>();
+    public IPage<SysResourceDO> listPage(IPage<SysResourceDO> page) {
+        QueryWrapper<SysResourceDO> queryWrapper = new QueryWrapper<>();
         if (ObjectUtil.isNotNull(page.condition())) {
             StringBuilder conditionSql = new StringBuilder();
             Map<Object, Object> paramMap = page.condition();
@@ -86,35 +86,35 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysMenuMapper, SysRe
     @Override
     @Cacheable
     public List<TreeDTO> listMenuTreeByUserId(Long userId) {
-        List<SysResourceDTO> sysResourceDTOList;
+        List<SysResourceDO> sysResourceDOList;
         // 如果是超级管理员，则查询所有目录菜单
         if (AmConstants.USERID_ADMIN.equals(userId)) {
-            SysResourceDTO sysResourceDTO = new SysResourceDTO();
-            sysResourceDTO.setIsEnable(1);
-            sysResourceDTO.setIsShow(1);
-            sysResourceDTO.setResourceType(2);
-            QueryWrapper<SysResourceDTO> queryWrapper = new QueryWrapper<>(sysResourceDTO);
+            SysResourceDO sysResourceDO = new SysResourceDO();
+            sysResourceDO.setIsEnable(1);
+            sysResourceDO.setIsShow(1);
+            sysResourceDO.setResourceType(2);
+            QueryWrapper<SysResourceDO> queryWrapper = new QueryWrapper<>(sysResourceDO);
             queryWrapper.orderByAsc("parent_id,sort_no");
-            sysResourceDTOList = sysMenuMapper.selectList(queryWrapper);
+            sysResourceDOList = sysResourceMapper.selectList(queryWrapper);
         } else {
-            sysResourceDTOList = sysMenuMapper.selectMenuTreeByUserId(userId);
+            sysResourceDOList = sysResourceMapper.selectMenuTreeByUserId(userId);
         }
-        return convertTreeData(sysResourceDTOList, null);
+        return convertTreeData(sysResourceDOList, null);
     }
 
     @Override
     @Cacheable
     public List<TreeDTO> listFuncMenuTree() {
-        List<SysResourceDTO> sysResourceDTOList = list();
-        return convertTreeData(sysResourceDTOList, null);
+        List<SysResourceDO> sysResourceDOList = list();
+        return convertTreeData(sysResourceDOList, null);
     }
 
     @Override
     @Cacheable(value = AmCacheName.ROLE)
     public List<TreeDTO> listFuncMenuTree(Long roleId) {
-        List<SysResourceDTO> sysResourceDTOList = list();
+        List<SysResourceDO> sysResourceDOList = list();
         List<Long> menuIdList = sysRoleResourceMapper.selectMenuIdListByRoleId(roleId);
-        return convertTreeData(sysResourceDTOList, menuIdList.toArray());
+        return convertTreeData(sysResourceDOList, menuIdList.toArray());
     }
 
     @Override
@@ -129,10 +129,10 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysMenuMapper, SysRe
     @CacheEvict(value = AmCacheName.RESOURCE, allEntries = true)
     public boolean removeById(Long resourceId) {
         // 查询是否有子菜单，如果有则返回false，否则允许删除
-        SysResourceDTO sysResourceDTO = new SysResourceDTO();
-        sysResourceDTO.setParentId(resourceId);
-        QueryWrapper<SysResourceDTO> queryWrapper = new QueryWrapper<>(sysResourceDTO);
-        List<SysResourceDTO> childList = super.list(queryWrapper);
+        SysResourceDO sysResourceDO = new SysResourceDO();
+        sysResourceDO.setParentId(resourceId);
+        QueryWrapper<SysResourceDO> queryWrapper = new QueryWrapper<>(sysResourceDO);
+        List<SysResourceDO> childList = super.list(queryWrapper);
         if (CollUtil.isNotEmpty(childList)) {
             log.error("删除菜单[id:{}]失败，请先删除子菜单", childList);
             throw new BusinessException("删除菜单失败，请先删除子菜单");
@@ -154,55 +154,55 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysMenuMapper, SysRe
      * @date 2018/1/25 22:37
      */
     @Override
-    public List<SysResourceDTO> listParentMenu() {
-        return sysMenuMapper.selectParentMenu();
+    public List<SysResourceDO> listParentMenu() {
+        return sysResourceMapper.selectParentMenu();
     }
 
     @Override
     @CacheEvict(value = AmCacheName.RESOURCE, allEntries = true)
     @DistributedLock(value = "#sysMenuModel.getParentId()")
-    public boolean save(SysResourceDTO sysResourceDTO) {
+    public boolean save(SysResourceDO sysResourceDO) {
         // 名称重复验证，同一目录下，菜单名称不能相同
-        SysResourceDTO checkSysResourceDTO = new SysResourceDTO();
-        checkSysResourceDTO.setParentId(sysResourceDTO.getParentId());
-        checkSysResourceDTO.setResourceName(sysResourceDTO.getResourceName());
-        QueryWrapper<SysResourceDTO> queryWrapper = new QueryWrapper<>(sysResourceDTO);
+        SysResourceDO checkSysResourceDO = new SysResourceDO();
+        checkSysResourceDO.setParentId(sysResourceDO.getParentId());
+        checkSysResourceDO.setResourceName(sysResourceDO.getResourceName());
+        QueryWrapper<SysResourceDO> queryWrapper = new QueryWrapper<>(sysResourceDO);
         if (super.count(queryWrapper) > 0) {
             throw new BusinessException("同一目录下，菜单名称不能相同");
         }
-        return super.save(sysResourceDTO);
+        return super.save(sysResourceDO);
     }
 
     @Override
     @CacheEvict(value = AmCacheName.RESOURCE, allEntries = true)
-    public boolean updateById(SysResourceDTO sysResourceDTO) {
-        return super.updateById(sysResourceDTO);
+    public boolean updateById(SysResourceDO sysResourceDO) {
+        return super.updateById(sysResourceDO);
     }
 
     /**
      * 获取树模型结构数据
      *
-     * @param SysResourceDTOList
+     * @param SysResourceDOList
      * @param checkedMenuIds
      * @return List<SysTreeModel>
      * @author wanyong
      * @date 2017-12-19 10:55
      */
-    private List<TreeDTO> convertTreeData(List<SysResourceDTO> SysResourceDTOList, Object[] checkedMenuIds) {
+    private List<TreeDTO> convertTreeData(List<SysResourceDO> SysResourceDOList, Object[] checkedMenuIds) {
         Map<Long, List<TreeDTO>> map = new HashMap<>(3);
-        for (SysResourceDTO SysResourceDTO : SysResourceDTOList) {
-            if (SysResourceDTO != null && map.get(SysResourceDTO.getParentId()) == null) {
+        for (SysResourceDO SysResourceDO : SysResourceDOList) {
+            if (SysResourceDO != null && map.get(SysResourceDO.getParentId()) == null) {
                 List<TreeDTO> children = new ArrayList<>();
-                map.put(SysResourceDTO.getParentId(), children);
+                map.put(SysResourceDO.getParentId(), children);
             }
-            map.get(SysResourceDTO.getParentId()).add(convertTreeModel(SysResourceDTO, checkedMenuIds));
+            map.get(SysResourceDO.getParentId()).add(convertTreeModel(SysResourceDO, checkedMenuIds));
         }
         List<TreeDTO> result = new ArrayList<>();
-        for (SysResourceDTO SysResourceDTO : SysResourceDTOList) {
-            boolean flag = SysResourceDTO != null && SysResourceDTO.getParentId() == null || SysResourceDTO.getParentId() == 0;
+        for (SysResourceDO SysResourceDO : SysResourceDOList) {
+            boolean flag = SysResourceDO != null && SysResourceDO.getParentId() == null || SysResourceDO.getParentId() == 0;
             if (flag) {
-                TreeDTO treeDTO = convertTreeModel(SysResourceDTO, checkedMenuIds);
-                treeDTO.setChildren(getChild(map, SysResourceDTO.getId()));
+                TreeDTO treeDTO = convertTreeModel(SysResourceDO, checkedMenuIds);
+                treeDTO.setChildren(getChild(map, SysResourceDO.getId()));
                 result.add(treeDTO);
             }
         }
@@ -233,21 +233,21 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysMenuMapper, SysRe
     /**
      * 把菜单模型对象转换成树模型对象
      *
-     * @param sysResourceDTO
+     * @param sysResourceDO
      * @param checkedMenuIds
      * @return SysTreeModel
      * @author wanyong
      * @date 2017-12-19 14:22
      */
-    private TreeDTO convertTreeModel(SysResourceDTO sysResourceDTO, Object[] checkedMenuIds) {
+    private TreeDTO convertTreeModel(SysResourceDO sysResourceDO, Object[] checkedMenuIds) {
         TreeDTO treeDTO = new TreeDTO();
-        treeDTO.setId(sysResourceDTO.getId());
-        treeDTO.setName(sysResourceDTO.getResourceName());
-        treeDTO.setIcon(sysResourceDTO.getIcon());
+        treeDTO.setId(sysResourceDO.getId());
+        treeDTO.setName(sysResourceDO.getResourceName());
+        treeDTO.setIcon(sysResourceDO.getIcon());
         treeDTO.setSpread(true);
-        treeDTO.setHref(sysResourceDTO.getRequestUrl());
-        treeDTO.setPermission(sysResourceDTO.getPermission());
-        treeDTO.setChecked(checkedMenuIds != null && ArrayUtil.contains(checkedMenuIds, sysResourceDTO.getId()));
+        treeDTO.setHref(sysResourceDO.getRequestUrl());
+        treeDTO.setPermission(sysResourceDO.getPermission());
+        treeDTO.setChecked(checkedMenuIds != null && ArrayUtil.contains(checkedMenuIds, sysResourceDO.getId()));
         treeDTO.setDisabled(false);
         return treeDTO;
     }

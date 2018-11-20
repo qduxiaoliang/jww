@@ -2,10 +2,10 @@ package com.jww.base.am.server.controller;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.dto.SysLogDTO;
+import com.jww.base.am.model.dos.SysLogDO;
 import com.jww.base.am.service.SysLogService;
 import com.jww.common.web.BaseController;
-import com.jww.common.web.model.dto.ResultDTO;
+import com.jww.common.web.model.dto.Result;
 import com.jww.common.web.util.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,14 +36,14 @@ public class SysLogController extends BaseController {
      * 查询日志分页方法
      *
      * @param page
-     * @return com.jww.common.web.model.dto.ResultDTO
+     * @return com.jww.common.web.model.dto.Result
      * @author RickyWang
      * @date 17/12/26 12:28:13
      */
     @ApiOperation(value = "分页查询日志列表", notes = "根据分页参数查询日志列表")
     @PostMapping("/queryListPage")
     // @RequiresPermissions("sys:log:read")
-    public ResultDTO queryListPage(@RequestBody IPage<SysLogDTO> page) {
+    public Result queryListPage(@RequestBody IPage<SysLogDO> page) {
         return ResultUtil.ok(sysLogService.listPage(page));
     }
 }

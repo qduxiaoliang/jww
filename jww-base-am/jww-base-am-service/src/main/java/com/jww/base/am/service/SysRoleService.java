@@ -1,7 +1,7 @@
 package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.dto.SysRoleDTO;
+import com.jww.base.am.model.dos.SysRoleDO;
 import com.jww.common.core.base.BaseService;
 
 import java.util.List;
@@ -14,49 +14,27 @@ import java.util.List;
  * @author wanyong
  * @since 2017-12-17
  */
-public interface SysRoleService extends BaseService<SysRoleDTO> {
+public interface SysRoleService extends BaseService<SysRoleDO> {
 
     /**
      * 分页查找所有角色
      *
      * @param page 分页实体
-     * @return Page<SysRoleModel>
+     * @return Page<SysRoleDO>
      * @author wanyong
      * @date 2017/12/4 14:45
      */
-    IPage<SysRoleDTO> listPage(IPage<SysRoleDTO> page);
-
-    /**
-     * 新增角色
-     *
-     * @param sysRoleDTO 角色传输实体
-     * @return boolean
-     * @author wanyong
-     * @date 2017-12-19 15:37
-     */
-    @Override
-    boolean save(SysRoleDTO sysRoleDTO);
-
-    /**
-     * 根据角色ID修改
-     *
-     * @param sysRoleDTO 角色传输实体
-     * @return boolean
-     * @author wanyong
-     * @date 2017-12-24 14:41
-     */
-    @Override
-    boolean updateById(SysRoleDTO sysRoleDTO);
+    IPage<SysRoleDO> listPage(IPage<SysRoleDO> page);
 
     /**
      * 查询部门下所有角色
      *
      * @param deptId 部门ID
-     * @return List<SysRoleDTO>
+     * @return List<SysRoleDO>
      * @author shadj
      * @date 2017/12/29 17:31
      */
-    List<SysRoleDTO> list(Long deptId);
+    List<SysRoleDO> list(Long deptId);
 
     /**
      * 根据角色ID集合批量删除

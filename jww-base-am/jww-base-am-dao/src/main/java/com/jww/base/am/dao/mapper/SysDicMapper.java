@@ -1,6 +1,6 @@
 package com.jww.base.am.dao.mapper;
 
-import com.jww.base.am.model.dto.SysDicDTO;
+import com.jww.base.am.model.dos.SysDicDO;
 import com.jww.common.core.base.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.jww.common.core.base.BaseMapper;
  * @author wanyong
  * @since 2017-12-17
  */
-public interface SysDicMapper extends BaseMapper<SysDicDTO> {
+public interface SysDicMapper extends BaseMapper<SysDicDO> {
 
 }

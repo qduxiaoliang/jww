@@ -1,7 +1,7 @@
 package com.jww.base.am.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jww.base.am.model.dto.SysResourceDTO;
+import com.jww.base.am.model.dos.SysResourceDO;
 import com.jww.common.core.base.BaseService;
 import com.jww.common.core.model.dto.TreeDTO;
 
@@ -15,26 +15,26 @@ import java.util.List;
  * @author wanyong
  * @since 2017-11-29
  */
-public interface SysResourceService extends BaseService<SysResourceDTO> {
+public interface SysResourceService extends BaseService<SysResourceDO> {
 
     /**
      * 查找所有菜单
      *
-     * @return List<SysResourceDTO>
+     * @return List<SysResourceDO>
      * @author wanyong
      * @date 2017-12-02 13:59
      */
-    List<SysResourceDTO> list();
+    List<SysResourceDO> list();
 
     /**
      * 分页查询所有菜单
      *
      * @param page 分页对象
-     * @return IPage<SysResourceDTO>
+     * @return IPage<SysResourceDO>
      * @author shadj
      * @date 2017/12/18 13:52
      */
-    IPage<SysResourceDTO> listPage(IPage<SysResourceDTO> page);
+    IPage<SysResourceDO> listPage(IPage<SysResourceDO> page);
 
     /**
      * 根据用户ID查找菜单树（包含目录和菜单，不包含按钮）
@@ -99,9 +99,9 @@ public interface SysResourceService extends BaseService<SysResourceDTO> {
     /**
      * 查询所有父级菜单
      *
-     * @return List<SysResourceDTO>
+     * @return List<SysResourceDO>
      * @author shadj
      * @date 2018/1/25 22:37
      */
-    List<SysResourceDTO> listParentMenu();
+    List<SysResourceDO> listParentMenu();
 }

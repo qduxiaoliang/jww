@@ -1,6 +1,6 @@
 package com.jww.base.am.dao.mapper;
 
-import com.jww.base.am.model.dto.SysRoleResourceDTO;
+import com.jww.base.am.model.dos.SysRoleResourceDO;
 import com.jww.common.core.base.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @author wanyong
  * @date 2017-12-17
  */
-public interface SysRoleResourceMapper extends BaseMapper<SysRoleResourceDTO> {
+public interface SysRoleResourceMapper extends BaseMapper<SysRoleResourceDO> {
 
     /**
      * 根据角色ID查询对应菜单ID集合

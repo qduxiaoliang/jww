@@ -1,6 +1,6 @@
 package com.jww.base.am.dao.mapper;
 
-import com.jww.base.am.model.dto.SysParamDTO;
+import com.jww.base.am.model.dos.SysParamDO;
 import com.jww.common.core.base.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.jww.common.core.base.BaseMapper;
  * @author shadj
  * @since 2017-12-24
  */
-public interface SysParamMapper extends BaseMapper<SysParamDTO> {
+public interface SysParamMapper extends BaseMapper<SysParamDO> {
 
 }

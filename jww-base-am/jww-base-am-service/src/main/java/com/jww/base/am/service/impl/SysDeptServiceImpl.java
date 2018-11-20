@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysDeptMapper;
 import com.jww.base.am.dao.mapper.SysTreeMapper;
-import com.jww.base.am.model.dto.SysDeptDTO;
+import com.jww.base.am.model.dos.SysDeptDO;
 import com.jww.base.am.service.SysDeptService;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 @Service("sysDeptService")
 @CacheConfig(cacheNames = AmConstants.AmCacheName.DEPT)
-public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptDTO> implements SysDeptService {
+public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptDO> implements SysDeptService {
 
     @Autowired
     private SysDeptMapper sysDeptMapper;
@@ -39,40 +39,40 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptDT
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.DEPT, allEntries = true)
-    public boolean save(SysDeptDTO sysDeptDTO) {
-        SysDeptDTO checkSysDeptDTO = new SysDeptDTO();
-        checkSysDeptDTO.setParentId(sysDeptDTO.getParentId());
-        checkSysDeptDTO.setDeptName(sysDeptDTO.getDeptName());
-        QueryWrapper<SysDeptDTO> queryWrapper = new QueryWrapper<>(checkSysDeptDTO);
+    public boolean save(SysDeptDO sysDeptDO) {
+        SysDeptDO checkSysDeptDO = new SysDeptDO();
+        checkSysDeptDO.setParentId(sysDeptDO.getParentId());
+        checkSysDeptDO.setDeptName(sysDeptDO.getDeptName());
+        QueryWrapper<SysDeptDO> queryWrapper = new QueryWrapper<>(checkSysDeptDO);
         if (super.count(queryWrapper) > 0) {
             throw new BusinessException("同级部门名称不能重复");
         }
-        if (sysDeptDTO.getParentId() == null) {
-            sysDeptDTO.setParentId(0L);
+        if (sysDeptDO.getParentId() == null) {
+            sysDeptDO.setParentId(0L);
         }
-        return super.save(sysDeptDTO);
+        return super.save(sysDeptDO);
     }
 
     @Override
     @CacheEvict(value = AmConstants.AmCacheName.DEPT, allEntries = true)
-    public boolean updateById(SysDeptDTO sysDeptDTO) {
-        return super.updateById(sysDeptDTO);
+    public boolean updateById(SysDeptDO sysDeptDO) {
+        return super.updateById(sysDeptDO);
     }
 
     @Override
-    public IPage<SysDeptDTO> listPage(IPage<SysDeptDTO> page) {
+    public IPage<SysDeptDO> listPage(IPage<SysDeptDO> page) {
         String deptName = page.condition() == null ? null : page.condition().get("dept_name").toString();
-        List<SysDeptDTO> list = sysDeptMapper.selectPage(page, deptName);
+        List<SysDeptDO> list = sysDeptMapper.selectPage(page, deptName);
         page.setRecords(list);
         return page;
     }
 
     @Override
     @Cacheable
-    public SysDeptDTO getOne(Long deptId) {
-        SysDeptDTO sysDeptDTO = new SysDeptDTO();
-        sysDeptDTO.setId(deptId);
-        QueryWrapper<SysDeptDTO> queryWrapper = new QueryWrapper<>(sysDeptDTO);
+    public SysDeptDO getOne(Long deptId) {
+        SysDeptDO sysDeptDO = new SysDeptDO();
+        sysDeptDO.setId(deptId);
+        QueryWrapper<SysDeptDO> queryWrapper = new QueryWrapper<>(sysDeptDO);
         return super.getOne(queryWrapper);
     }
 
@@ -111,27 +111,27 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptDT
 
     @Override
     @Cacheable
-    public List<SysDeptDTO> listChild(Long id) {
+    public List<SysDeptDO> listChild(Long id) {
         Assert.notNull(id);
-        SysDeptDTO sysDeptDTO = new SysDeptDTO();
-        sysDeptDTO.setParentId(id);
-        QueryWrapper<SysDeptDTO> queryWrapper = new QueryWrapper<>(sysDeptDTO);
+        SysDeptDO sysDeptDO = new SysDeptDO();
+        sysDeptDO.setParentId(id);
+        QueryWrapper<SysDeptDO> queryWrapper = new QueryWrapper<>(sysDeptDO);
         return super.list(queryWrapper);
     }
 
     @Override
     public int countChild(Long id) {
         Assert.notNull(id);
-        SysDeptDTO sysDeptDTO = new SysDeptDTO();
-        sysDeptDTO.setParentId(id);
-        QueryWrapper<SysDeptDTO> queryWrapper = new QueryWrapper<>(sysDeptDTO);
+        SysDeptDO sysDeptDO = new SysDeptDO();
+        sysDeptDO.setParentId(id);
+        QueryWrapper<SysDeptDO> queryWrapper = new QueryWrapper<>(sysDeptDO);
         return super.count(queryWrapper);
     }
 
     @Override
     public int countChild(Long[] ids) {
         Assert.notNull(ids);
-        QueryWrapper<SysDeptDTO> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<SysDeptDO> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("parent_id", ids);
         return super.count(queryWrapper);
     }

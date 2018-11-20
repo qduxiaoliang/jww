@@ -70,4 +70,8 @@ public class SysRoleDO extends BaseDO {
     @TableLogic
     private Integer isDel;
 
+    /**
+     * 部门名称
+     */
+    private String deptName;
 }

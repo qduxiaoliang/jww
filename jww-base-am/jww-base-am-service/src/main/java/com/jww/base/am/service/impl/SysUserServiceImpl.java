@@ -1,18 +1,15 @@
 package com.jww.base.am.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysRoleMapper;
 import com.jww.base.am.dao.mapper.SysUserMapper;
 import com.jww.base.am.dao.mapper.SysUserRoleMapper;
+import com.jww.base.am.model.dos.SysRoleDO;
 import com.jww.base.am.model.dos.SysUserDO;
-import com.jww.base.am.model.dto.SysRoleDTO;
-import com.jww.base.am.model.dto.SysUserDTO;
-import com.jww.base.am.model.dto.SysUserRoleDTO;
+import com.jww.base.am.model.dos.SysUserRoleDO;
 import com.jww.base.am.service.SysUserService;
 import com.jww.common.core.annotation.DistributedLock;
 import com.jww.common.core.base.BaseServiceImpl;
@@ -46,20 +43,19 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDO
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
-    public SysUserDTO getByUsername(String username) {
+    public SysUserDO getByUsername(String username) {
         SysUserDO sysUserDO = new SysUserDO();
         sysUserDO.setUsername(username);
         sysUserDO.setIsEnable(1);
         QueryWrapper<SysUserDO> entityWrapper = new QueryWrapper<>(sysUserDO);
-        // return super.getOne(entityWrapper);
-        return null;
+        return super.getOne(entityWrapper);
     }
 
     @Override
-    public IPage<SysUserDTO> listPage(IPage<SysUserDTO> page) {
+    public IPage<SysUserDO> listPage(IPage<SysUserDO> page) {
         String searchKey = page.condition() == null ? null : page.condition().get("searchKey").toString();
-        // List<SysUserDTO> list = sysUserMapper.selectPage(page, searchKey);
-        // page.setRecords(list);
+        List<SysUserDO> list = sysUserMapper.selectPage(page, searchKey);
+        page.setRecords(list);
         return page;
     }
 
@@ -74,53 +70,53 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDO
     }
 
     @Override
-    public List<SysRoleDTO> listRole(Long deptId) {
+    public List<SysRoleDO> listRole(Long deptId) {
         Assert.notNull(deptId);
-        QueryWrapper<SysRoleDTO> entityWrapper = new QueryWrapper<>();
-        entityWrapper.eq("dept_id", deptId);
-        return sysRoleMapper.selectList(entityWrapper);
+        QueryWrapper<SysRoleDO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("dept_id", deptId);
+        return sysRoleMapper.selectList(queryWrapper);
     }
 
+    @Override
     @DistributedLock
     @CacheEvict(value = AmConstants.AmCacheName.USER, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
-    public SysUserDTO add(SysUserDTO sysUserDTO) {
-        sysUserDTO.setCreateTime(new Date());
-        if (super.save(sysUserDTO)) {
-            saveUserRole(sysUserDTO);
-            return sysUserDTO;
+    public boolean save(SysUserDO sysUserDO) {
+        sysUserDO.setCreateTime(new Date());
+        if (super.save(sysUserDO)) {
+            saveUserRole(sysUserDO);
+            return true;
         }
-        return null;
+        return false;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = AmConstants.AmCacheName.USER, allEntries = true)
-    public boolean updateById(SysUserDTO sysUserDTO) {
-        SysUserRoleDTO sysUserRoleDTO = new SysUserRoleDTO();
-        sysUserRoleDTO.setUserId(sysUserDTO.getId());
-        QueryWrapper<SysUserRoleDTO> queryWrapper = new QueryWrapper<>(sysUserRoleDTO);
+    public boolean updateById(SysUserDO sysUserDO) {
+        SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+        sysUserRoleDO.setUserId(sysUserDO.getId());
+        QueryWrapper<SysUserRoleDO> queryWrapper = new QueryWrapper<>(sysUserRoleDO);
         sysUserRoleMapper.delete(queryWrapper);
-        saveUserRole(sysUserDTO);
-        return super.updateById(sysUserDTO);
+        saveUserRole(sysUserDO);
+        return super.updateById(sysUserDO);
     }
 
     @Override
     @Cacheable
-    public List<SysUserDTO> listRunas() {
-        SysUserDTO sysUserDTO = new SysUserDTO();
-        sysUserDTO.setIsDel(0);
+    public List<SysUserDO> listRunas() {
+        SysUserDO sysUserDTO = new SysUserDO();
         sysUserDTO.setIsEnable(1);
-        QueryWrapper<SysUserDTO> queryWrapper = new QueryWrapper<>(sysUserDTO);
+        QueryWrapper<SysUserDO> queryWrapper = new QueryWrapper<>(sysUserDTO);
         // wrapper.setSqlSelect("id_", "user_name", "account_");
         // return sysUserMapper.selectList(queryWrapper);
         return null;
     }
 
     @Override
-    public List<SysUserRoleDTO> listUserRole(Long userId) {
+    public List<SysUserRoleDO> listUserRole(Long userId) {
         Assert.notNull(userId);
-        QueryWrapper<SysUserRoleDTO> wrapper = new QueryWrapper<>();
+        QueryWrapper<SysUserRoleDO> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
         return sysUserRoleMapper.selectList(wrapper);
     }
@@ -128,22 +124,22 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDO
     /**
      * 保存用户角色
      *
-     * @param sysUserDTO 用户传输实体
+     * @param sysUserDO 用户传输实体
      * @author wanyong
      * @date 2018-11-8 10:03
      */
-    private void saveUserRole(SysUserDTO sysUserDTO) {
-        if (sysUserDTO.getRoleIds() != null && sysUserDTO.getRoleIds().length != 0) {
-            for (Long roleId : sysUserDTO.getRoleIds()) {
-                SysUserRoleDTO sysUserRoleDTO = new SysUserRoleDTO();
-                sysUserRoleDTO.setUserId(sysUserDTO.getId());
-                sysUserRoleDTO.setCreateTime(new Date());
-                sysUserRoleDTO.setUpdateTime(new Date());
-                sysUserRoleDTO.setCreateBy(sysUserDTO.getCreateBy());
-                sysUserRoleDTO.setUpdateBy(sysUserDTO.getCreateBy());
-                sysUserRoleDTO.setRoleId(roleId);
-                sysUserRoleMapper.insert(sysUserRoleDTO);
-            }
-        }
+    private void saveUserRole(SysUserDO sysUserDO) {
+//        if (sysUserDO.getRoleIds() != null && sysUserDO.getRoleIds().length != 0) {
+//            for (Long roleId : sysUserDO.getRoleIds()) {
+//                SysUserRoleDTO sysUserRoleDTO = new SysUserRoleDTO();
+//                sysUserRoleDTO.setUserId(sysUserDO.getId());
+//                sysUserRoleDTO.setCreateTime(new Date());
+//                sysUserRoleDTO.setUpdateTime(new Date());
+//                sysUserRoleDTO.setCreateBy(sysUserDO.getCreateBy());
+//                sysUserRoleDTO.setUpdateBy(sysUserDO.getCreateBy());
+//                sysUserRoleDTO.setRoleId(roleId);
+//                sysUserRoleMapper.insert(sysUserRoleDTO);
+//            }
+//        }
     }
 }

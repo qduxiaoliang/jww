@@ -4,13 +4,12 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jww.base.am.model.dos.SysParamDO;
-import com.jww.base.am.model.dto.SysParamDTO;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysParamService;
 import com.jww.common.core.constant.enums.LogOptEnum;
 import com.jww.common.core.exception.BusinessException;
 import com.jww.common.web.BaseController;
-import com.jww.common.web.model.dto.ResultDTO;
+import com.jww.common.web.model.dto.Result;
 import com.jww.common.web.util.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,7 +40,7 @@ public class SysParamController extends BaseController {
      * 根据参数ID查询参数
      *
      * @param paramId 参数主键
-     * @return ResultDTO<SysParamModel>
+     * @return Result<SysParamModel>
      * @author shadj
      * @date 2017-12-05 13:35
      */
@@ -49,7 +48,7 @@ public class SysParamController extends BaseController {
     @ApiImplicitParam(name = "id", value = "参数主键ID", required = true, dataType = "Long")
     @PostMapping("/query")
     // @RequiresPermissions("sys:param:read")
-    public ResultDTO query(@RequestBody Long paramId) {
+    public Result query(@RequestBody Long paramId) {
         Assert.notNull(paramId);
         SysParamDO sysParamDO = sysParamService.getById(paramId);
         return ResultUtil.ok(sysParamDO);
@@ -59,22 +58,22 @@ public class SysParamController extends BaseController {
      * 分页查询参数列表
      *
      * @param page 分页对象
-     * @return ResultDTO
+     * @return Result
      * @author wanyong
      * @date 2018-01-03 19:27
      */
     @ApiOperation(value = "分页查询参数", notes = "根据分页参数查询参数列表")
     @PostMapping("/listPage")
     // @RequiresPermissions("sys:param:read")
-    public ResultDTO queryListPage(@RequestBody IPage<SysParamDTO> page) {
+    public Result queryListPage(@RequestBody IPage<SysParamDO> page) {
         return ResultUtil.ok(sysParamService.listPage(page));
     }
 
     /**
      * 新增参数
      *
-     * @param sysParamDTO 参数实体
-     * @return ResultDTO
+     * @param sysParamDO 参数实体
+     * @return Result
      * @author shadj
      * @date 2017/12/18 21:54
      */
@@ -82,17 +81,17 @@ public class SysParamController extends BaseController {
     @PostMapping("/add")
     // @RequiresPermissions("sys:param:add")
     @SysLogOpt(module = "参数管理", value = "参数新增", operationType = LogOptEnum.ADD)
-    public ResultDTO add(@Valid @RequestBody SysParamDTO sysParamDTO) {
-        sysParamDTO.setCreateBy(super.getCurrentUserId());
-        sysParamDTO.setUpdateBy(super.getCurrentUserId());
-        return ResultUtil.ok(sysParamService.save(sysParamDTO));
+    public Result add(@Valid @RequestBody SysParamDO sysParamDO) {
+        sysParamDO.setCreateBy(super.getCurrentUserId());
+        sysParamDO.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysParamService.save(sysParamDO));
     }
 
     /**
      * 修改参数
      *
      * @param sysParamDO 参数实体
-     * @return ResultDTO
+     * @return Result
      * @author wanyong
      * @date 2018-01-03 22:36
      */
@@ -100,16 +99,16 @@ public class SysParamController extends BaseController {
     @PostMapping("/modify")
     // @RequiresPermissions("sys:param:update")
     @SysLogOpt(module = "参数管理", value = "参数修改", operationType = LogOptEnum.MODIFY)
-    public ResultDTO modify(@RequestBody SysParamDTO sysParamDTO) {
-        sysParamDTO.setUpdateBy(super.getCurrentUserId());
-        return ResultUtil.ok(sysParamService.updateById(sysParamDTO));
+    public Result modify(@RequestBody SysParamDO sysParamDO) {
+        sysParamDO.setUpdateBy(super.getCurrentUserId());
+        return ResultUtil.ok(sysParamService.updateById(sysParamDO));
     }
 
     /**
      * 根据参数ID集合批量删除
      *
      * @param ids 主键集合
-     * @return ResultDTO
+     * @return Result
      * @author shadj
      * @date 2017-12-24 18:30
      */
@@ -117,7 +116,7 @@ public class SysParamController extends BaseController {
     @DeleteMapping("/deleteBatchByIds")
     // @RequiresPermissions("sys:param:delete")
     @SysLogOpt(module = "参数管理", value = "参数批量删除", operationType = LogOptEnum.DELETE)
-    public ResultDTO deleteBatchByIds(@RequestBody List<Long> ids) {
+    public Result deleteBatchByIds(@RequestBody List<Long> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new BusinessException("参数ID集合不能为空");
         }

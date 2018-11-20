@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.jww.base.am.common.AmConstants;
 import com.jww.base.am.dao.mapper.SysAuthorizeMapper;
-import com.jww.base.am.model.dto.SysResourceDTO;
+import com.jww.base.am.model.dos.SysResourceDO;
 import com.jww.base.am.service.SysAuthorizeService;
 import com.jww.base.am.service.SysResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +34,10 @@ public class SysAuthorizeServiceImpl implements SysAuthorizeService {
         List<String> permissionList = new ArrayList<>();
         //如果是超级管理员，则查询所有权限code
         if (AmConstants.USERID_ADMIN.equals(userId)) {
-            List<SysResourceDTO> list = sysResourceService.list(null);
+            List<SysResourceDO> list = sysResourceService.list(null);
             if (CollUtil.isNotEmpty(list)) {
-                for (SysResourceDTO sysResourceDTO : list) {
-                    permissionList.add(sysResourceDTO.getPermission());
+                for (SysResourceDO sysResourceDO : list) {
+                    permissionList.add(sysResourceDO.getPermission());
                 }
             }
             permissionList.add(AmConstants.PERMISSION_ADMIN);
