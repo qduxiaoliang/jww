@@ -9,6 +9,8 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.jww.base.am.server.annotation.SysLogOpt;
 import com.jww.base.am.service.SysUserService;
+import com.jww.common.core.cache.CacheServiceFactory;
+import com.jww.common.core.constant.enums.CacheNamespaceEnum;
 import com.jww.common.core.constant.enums.LogOptEnum;
 import com.jww.common.core.constant.enums.ResultCodeEnum;
 import com.jww.common.core.model.dto.LoginDTO;
@@ -55,13 +57,12 @@ public class LoginController extends BaseController {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(116, 37, 4, 5);
         captcha.createCode();
-        // if (StrUtil.isBlank(captchaId) || !CacheUtil.getCache().exists(CacheNamespaceEnum.CAPTCHA.value() + captchaId)) {
-        if (StrUtil.isBlank(captchaId)) {
+        if (StrUtil.isBlank(captchaId) || !CacheServiceFactory.getCacheService().hasKey(CacheNamespaceEnum.CAPTCHA.value() + captchaId)) {
             captchaId = IdUtil.randomUUID();
+            CacheServiceFactory.getCacheService().set(CacheNamespaceEnum.CAPTCHA.value() + captchaId, captcha.getCode(), 120);
         }
-        // CacheUtil.getCache().set(CacheNamespaceEnum.CAPTCHA.value() + captchaId, captcha.getCode(), 120);
         captcha.write(outputStream);
-        Map<String, String> map = new HashMap<String, String>(2);
+        Map<String, String> map = new HashMap<>(2);
         map.put("captchaId", captchaId);
         map.put("captcha", Base64.encode(outputStream.toByteArray()));
         return ResultUtil.ok(map);
